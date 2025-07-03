@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <ui:composition template="/template/template.xhtml">
+            <ui:define name="maincontent">
+                <b:panel rendered="#{reportBean.list}" look="default"  collapsible="false">
+                    <f:facet name="heading">
+                        <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                            <p:outputLabel value="Section Report" styleClass="panel-title-css"/>
+                            <p:separator/>
+                            <b:panelGrid colSpans="4,4,4" size="lg" styleClass="ui-fluid">
+                                <b:formGroup>
+                                    <p:outputLabel value="Report Type"/>
+                                    <p:selectOneMenu  value="#{reportBean.reportType}" required="true" converter="entityConverter" rendered="true" requiredMessage="Please select the report type">
+                                        <f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true"/>
+                                        <f:selectItems value="#{reportBean.reportTypes}" var="reportType" itemLabel="#{reportType.toString()}" itemValue="#{reportType}"/>
+                                    </p:selectOneMenu>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:outputLabel value="Start Date"/>
+                                    <p:datePicker yearNavigator="true" monthNavigator="true" locale="en" pattern="dd MMMM yyyy" value="#{reportBean.startDate}" showIcon="true"/>
+                                </b:formGroup>
+                                <b:formGroup> 
+                                    <p:outputLabel value="End Date"/>
+                                    <p:datePicker yearNavigator="true" monthNavigator="true" locale="en" pattern="dd MMMM yyyy" value="#{reportBean.endDate}" showIcon="true"/>
+                                </b:formGroup>
+                            </b:panelGrid>
+                            <b:panelGrid colSpans="4,4,4" size="lg" styleClass="ui-fluid">
+                                <b:row>
+                                    <b:commandButton large-screen="full-width" size="lg" value="View Report" look="primary" action="#{reportBean.viewReport()}" update="@form" />                                
+                                </b:row>
+                            </b:panelGrid>
+                        </b:panelGrid>
+                    </f:facet>
+                </b:panel>
+                <b:panel  rendered="#{reportBean.viewMonitoringRiskReport}" look="default" collapsed="false"  collapsible="false">
+                    <f:facet name="heading">
+                        <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                            <p:outputLabel value="#{reportBean.panelTitleName}" styleClass="panel-title-css"/>
+                            <p:separator/>
+                        </b:panelGrid>                        
+                    </f:facet>
+                    <p:dataTable id="monitoringRiskReport" var="monitoring" value="#{reportBean.monotoryRiskHelpers}" rows="10"
+                                 paginator="true" paginatorAlwaysVisible="false" paginatorPosition="top"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15">
+                        <f:facet name="header">
+                            <p:toolbar>
+                                <f:facet name="right">
+                                    <p:commandButton id="toggler" type="button" value="Columns" icon="pi pi-align-justify"/>
+                                    <p:columnToggler datasource="monitoringRiskReport" trigger="toggler" />
+                                </f:facet>
+                                <f:facet name="left">
+                                    <p:commandButton styleClass="ui-button-primary btn-size-lg" value="Download" style="width:15rem">
+                                        <p:dataExporter type="xlsxstream" target="monitoringRiskReport" fileName="monitoring Risk_report"/>
+                                    </p:commandButton>
+                                </f:facet>
+                            </p:toolbar>
+                        </f:facet>
+                        <p:column headerText="Date (Risk identified Date)">
+                            <h:outputText value="#{monitoring.riskIdentifiedDate}">
+                                <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Full Names" styleClass="large">
+                            <h:outputText value="#{monitoring.employeeFullNames}"/>
+                        </p:column>
+                        <p:column headerText="ID Number" styleClass="large">
+                            <h:outputText value="#{monitoring.employeeIdNumber}" />
+                        </p:column>
+                        <p:column headerText="SID Number" styleClass="large">
+                            <h:outputText value="#{monitoring.employeeSid}" />
+                        </p:column>
+                        <p:column headerText="Position" styleClass="large">
+                            <h:outputText value="#{monitoring.employeePositionTitle}" />
+                        </p:column>
+                        <p:column headerText="Business Unit" styleClass="large">
+                            <h:outputText value="#{monitoring.businessUnit}" />
+                        </p:column>
+                        <p:column headerText="Region" styleClass="large">
+                            <h:outputText value="#{monitoring.region}" />
+                        </p:column>
+                        <p:column headerText="Office" styleClass="large">
+                            <h:outputText value="#{monitoring.office}" />
+                        </p:column>
+                        <p:column headerText="Clearance Issued" styleClass="large">
+                            <h:outputText value="#{monitoring.clearanceIssued}" />
+                        </p:column>
+                        <p:column headerText="Years Recommended" styleClass="large">
+                            <h:outputText value="#{monitoring.yearsRecommendation}" />
+                        </p:column>
+                        <p:column headerText="Date For Next Monitoring" styleClass="large">
+                            <h:outputText value="#{monitoring.dateNextMonitoring}" />
+                        </p:column>
+                        <p:column headerText="Comments/Feedback/Mitigation" styleClass="large">
+                            <h:outputText value="#{monitoring.comment}" />
+                        </p:column>
+                        <p:column headerText="Comments from SSA" styleClass="large">
+                            <h:outputText value="#{monitoring.commentSSA}" />
+                        </p:column>
+                    </p:dataTable>
+                    <f:facet name="footer">
+                        <b:row>
+                            <b:panelGrid colSpans="12" size="md" styleClass="ui-fluid">
+                                <b:commandButton large-screen="full-width" action="#{reportBean.cancel()}"  value="Cancel" look="danger" iconAwesome="fa-close" process="@this"  update="@(form)" size="lg"   immediate="true" ajax="true" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()"/>                               
+                            </b:panelGrid>
+                        </b:row>
+                    </f:facet>
+                </b:panel>
+                <b:panel  rendered="#{reportBean.viewVettingRegisterReport}" look="default" collapsed="false"  collapsible="false">
+                    <f:facet name="heading">
+                        <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                            <p:outputLabel value="#{reportBean.panelTitleName}" styleClass="panel-title-css"/>
+                            <p:separator/>
+                        </b:panelGrid>                        
+                    </f:facet>
+                    <p:dataTable id="vettingRegisterReport" var="vetting" value="#{reportBean.vettings}"  rows="10"
+                                 paginator="true" paginatorAlwaysVisible="false" paginatorPosition="top"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15">
+                        <f:facet name="header">
+                            <p:toolbar>
+                                <f:facet name="right">
+                                    <p:commandButton id="toggler" type="button" value="Columns" icon="pi pi-align-justify" />
+                                    <p:columnToggler datasource="vettingRegisterReport" trigger="toggler" />                                    
+                                </f:facet>
+                                <f:facet name="left">
+                                    <p:commandButton styleClass="ui-button-primary btn-size-lg" value="Download" style="width:15rem">
+                                        <p:dataExporter type="xlsxstream" target="vettingRegisterReport" fileName="Vetting Register_report"/>
+                                    </p:commandButton>
+                                </f:facet>
+                            </p:toolbar>
+                        </f:facet>
+                        <p:column headerText="Employee Id" styleClass="large">
+                            <h:outputText value="#{vetting.employeeSid}"/>
+                        </p:column>
+                        <p:column headerText="Full Name" styleClass="large">
+                            <h:outputText value="#{vetting.employeeFullNames}"/>
+                        </p:column>
+                        <p:column headerText="ID Nr" styleClass="large">
+                            <h:outputText value="#{vetting.employeeIdNumber}" />
+                        </p:column>
+                        <p:column headerText="Position Title" styleClass="large">
+                            <h:outputText value="#{vetting.employeePositionTitle}" />
+                        </p:column>
+                        <p:column headerText="Org Unit Name" styleClass="large">
+                            <h:outputText value="#{vetting.businessUnit}" />
+                        </p:column>
+                        <p:column headerText="Project" styleClass="large">
+                            <h:outputText value="#{vetting.project}" />
+                        </p:column>
+                        <p:column headerText="Priority Project(tick if priority)" styleClass="large">
+                            <h:outputText value="#{vetting.priorityProject}" />
+                        </p:column>
+                        <p:column headerText="Region" styleClass="large">
+                            <h:outputText value="#{vetting.region}" />
+                        </p:column>
+                        <p:column headerText="Office" styleClass="large">
+                            <h:outputText value="#{vetting.office}" />
+                        </p:column>
+                        <p:column headerText="Date Z-204 Requested to completed" styleClass="large">
+                            <h:outputText value="#{vetting.z204Request}" >
+                                <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Date Z-204 Submitted" styleClass="large">
+                            <h:outputText value="#{vetting.z204RequestSubmited}">
+                                <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Responsible vetting official" styleClass="large">
+                            <h:outputText value="#{vetting.responsibleOfficer}" />
+                        </p:column>
+                        <p:column headerText="Date Allocated To Vetting Official" styleClass="large">
+                            <h:outputText value="#{vetting.dateAllocatedOfficial}" >
+                                <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Date sent to QA" styleClass="large">
+                            <h:outputText value="#{vetting.allocatedQA}">
+                                <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Sars Recommendations" styleClass="large">
+                            <h:outputText value="#{vetting.recommendation}" />
+                        </p:column>
+                        <p:column headerText="Date Transferred To SSA" styleClass="large">
+                            <h:outputText value="#{vetting.dateToSSA}">
+                                <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Clearance Requested" styleClass="large">
+                            <h:outputText value="#{vetting.clearenceRequest}" />
+                        </p:column>
+                        <p:column headerText="Clearance Issued" styleClass="large">
+                            <h:outputText value="#{vetting.clearenceIssue}" />
+                        </p:column>
+                        <p:column headerText="Clearance Number Issued" styleClass="large">
+                            <h:outputText value="#{vetting.clearenceNumberIssue}" />
+                        </p:column>
+                        <p:column headerText="Clearance Issue Date" styleClass="large">
+                            <h:outputText value="#{vetting.clearenceIssueDate}" >
+                                <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Clearance Expiry Date" styleClass="large">
+                            <h:outputText value="#{vetting.clearenceExpiryDate}" />
+                        </p:column>
+                        <p:column headerText="Comments From SSA" styleClass="large">
+                            <h:outputText value="#{vetting.commentFromSSA}" />
+                        </p:column>
+                        <p:column headerText="Comments From Sars" styleClass="large">
+                            <h:outputText value="#{vetting.commentFromSars}" />
+                        </p:column>
+                        <p:column headerText="Risks Identified" styleClass="large">
+                            <h:outputText value="#{vetting.riskIdentified}" >
+                                <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                    </p:dataTable>
+                    <f:facet name="footer">
+                        <b:row>
+                            <b:panelGrid colSpans="12" size="md" styleClass="ui-fluid">
+                                <b:commandButton large-screen="full-width" action="#{reportBean.cancel()}"  value="Cancel" look="danger" iconAwesome="fa-close" process="@this"  update="@(form)" size="lg"   immediate="true" ajax="true" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()"/>                               
+                            </b:panelGrid>
+                        </b:row>
+                    </f:facet>
+                </b:panel>
+                <b:panel  rendered="#{reportBean.viewRecordChecksReport}" look="default" collapsed="false"  collapsible="false">
+                    <f:facet name="heading">
+                        <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                            <p:outputLabel value="#{reportBean.panelTitleName}" styleClass="panel-title-css"/>
+                            <p:separator/>
+                        </b:panelGrid>                        
+                    </f:facet>
+                    <p:dataTable id="vettingRecordChecksReport" var="recordCheck" value="#{reportBean.recordCheckHelpers}" rows="10"
+                                 paginator="true" paginatorAlwaysVisible="false" paginatorPosition="top"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15">
+                        <f:facet name="header">
+                            <p:toolbar>
+                                <f:facet name="right">
+                                    <p:commandButton id="toggler" type="button" value="Columns" icon="pi pi-align-justify" />
+                                    <p:columnToggler datasource="vettingRecordChecksReport" trigger="toggler" />
+                                </f:facet>
+                                <f:facet name="left">
+                                    <p:commandButton styleClass="ui-button-primary btn-size-lg" value="Download" style="width:15rem">
+                                        <p:dataExporter type="xlsxstream" target="vettingRecordChecksReport" fileName="Vetting Record Checks_report"/>
+                                    </p:commandButton>
+                                </f:facet>
+                            </p:toolbar>
+                        </f:facet>
+                        <p:column headerText="Full Names" styleClass="large">
+                            <h:outputText value="#{recordCheck.employeeFullNames}"/>
+                        </p:column>
+                        <p:column headerText="ID Number" styleClass="large">
+                            <h:outputText value="#{recordCheck.employeeIdNumber}" />
+                        </p:column>
+                        <p:column headerText="SID Number" styleClass="large">
+                            <h:outputText value="#{recordCheck.employeeSid}" />
+                        </p:column>
+                        <p:column headerText="Citizenship" styleClass="large">
+                            <h:outputText value="" />
+                        </p:column>
+                        <p:column headerText="Position" styleClass="large">
+                            <h:outputText value="#{recordCheck.employeePositionTitle}" />
+                        </p:column>
+                        <p:column headerText="Business Unit" styleClass="large">
+                            <h:outputText value="#{recordCheck.businessUnit}" />
+                        </p:column>
+                        <p:column headerText="Region" styleClass="large">
+                            <h:outputText value="#{recordCheck.region}"/>
+                        </p:column>
+                        <!--The following fields must be retrieved from the IBR system: -->
+                        <p:column headerText="CIPRO Directors and IT Information" styleClass="large">
+                            <h:outputText value="#{recordCheck.director}" />
+                        </p:column>
+                        <p:column headerText="Enterprise Links" styleClass="large">
+                            <h:outputText value="#{recordCheck.enterpriseLink}" />
+                        </p:column>
+                        <p:column headerText="Enterprise Previous Links" styleClass="large">
+                            <h:outputText value="#{recordCheck.enterpriseLinkPrevious}" />
+                        </p:column>
+                        <p:column headerText="Outstanding Returns" styleClass="large">
+                            <h:outputText value="#{recordCheck.outStandingReturn}" />
+                        </p:column>
+                        <p:column headerText="Outstanding Debt" styleClass="large">
+                            <h:outputText value="#{recordCheck.outstandingDebt}" />
+                        </p:column>
+                        <p:column headerText="Qualifications" styleClass="large">
+                            <h:outputText value="#{recordCheck.qualification}" />
+                        </p:column>
+                        <p:column headerText="Credit" styleClass="large">
+                            <h:outputText value="#{recordCheck.creditRecord}" />
+                        </p:column>
+                        <p:column headerText="Criminal" styleClass="large">
+                            <h:outputText value="#{recordCheck.criminalRecord}" />
+                        </p:column>
+                        <p:column headerText="Internal Investigation" styleClass="large">
+                            <h:outputText value="#{recordCheck.internalInvestigationRecord}" />
+                        </p:column>
+                        <p:column headerText="Vetting Status" styleClass="large">
+                            <h:outputText value="#{recordCheck.vettingStatus.toString()}" />
+                        </p:column>
+                        <p:column headerText="Income Tax" styleClass="large">
+                            <h:outputText value="#{recordCheck.taxRefNumber}" />
+                        </p:column>
+                        <p:column headerText="Last Assessment" styleClass="large">
+                            <h:outputText value="#{recordCheck.lastAssesment}" />
+                        </p:column>
+                        <p:column headerText="Returns Outstanding" styleClass="large">
+                            <h:outputText value="#{recordCheck.returnOustanding}" />
+                        </p:column>
+                        <p:column headerText="Money Owed to SARS" styleClass="large">
+                            <h:outputText value="#{recordCheck.moneyOwedSars}" />
+                        </p:column>
+                    </p:dataTable>
+                    <f:facet name="footer">
+                        <b:row>
+                            <b:panelGrid colSpans="12" size="md" styleClass="ui-fluid">
+                                <b:commandButton large-screen="full-width" action="#{reportBean.cancel()}"  value="Cancel" look="danger" iconAwesome="fa-close" process="@this"  update="@(form)" size="lg"   immediate="true" ajax="true" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()"/>                               
+                            </b:panelGrid>
+                        </b:row>
+                    </f:facet>
+                </b:panel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

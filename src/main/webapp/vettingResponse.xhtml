@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <ui:composition template="/template/template.xhtml">
+            <ui:define name="maincontent">
+                <b:panel rendered="#{vettingResponseBean.list}" look="default"  collapsible="false">
+                    <f:facet name="heading">
+                        <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                            <p:outputLabel value="All Vetting" styleClass="panel-title-css"/>
+                        </b:panelGrid>
+                    </f:facet>
+                    <b:panelGrid colSpans="4,2,6" size="md" styleClass="ui-fluid">
+                        <b:formGroup>
+                            <p:selectOneMenu value="#{vettingResponseBean.selctedVettingStatus}" converter="entityConverter" filter="true" filterMatchMode="contains" filterPlaceholder="Search">
+                                <f:selectItem itemLabel="Select One"/>
+                                <f:selectItems value="#{vettingResponseBean.vettingStatuses}" var="status" itemLabel="#{status.toString()}" itemValue="#{status}"/>
+                            </p:selectOneMenu>
+                        </b:formGroup>
+                        <b:row>
+                            <b:commandButton look="primary" iconAwesome="filter" size="lg" value="Filter Records" action="#{vettingResponseBean.filterByStatus()}" ajax="false" update="templateForm"/>
+                        </b:row>
+                    </b:panelGrid>
+                    <b:panelGrid colSpans="4,2,6" size="md" styleClass="ui-fluid">
+                        <b:formGroup>
+                            <b:inputText value="#{vettingResponseBean.idNumber}" placeholder="Search File by ID Number" fieldSize="lg"/>
+                        </b:formGroup>
+                        <b:row>
+                            <b:commandButton look="primary" iconAwesome="filter" size="lg" value="Filter Records" action="#{vettingResponseBean.filterByIdNumber()}" ajax="false" update="templateForm"/>
+                        </b:row>
+                    </b:panelGrid>
+                    <p:dataTable id="vettingFileTab" stripedRows="true" showGridlines="true" value="#{vettingResponseBean.vettingRecords}" var="vettingRecord" paginatorAlwaysVisible="false" reflow="true">
+                        <p:column headerText="Date Initiated"  styleClass="large" sortBy="#{vettingRecord.createdDate}">
+                            <h:outputText value="#{vettingRecord.createdDate}">
+                                <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="S-ID"  styleClass="large" sortBy="#{vettingRecord.employee.sid}">
+                            <h:outputText value="#{vettingRecord.employee.sid}"/>
+                        </p:column>
+                        <p:column headerText="Name" sortBy="#{vettingRecord.employee.fullNames}">
+                            <h:outputText value="#{vettingRecord.employee.fullNames}"/>
+                        </p:column>
+                        <p:column headerText="TAT Days"  styleClass="large" sortBy="#{vettingRecord.tat}">
+                            <h:outputText value="#{vettingRecord.tat}"/>
+                        </p:column>
+                        <p:column headerText="Date Updated"  styleClass="large" sortBy="#{vettingRecord.updatedDate}">
+                            <h:outputText value="#{vettingRecord.updatedDate}">
+                                <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="VSC Admin" sortBy="#{vettingRecord.vettingProcessingOfficer.fullNames}">
+                            <h:outputText value="#{vettingRecord.vettingProcessingOfficer.fullNames}"/>
+                        </p:column>
+                        <p:column headerText="Officer" sortBy="#{vettingRecord.vettingOfficer}">
+                            <h:outputText value="#{vettingRecord.vettingOfficer}"/>
+                        </p:column>
+                        <p:column headerText="Status" sortBy="#{vettingRecord.vettingStatus}">
+                            <h:outputText value="#{vettingRecord.vettingStatus.toString()}"/>
+                        </p:column>
+                        <p:column headerText="Action" styleClass="large">
+                            <p:commandButton rendered="#{vettingRecord.vettingStatus eq 'APPROVED' or vettingRecord.vettingStatus eq 'VETTING_DENIED'}" styleClass="ui-button-primary btn-size-sm" value="Add Response" action="#{vettingResponseBean.loadReviewVettingForm(vettingRecord)}" update="@form" immediate="true"/>
+                        </p:column>
+                    </p:dataTable>
+                </b:panel>
+                <b:panel rendered="#{vettingResponseBean.review}" look="default"  collapsible="false">
+                    <f:facet name="heading">
+                        <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                            <p:outputLabel value="Vetting File" styleClass="panel-title-css"/>
+                        </b:panelGrid>
+                    </f:facet>
+                    <p:tabView cache="false"> 
+                        <p:tab title="Response Attachment" id="attachmentTab">
+                            <ui:include src="certificate.xhtml"></ui:include>
+                        </p:tab>
+                    </p:tabView>
+                    <f:facet name="footer">
+                        <b:row>
+                            <b:panelGrid colSpans="6,6" size="md" styleClass="ui-fluid">
+                                <b:commandButton size="lg" icon="check" large-screen="full-width" look="success" value="Submit" action="#{vettingResponseBean.save(vettingResponseBean.entity)}" update="@form"/> 
+                                <b:commandButton large-screen="full-width"  value="Back" look="primary" iconAwesome="fa-close" process="@this"  update="@(form)" size="lg" action="#{vettingResponseBean.cancel()}" immediate="true" ajax="true" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()"/> 
+                            </b:panelGrid>
+                        </b:row>
+                    </f:facet>
+                </b:panel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <ui:composition template="/template/template.xhtml">
+            <ui:define name="maincontent">
+                <b:panel rendered="#{vettingFormProcessBean.list}" look="default"  collapsible="false">
+                    <f:facet name="heading">
+                        <b:panelGrid colSpans="4,2,6" size="lg" styleClass="ui-fluid">
+                            <b:formGroup>
+                                <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                                    <b:formGroup>
+                                        <p:selectOneMenu value="#{vettingFormProcessBean.selectedStatus}" converter="entityConverter">
+                                            <f:selectItem  itemLabel="Select One"  noSelectionOption="true"/>
+                                            <f:selectItems value="#{vettingFormProcessBean.pools}" var="caseStatus" itemLabel="#{caseStatus.toString()}" itemValue="#{caseStatus}"/>
+                                        </p:selectOneMenu>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </b:formGroup>
+                            <b:row>                          
+                                <b:commandButton look="primary" size="lg" icon="plus" value="Claim" action="#{vettingFormProcessBean.vettingClaim()}" ajax="false" update="templateForm"/>
+                            </b:row>
+                        </b:panelGrid>
+                    </f:facet>
+                    <b:tabView>
+                        <b:tab title="Allocated Vetting Files">
+                            <b:panel>
+                                <p:outputPanel rendered="#{empty vettingFormProcessBean.vettingRecords}">
+                                    <p:outputLabel value="No Vetting records found."/>
+                                </p:outputPanel>
+                                <p:dataTable rendered="#{not empty vettingFormProcessBean.vettingRecords}" stripedRows="true" showGridlines="true" value="#{vettingFormProcessBean.vettingRecords}" var="vettingRecord" paginatorAlwaysVisible="false" reflow="true">
+                                    <p:column headerText="Date Initiated"  styleClass="large" sortBy="#{vettingRecord.createdDate}">
+                                        <h:outputText value="#{vettingRecord.createdDate}">
+                                            <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="S-ID"  styleClass="large" sortBy="#{vettingRecord.employee.sid}">
+                                        <h:outputText value="#{vettingRecord.employee.sid}"/>
+                                    </p:column>
+                                    <p:column headerText="Name" sortBy="#{vettingRecord.employee.fullNames}">
+                                        <h:outputText value="#{vettingRecord.employee.fullNames}"/>
+                                    </p:column>                                    
+                                    <p:column headerText="TAT Days"  styleClass="large" sortBy="#{vettingRecord.tat}">
+                                        <h:outputText value="#{vettingRecord.tat}"/>
+                                    </p:column>
+                                    <p:column headerText="Date Updated"  styleClass="large" sortBy="#{vettingRecord.updatedDate}">
+                                        <h:outputText value="#{vettingRecord.updatedDate}">
+                                            <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="VSC Admin" sortBy="#{vettingRecord.vettingProcessingOfficer.fullNames}">
+                                        <h:outputText value="#{vettingRecord.vettingProcessingOfficer.fullNames}"/>
+                                    </p:column>
+                                    <p:column headerText="Officer" sortBy="#{vettingRecord.vettingOfficer}">
+                                        <h:outputText value="#{vettingRecord.vettingOfficer}"/>
+                                    </p:column>
+                                    <p:column headerText="Clearance" sortBy="#{vettingRecord.clearanceLevel}">
+                                        <h:outputText value="#{vettingRecord.clearanceLevel.toString()}"/>
+                                    </p:column>
+                                    <p:column headerText="Status" sortBy="#{vettingRecord.vettingStatus}">
+                                        <h:outputText value="#{vettingRecord.vettingStatus.toString()}"/>
+                                    </p:column>
+                                    <p:column headerText="Action" styleClass="medium">
+                                        <p:commandButton styleClass="ui-button-primary btn-size-sm" value="View" action="#{vettingFormProcessBean.loadProcessVettingForm(vettingRecord)}" update="@form"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </b:panel>
+                        </b:tab>
+                        <b:tab title="Completed Vetting Files">
+                            <b:panel> 
+                                <p:outputPanel rendered="#{empty vettingFormProcessBean.completedVetting}">
+                                    <p:outputLabel value="No Vetting records found."/>
+                                </p:outputPanel>
+                                <p:dataTable rendered="#{not empty vettingFormProcessBean.completedVetting}" stripedRows="true" showGridlines="true" value="#{vettingFormProcessBean.completedVetting}" var="vettingRecord" paginatorAlwaysVisible="false" reflow="true">
+                                    <p:column headerText="Date Initiated"  styleClass="large" sortBy="#{vettingRecord.createdDate}">
+                                        <h:outputText value="#{vettingRecord.createdDate}">
+                                            <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="S-ID"  styleClass="large" sortBy="#{vettingRecord.employee.sid}">
+                                        <h:outputText value="#{vettingRecord.employee.sid}"/>
+                                    </p:column>
+                                    <p:column headerText="Name" sortBy="#{vettingRecord.employee.fullNames}">
+                                        <h:outputText value="#{vettingRecord.employee.fullNames}"/>
+                                    </p:column>                                    
+                                    <p:column headerText="TAT Days"  styleClass="large" sortBy="#{vettingRecord.tat}">
+                                        <h:outputText value="#{vettingRecord.tat}"/>
+                                    </p:column>
+                                    <p:column headerText="Date Updated"  styleClass="large" sortBy="#{vettingRecord.updatedDate}">
+                                        <h:outputText value="#{vettingRecord.updatedDate}">
+                                            <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="VSC Admin" sortBy="#{vettingRecord.vettingProcessingOfficer.fullNames}">
+                                        <h:outputText value="#{vettingRecord.vettingProcessingOfficer.fullNames}"/>
+                                    </p:column>
+                                    <p:column headerText="Officer" sortBy="#{vettingRecord.vettingOfficer}">
+                                        <h:outputText value="#{vettingRecord.vettingOfficer}"/>
+                                    </p:column>
+                                    <p:column headerText="Clearance" sortBy="#{vettingRecord.clearanceLevel}">
+                                        <h:outputText value="#{vettingRecord.clearanceLevel.toString()}"/>
+                                    </p:column>
+                                    <p:column headerText="Status" sortBy="#{vettingRecord.vettingStatus}">
+                                        <h:outputText value="#{vettingRecord.vettingStatus.toString()}"/>
+                                    </p:column>
+                                    <p:column headerText="Action" styleClass="medium">
+                                        <p:commandButton styleClass="ui-button-primary btn-size-sm" value="View" action="#{vettingFormProcessBean.loadProcessVettingForm(vettingRecord)}" update="@form"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </b:panel>
+                        </b:tab>
+                        <b:tab title="Unallocated Vetting Files">
+                            <b:panel> 
+                                <p:outputPanel rendered="#{empty vettingFormProcessBean.activeVetting}">
+                                    <p:outputLabel value="No Vetting records found."/>
+                                </p:outputPanel>
+                                <p:dataTable rendered="#{not empty vettingFormProcessBean.activeVetting}" stripedRows="true" showGridlines="true" value="#{vettingFormProcessBean.activeVetting}" var="vettingRecord" paginatorAlwaysVisible="false" reflow="true">
+                                    <p:column headerText="Date Initiated"  styleClass="large" sortBy="#{vettingRecord.createdDate}">
+                                        <h:outputText value="#{vettingRecord.createdDate}">
+                                            <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="S-ID"  styleClass="large" sortBy="#{vettingRecord.employee.sid}">
+                                        <h:outputText value="#{vettingRecord.employee.sid}"/>
+                                    </p:column>
+                                    <p:column headerText="Name" sortBy="#{vettingRecord.employee.fullNames}">
+                                        <h:outputText value="#{vettingRecord.employee.fullNames}"/>
+                                    </p:column>                                    
+                                    <p:column headerText="TAT Days"  styleClass="large" sortBy="#{vettingRecord.tat}">
+                                        <h:outputText value="#{vettingRecord.tat}"/>
+                                    </p:column>
+                                    <p:column headerText="Date Updated"  styleClass="large" sortBy="#{vettingRecord.updatedDate}">
+                                        <h:outputText value="#{vettingRecord.updatedDate}">
+                                            <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="VSC Admin" sortBy="#{vettingRecord.vettingProcessingOfficer.fullNames}">
+                                        <h:outputText value="#{vettingRecord.vettingProcessingOfficer.fullNames}"/>
+                                    </p:column>
+                                    <p:column headerText="Officer" sortBy="#{vettingRecord.vettingOfficer}">
+                                        <h:outputText value="#{vettingRecord.vettingOfficer}"/>
+                                    </p:column>
+                                    <p:column headerText="Clearance" sortBy="#{vettingRecord.clearanceLevel}">
+                                        <h:outputText value="#{vettingRecord.clearanceLevel.toString()}"/>
+                                    </p:column>
+                                    <p:column headerText="Status" sortBy="#{vettingRecord.vettingStatus}">
+                                        <h:outputText value="#{vettingRecord.vettingStatus.toString()}"/>
+                                    </p:column>
+                                    <p:column headerText="Action" styleClass="medium">
+                                        <p:commandButton styleClass="ui-button-primary btn-size-sm" value="View" action="#{vettingFormProcessBean.loadProcessVettingForm(vettingRecord)}" update="@form"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </b:panel>
+                        </b:tab>
+                    </b:tabView>
+                </b:panel>
+                <b:panel rendered="#{vettingFormProcessBean.process}" look="default"  collapsible="false">
+                    <f:facet name="heading">
+                        <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                            <p:outputLabel value="Vetting Form" styleClass="panel-title-css"/>
+                        </b:panelGrid>
+                    </f:facet>
+                    <p:tabView id="wiz" activeIndex="#{vettingFormProcessBean.activeTab}" dynamic="true" cache="false">                          
+                        <p:tab title="Screening" id="screeningTab">
+                            <ui:include src="screening.xhtml"></ui:include>
+                            <b:panelGrid col-spans="3,2,2,2,2,1" size="lg" styleClass="ui-fluid" rendered="#{vettingFormProcessBean.entity.vettingStatus eq 'SSA_PROCESSING'}">
+                                <b:row>
+                                    <b:commandButton large-screen="full-width"  value="Save and Exit" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()" look="success" size="lg"  icon-awesome="fa-save" update="@(form)" action="#{vettingFormProcessBean.save(vettingFormProcessBean.entity)}"/>
+                                </b:row>
+                            </b:panelGrid>
+                            <p:separator/>
+                            <p:commandButton value="Back" action="#{vettingFormProcessBean.prev}" styleClass="left-button" update="wiz"/>
+                            <p:commandButton value="Next" action="#{vettingFormProcessBean.next}" styleClass="right-button" update="wiz"/>
+                        </p:tab>
+                        <p:tab title="Declaration" id="declarationTab">
+                            <ui:include src="screeningDeclaration.xhtml"></ui:include>
+                            <b:panelGrid col-spans="3,2,2,2,2,1" size="lg" styleClass="ui-fluid" rendered="#{vettingFormProcessBean.entity.vettingStatus eq 'SSA_PROCESSING'}">
+                                <b:row>
+                                    <b:commandButton large-screen="full-width"  value="Save and Exit" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()" look="success" size="lg"  icon-awesome="fa-save" update="@(form)" action="#{vettingFormProcessBean.save(vettingFormProcessBean.entity)}"/>
+                                </b:row>
+                            </b:panelGrid>
+                            <p:separator/>
+                            <p:commandButton value="Back" action="#{vettingFormProcessBean.prev}" styleClass="left-button" update="wiz"/>
+                            <p:commandButton value="Next" action="#{vettingFormProcessBean.next}" styleClass="right-button" update="wiz"/>
+                        </p:tab>
+                        <p:tab title="Income Expenditure" id="expenditureTab">
+                            <ui:include src="incomeExpenditure.xhtml"></ui:include>
+                            <b:panelGrid col-spans="3,2,2,2,2,1" size="lg" styleClass="ui-fluid" rendered="#{vettingFormProcessBean.entity.vettingStatus eq 'SSA_PROCESSING'}">
+                                <b:row>
+                                    <b:commandButton large-screen="full-width"  value="Save and Exit" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()" look="success" size="lg"  icon-awesome="fa-save" update="@(form)" action="#{vettingFormProcessBean.save(vettingFormProcessBean.entity)}"/>
+                                </b:row>
+                            </b:panelGrid>
+                            <p:separator/>
+                            <p:commandButton value="Back" action="#{vettingFormProcessBean.prev}" styleClass="left-button" update="wiz"/>
+                            <p:commandButton value="Next" action="#{vettingFormProcessBean.next}" styleClass="right-button" update="wiz"/>
+                        </p:tab> 
+                        <p:tab title="Grade of Clearance" id="gradeClearanceTab" rendered="#{vettingFormProcessBean.entity.clearanceLevel ne null}">
+                            <ui:include src="gradeClearance.xhtml"></ui:include>
+                            <b:panelGrid col-spans="3,2,2,2,2,1" size="lg" styleClass="ui-fluid" rendered="#{vettingFormProcessBean.entity.vettingStatus eq 'SSA_PROCESSING'}">
+                                <b:row>
+                                    <b:commandButton large-screen="full-width"  value="Save and Exit" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()" look="success" size="lg"  icon-awesome="fa-save" update="@(form)" action="#{vettingFormProcessBean.save(vettingFormProcessBean.entity)}"/>
+                                </b:row>
+                            </b:panelGrid>
+                            <p:separator/>
+                            <p:commandButton value="Back" action="#{vettingFormProcessBean.prev}" styleClass="left-button" update="wiz"/>
+                            <p:commandButton value="Next" action="#{vettingFormProcessBean.next}" styleClass="right-button" update="wiz"/>
+                        </p:tab> 
+                        <p:tab title="Additional Information" id="commentTab" rendered="#{not empty vettingFormProcessBean.comments}">
+                            <p:fieldset legend="List of Additional Information">
+                                <b:panelGrid colSpans="2,2,8" size="lg" styleClass="ui-fluid">
+                                    <p:outputLabel value="Date"/>
+                                    <p:outputLabel value="Name"/>
+                                    <p:outputLabel value="Notes"/>
+                                </b:panelGrid>                    
+                                <p:separator/>
+                                <p:outputPanel>
+                                    <ui:repeat value="#{vettingFormProcessBean.comments}" var="comment" varStatus="commentVarStatus">
+                                        <b:panelGrid colSpans="2,2,8" size="lg" styleClass="ui-fluid">
+                                            <b:formGroup>
+                                                <h:outputText  value="#{comment.createdDate}" styleClass="customCSS">
+                                                    <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                                                </h:outputText>
+                                            </b:formGroup>
+                                            <b:formGroup>
+                                                <h:outputText value="#{comment.loggedOnUserFullName}" styleClass="customCSS"/>
+                                            </b:formGroup>
+                                            <b:formGroup>
+                                                <p:textEditor toolbarVisible="false" readonly="true" allowBlocks="false"  value="#{comment.description}"/>
+                                            </b:formGroup>
+                                        </b:panelGrid>
+                                    </ui:repeat>
+                                </p:outputPanel>
+                            </p:fieldset> 
+                            <p:separator/>
+                            <b:panelGrid colSpans="2,3,2,3,2" size="md" styleClass="ui-fluid" rendered="#{vettingFormProcessBean.entity.vettingStatus eq 'SSA_PROCESSING'}">
+                                <b:commandButton large-screen="full-width" value="Save and Exit" look="info" iconAwesome="fa-save" update="@(form)" size="lg" action="#{vettingFormProcessBean.save(vettingFormProcessBean.entity)}" ajax="true" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()"/> 
+                                <b:commandButton large-screen="full-width" value="Submit to next level" look="success" icon="check" update="@(form)" size="lg" action="#{vettingFormProcessBean.addNote('officerNote')}" immediate="true" ajax="true" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()"/>
+                                <b:commandButton large-screen="full-width" value="SendBack" look="primary" iconAwesome="reply" update="@(form)" size="lg" action="#{vettingFormProcessBean.addNote('rework')}" immediate="true" ajax="true" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()"/>                                
+                                <b:commandButton large-screen="full-width" value="Request additional info" look="warning" icon="send" update="@(form)" size="lg" action="#{vettingFormProcessBean.addComment('request')}" immediate="true" ajax="true" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()"/>                                
+                                <b:commandButton large-screen="full-width" value="Cancel" look="danger" iconAwesome="window-close" process="@this" update="@(form)" size="lg" action="#{vettingFormProcessBean.cancel()}" immediate="true" ajax="true" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()"/> 
+                            </b:panelGrid>
+                            <p:separator/>
+                            <p:commandButton value="Back" action="#{vettingFormProcessBean.prev}" styleClass="left-button" update="wiz"/>
+                            <p:commandButton value="Next" action="#{vettingFormProcessBean.next}" styleClass="right-button" update="wiz"/>
+                        </p:tab>
+                        <p:tab title="Recommendations" id="noteTab" rendered="#{not empty vettingFormProcessBean.notesAdded}">
+                            <p:fieldset legend="List of Recommendations">
+                                <b:panelGrid colSpans="2,2,8" size="lg" styleClass="ui-fluid">
+                                    <p:outputLabel value="Date"/>
+                                    <p:outputLabel value="Name"/>
+                                    <p:outputLabel value="Notes"/>
+                                </b:panelGrid>                    
+                                <p:separator/>
+                                <p:outputPanel>
+                                    <ui:repeat value="#{vettingFormProcessBean.notesAdded}" var="note" varStatus="noteVarStatus">
+                                        <b:panelGrid colSpans="2,2,8" size="lg" styleClass="ui-fluid">
+                                            <b:formGroup>
+                                                <h:outputText  value="#{note.createdDate}" styleClass="customCSS">
+                                                    <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                                                </h:outputText>
+                                            </b:formGroup>
+                                            <b:formGroup>
+                                                <h:outputText value="#{note.loggedOnUserFullName} (#{note.roleDescription})" styleClass="customCSS"/>
+                                            </b:formGroup>
+                                            <b:formGroup>
+                                                <p:textEditor toolbarVisible="false" readonly="true" allowBlocks="false"  value="#{note.description}"/>
+                                            </b:formGroup>
+                                        </b:panelGrid>
+                                    </ui:repeat>
+                                </p:outputPanel>
+                            </p:fieldset> 
+                            <b:panelGrid col-spans="3,2,2,2,2,1" size="lg" styleClass="ui-fluid" rendered="#{vettingFormProcessBean.entity.vettingStatus eq 'SSA_PROCESSING'}">
+                                <b:row>
+                                    <b:commandButton large-screen="full-width"  value="Save and Exit" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()" look="success" size="lg"  icon-awesome="fa-save" update="@(form)" action="#{vettingFormProcessBean.save(vettingFormProcessBean.entity)}"/>
+                                </b:row>
+                            </b:panelGrid>
+                            <p:separator/>
+                            <p:commandButton value="Back" action="#{vettingFormProcessBean.prev}" styleClass="left-button" update="wiz"/>
+                            <p:commandButton value="Next" action="#{vettingFormProcessBean.next}" styleClass="right-button" update="wiz"/>
+                        </p:tab>
+                        <p:tab title="Attachments" id="attachmentTab">
+                            <ui:include src="attachment.xhtml"></ui:include> 
+                            <b:panelGrid colSpans="2,3,2,3,2" size="md" styleClass="ui-fluid" rendered="#{vettingFormProcessBean.entity.vettingStatus eq 'SSA_PROCESSING'}">
+                                <b:commandButton large-screen="full-width" value="Save and Exit" look="info" iconAwesome="fa-save" update="@(form)" size="lg" action="#{vettingFormProcessBean.save(vettingFormProcessBean.entity)}" ajax="true" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()"/> 
+                                <b:commandButton large-screen="full-width" value="Submit to next level" look="success" icon="check" update="@(form)" size="lg" action="#{vettingFormProcessBean.addNote('officerNote')}" immediate="true" ajax="true" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()"/>
+                                <b:commandButton large-screen="full-width" value="SendBack" look="primary" iconAwesome="reply" update="@(form)" size="lg" action="#{vettingFormProcessBean.addNote('rework')}" immediate="true" ajax="true" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()"/>                                
+                                <b:commandButton large-screen="full-width" value="Request additional info" look="warning" icon="send" update="@(form)" size="lg" action="#{vettingFormProcessBean.addComment('request')}" immediate="true" ajax="true" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()"/>                                
+                                <b:commandButton large-screen="full-width" value="Cancel" look="danger" iconAwesome="window-close" process="@this" update="@(form)" size="lg" action="#{vettingFormProcessBean.cancel()}" immediate="true" ajax="true" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()"/> 
+                            </b:panelGrid>
+                            <p:separator/>
+                            <p:commandButton value="Back" action="#{vettingFormProcessBean.prev}" styleClass="left-button" update="wiz"/>
+                            <p:commandButton value="Next" action="#{vettingFormProcessBean.next}" styleClass="right-button" update="wiz"/>
+                        </p:tab>
+                        <p:tab title="Vetting File" id="fileAttachmentTab">
+                            <ui:include src="vettingFileAttach.xhtml"></ui:include>
+                            <b:panelGrid colSpans="2,3,2,3,2" size="md" styleClass="ui-fluid" rendered="#{vettingFormProcessBean.entity.vettingStatus eq 'SSA_PROCESSING'}">
+                                <b:commandButton large-screen="full-width" value="Save and Exit" look="info" iconAwesome="fa-save" update="@(form)" size="lg" action="#{vettingFormProcessBean.save(vettingFormProcessBean.entity)}" ajax="true" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()"/> 
+                                <b:commandButton large-screen="full-width" value="Submit to next level" look="success" icon="check" update="@(form)" size="lg" action="#{vettingFormProcessBean.addNote('officerNote')}" immediate="true" ajax="true" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()"/>
+                                <b:commandButton large-screen="full-width" value="SendBack" look="primary" iconAwesome="reply" update="@(form)" size="lg" action="#{vettingFormProcessBean.addNote('rework')}" immediate="true" ajax="true" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()"/>                                
+                                <b:commandButton large-screen="full-width" value="Request additional info" look="warning" icon="send" update="@(form)" size="lg" action="#{vettingFormProcessBean.addComment('request')}" immediate="true" ajax="true" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()"/>                                
+                                <b:commandButton large-screen="full-width" value="Cancel" look="danger" iconAwesome="window-close" process="@this" update="@(form)" size="lg" action="#{vettingFormProcessBean.cancel()}" immediate="true" ajax="true" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()"/> 
+                            </b:panelGrid>
+                            <b:panelGrid colSpans="12" size="md" styleClass="ui-fluid" rendered="#{vettingFormProcessBean.entity.vettingStatus ne 'SSA_PROCESSING'}">
+                                <b:commandButton large-screen="full-width" value="Back" look="primary" iconAwesome="window-close" process="@this"  update="@(form)" size="lg" action="#{vettingFormProcessBean.cancel()}" immediate="true" ajax="true" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()"/> 
+                            </b:panelGrid>
+                            <p:separator/>
+                            <p:commandButton value="Back" action="#{vettingFormProcessBean.prev}" styleClass="left-button" update="wiz"/>
+                        </p:tab>
+                    </p:tabView>
+                </b:panel>
+                <b:panel rendered="#{vettingFormProcessBean.commentView}">
+                    <p:fieldset legend="Add Notes">
+                        <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                            <b:formGroup>
+                                <p:textEditor allowLinks="false" allowImages="false" value="#{vettingFormProcessBean.comment.description}">
+                                    <f:facet name="toolbar">
+                                        <span class="ql-formats">
+                                            <select class="ql-font" />
+                                            <select class="ql-size" />
+                                        </span>
+                                        <span class="ql-formats">
+                                            <button class="ql-bold" />
+                                            <button class="ql-italic" />
+                                            <button class="ql-underline" />
+                                            <button class="ql-strike" />
+                                        </span>
+                                        <span class="ql-formats">
+                                            <select class="ql-color" />
+                                            <select class="ql-background" />
+                                        </span>
+                                        <span class="ql-formats">
+                                            <button class="ql-header" value="1" />
+                                            <button class="ql-header" value="2" />
+                                            <button class="ql-blockquote" />
+                                            <button class="ql-code-block" />
+                                        </span>
+                                        <span class="ql-formats">
+                                            <button class="ql-list" value="ordered" />
+                                            <button class="ql-list" value="bullet" />
+                                            <button class="ql-indent" value="-1" />
+                                            <button class="ql-indent" value="+1" />
+                                        </span>
+                                        <span class="ql-formats">
+                                            <button class="ql-direction" value="rtl" />
+                                            <select class="ql-align" />
+                                        </span>      
+                                    </f:facet>
+                                </p:textEditor>
+                            </b:formGroup>
+                        </b:panelGrid>                        
+                    </p:fieldset>
+                    <f:facet name="footer">
+                        <b:row>
+                            <b:panelGrid colSpans="6,6" size="lg" styleClass="ui-fluid" rendered="#{vettingFormProcessBean.comment.clickedButton eq 'request'}">
+                                <b:commandButton size="lg" icon="check" large-screen="full-width" look="primary" value="Submit" action="#{vettingFormProcessBean.request(vettingFormProcessBean.entity)}" update="@form"/>
+                                <b:commandButton large-screen="full-width" size="lg" value="Cancel" iconAwesome="window-close" look="danger" action="#{vettingFormProcessBean.cancelComment(vettingFormProcessBean.comment)}"  immediate="true" process="@this"  update="@(form)"/>
+                            </b:panelGrid>
+                        </b:row> 
+                    </f:facet>
+                </b:panel>
+                <b:panel rendered="#{vettingFormProcessBean.notes}">
+                    <p:fieldset legend="Add Notes">
+                        <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                            <b:formGroup>
+                                <p:textEditor allowLinks="false" allowImages="false" value="#{vettingFormProcessBean.note.description}">
+                                    <f:facet name="toolbar">
+                                        <span class="ql-formats">
+                                            <select class="ql-font" />
+                                            <select class="ql-size" />
+                                        </span>
+                                        <span class="ql-formats">
+                                            <button class="ql-bold" />
+                                            <button class="ql-italic" />
+                                            <button class="ql-underline" />
+                                            <button class="ql-strike" />
+                                        </span>
+                                        <span class="ql-formats">
+                                            <select class="ql-color" />
+                                            <select class="ql-background" />
+                                        </span>
+                                        <span class="ql-formats">
+                                            <button class="ql-header" value="1" />
+                                            <button class="ql-header" value="2" />
+                                            <button class="ql-blockquote" />
+                                            <button class="ql-code-block" />
+                                        </span>
+                                        <span class="ql-formats">
+                                            <button class="ql-list" value="ordered" />
+                                            <button class="ql-list" value="bullet" />
+                                            <button class="ql-indent" value="-1" />
+                                            <button class="ql-indent" value="+1" />
+                                        </span>
+                                        <span class="ql-formats">
+                                            <button class="ql-direction" value="rtl" />
+                                            <select class="ql-align" />
+                                        </span>      
+                                    </f:facet>
+                                </p:textEditor>
+                            </b:formGroup>
+                        </b:panelGrid>
+                    </p:fieldset>
+                    <f:facet name="footer">
+                        <b:row>
+                            <b:panelGrid colSpans="4,4,4" size="lg" styleClass="ui-fluid" rendered="#{vettingFormProcessBean.note.clickedButton eq 'officerNote'}">
+                                <b:commandButton large-screen="full-width" size="lg" look="success" icon="check" value="Submit" action="#{vettingFormProcessBean.allocateVetting(vettingFormProcessBean.entity)}" update="@form"/>
+                                <b:commandButton large-screen="full-width" value="Request additional info" look="warning" icon="send" update="@(form)" size="lg" action="#{vettingFormProcessBean.addComment('request')}" immediate="true" ajax="true" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()"/>                                
+                                <b:commandButton large-screen="full-width" size="lg" value="Cancel" iconAwesome="window-close" look="danger" action="#{vettingFormProcessBean.cancelNote(vettingFormProcessBean.note)}" immediate="true" process="@this"  update="@(form)"/>
+                            </b:panelGrid>
+                            <b:panelGrid colSpans="6,6" size="lg" styleClass="ui-fluid" rendered="#{vettingFormProcessBean.note.clickedButton eq 'rework'}">
+                                <b:commandButton size="lg" icon="check" large-screen="full-width" look="success" value="Submit" action="#{vettingFormProcessBean.rework(vettingFormProcessBean.entity)}" update="@form"/>
+                                <b:commandButton large-screen="full-width" size="lg" value="Cancel" iconAwesome="window-close" look="danger" action="#{vettingFormProcessBean.cancelNote(vettingFormProcessBean.note)}"  immediate="true" process="@this"  update="@(form)"/>
+                            </b:panelGrid>
+                        </b:row>
+                    </f:facet>
+                </b:panel>
+                <b:panel collapsible="false" rendered="#{vettingFormProcessBean.fetchCaseFromPool}">
+                    <f:facet name="heading">
+                        <p:outputLabel value="Fetch the next Case" styleClass="panel-title-css"/>
+                    </f:facet>
+                    <b:panelGrid colSpans="6,6" size="lg" styleClass="ui-fluid">
+                        <p:fieldset legend="Pools">
+                            <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                                <b:formGroup>
+                                    <p:selectOneMenu value="#{vettingFormProcessBean.selectedStatus}" converter="entityConverter">
+                                        <f:selectItem  itemLabel="Select One"  noSelectionOption="true"/>
+                                        <f:selectItems value="#{vettingFormProcessBean.pools}" var="caseStatus" itemLabel="#{caseStatus.toString()}" itemValue="#{caseStatus}"/>
+                                    </p:selectOneMenu>
+                                </b:formGroup>
+                            </b:panelGrid>
+                        </p:fieldset>
+                        <b:row>                          
+                            <b:commandButton look="primary" size="lg" value="Fetch" action="#{vettingFormProcessBean.vettingClaim()}" ajax="false" update="templateForm"/>
+                            <b:commandButton large-screen="full-width" size="lg" value="Cancel" look="danger" action="#{vettingFormProcessBean.cancelPool(null)}" immediate="true" process="@this" update="@form" />
+                        </b:row>
+                    </b:panelGrid>
+                </b:panel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

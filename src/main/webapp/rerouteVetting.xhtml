@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <ui:composition template="/template/template.xhtml">
+            <ui:define name="maincontent">
+                <b:panel rendered="#{vettingRerouteBean.list}" look="default"  collapsible="false">
+                    <f:facet name="heading">
+                        <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                            <p:outputLabel value="Re-route Vetting" styleClass="panel-title-css"/>
+                        </b:panelGrid>
+                    </f:facet>
+                    <b:panelGrid colSpans="4,2,6" size="md" styleClass="ui-fluid">
+                        <b:formGroup>
+                            <p:selectOneMenu value="#{vettingRerouteBean.selctedVettingStatus}" converter="entityConverter" filter="true" filterMatchMode="contains" filterPlaceholder="Search">
+                                <f:selectItem itemLabel="Select One"/>
+                                <f:selectItems value="#{vettingRerouteBean.vettingStatus}" var="status" itemLabel="#{status.toString()}" itemValue="#{status}"/>
+                            </p:selectOneMenu>
+                        </b:formGroup>
+                        <b:row>
+                            <b:commandButton look="primary" iconAwesome="filter" size="lg" value="Filter Records" action="#{vettingRerouteBean.filterByStatus()}" ajax="false" update="templateForm"/>
+                        </b:row>
+                    </b:panelGrid>
+                    <p:dataTable paginator="true" paginatorPosition="top" paginatorAlwaysVisible="false" reflow="true" rows="10" stripedRows="true" value="#{vettingRerouteBean.vettingRecords}" var="vettingRecord">
+                        <p:column headerText="Date Initiated"  styleClass="large" sortBy="#{vettingRecord.createdDate}">
+                            <h:outputText value="#{vettingRecord.createdDate}">
+                                <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="S-ID"  styleClass="large" sortBy="#{vettingRecord.employee.sid}">
+                            <h:outputText value="#{vettingRecord.employee.sid}"/>
+                        </p:column>
+                        <p:column headerText="Name" sortBy="#{vettingRecord.employee.fullNames}">
+                            <h:outputText value="#{vettingRecord.employee.fullNames}"/>
+                        </p:column>                                    
+                        <p:column headerText="TAT Days"  styleClass="large" sortBy="#{vettingRecord.tat}">
+                            <h:outputText value="#{vettingRecord.tat}"/>
+                        </p:column>
+                        <p:column headerText="Date Updated"  styleClass="large" sortBy="#{vettingRecord.updatedDate}">
+                            <h:outputText value="#{vettingRecord.updatedDate}">
+                                <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="VSC Admin" sortBy="#{vettingRecord.vettingProcessingOfficer.fullNames}">
+                            <h:outputText value="#{vettingRecord.vettingProcessingOfficer.fullNames}"/>
+                        </p:column>
+                        <p:column headerText="Officer" sortBy="#{vettingRecord.vettingOfficer}">
+                            <h:outputText value="#{vettingRecord.vettingOfficer}"/>
+                        </p:column>
+                        <p:column headerText="Clearance" sortBy="#{vettingRecord.clearanceLevel}">
+                            <h:outputText value="#{vettingRecord.clearanceLevel.toString()}"/>
+                        </p:column>
+                        <p:column headerText="Status" sortBy="#{vettingRecord.vettingStatus}">
+                            <h:outputText value="#{vettingRecord.vettingStatus.toString()}"/>
+                        </p:column>
+                        <p:column headerText="Action" styleClass="large">
+                            <p:commandButton styleClass="ui-button-primary btn-size-sm" value="Allocate" action="#{vettingRerouteBean.loadAllocateVettingForm(vettingRecord)}"  update="@form"/>
+                        </p:column>
+                    </p:dataTable>
+                </b:panel>
+                <b:panel rendered="#{vettingRerouteBean.allocate}" look="default"  collapsible="false">
+                    <f:facet name="heading">
+                        <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                            <p:outputLabel value="ALLOCATE VETTING" styleClass="panel-title-css"/>
+                        </b:panelGrid>
+                    </f:facet>
+                    <b:panelGrid col-spans="6,6" size="lg" styleClass="ui-fluid">
+                        <b:formGroup>
+                            <p:fieldset legend="Full Names">
+                                <p:inputText value="#{vettingRerouteBean.entity.employee.fullNames}" readonly="true"/> 
+                            </p:fieldset>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:fieldset legend="S-ID">
+                                <p:inputText value="#{vettingRerouteBean.entity.employee.sid}" readonly="true"/>
+                            </p:fieldset>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:fieldset legend="Employee Number">
+                                <p:inputText value="#{vettingRerouteBean.entity.employee.employeeNumber}" readonly="true"/>
+                            </p:fieldset>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:fieldset legend="Assign Officer">
+                                <p:selectOneMenu value="#{vettingRerouteBean.entity.vettingProcessingOfficer}" converter="entityConverter" required="true" requiredMessage="Select vetting officer" filter="true" filterPlaceholder="Search user" filterMatchMode="contains">
+                                    <f:selectItems value="#{vettingRerouteBean.vettingOfficers}" var="officer" itemLabel="[#{officer.fullNames}][#{officer.sid}]" itemValue="#{officer}" />
+                                </p:selectOneMenu>
+                            </p:fieldset>
+                        </b:formGroup>
+                    </b:panelGrid>
+                    <f:facet name="footer">
+                        <b:row>
+                            <b:panelGrid colSpans="6,6" size="md" styleClass="ui-fluid">
+                                <b:commandButton large-screen="full-width"  value="Allocate Vetting" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()" look="success" size="lg" action="#{vettingRerouteBean.allocateVetting(vettingRerouteBean.entity)}" icon-awesome="fa-save" update="@(form)"/>
+                                <b:commandButton large-screen="full-width"  value="Cancel" look="danger" iconAwesome="window-close" process="@this"  update="@(form)" size="lg"  action="#{vettingRerouteBean.cancel()}" immediate="true" ajax="true" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()"/>                               
+                            </b:panelGrid>
+                        </b:row>
+                    </f:facet>
+                </b:panel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <b:panel look="default"  collapsible="false">
+            <b:panelGrid col-spans="12" size="lg" styleClass="ui-fluid">
+                <p:fieldset legend="Grade Clearance">
+                    <b:panelGrid col-spans="6,6" size="md" styleClass="ui-fluid">
+                        <b:formGroup>
+                            <p:fieldset legend="Employee Full Names">
+                                <p:inputText readonly="true" value="#{gradeClearanceBean.employee.fullNames}" /> 
+                            </p:fieldset>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:fieldset legend="Vetting Officer">
+                                <p:inputText readonly="true" value="#{gradeClearanceBean.officer}" /> 
+                            </p:fieldset>
+                        </b:formGroup>
+                    </b:panelGrid>                   
+                </p:fieldset>
+                <p:separator/>
+                <p:fieldset legend="STEP 1: NATIONAL SECURITY REQUIREMENTS OF THE POSITION">
+                    <b:formGroup>
+                        <p:outputLabel value="Job Role"/>
+                        <p:selectOneMenu disabled="#{gradeClearanceBean.disabled}" value="#{gradeClearanceBean.entity.nationalJobRole}" required="true" requiredMessage="Please select a role">
+                            <p:ajax event="change" listener="#{gradeClearanceBean.step1Listener}" update="responsibilities"/>
+                            <p:ajax event="change" listener="#{gradeClearanceBean.stepListener}" update="outcome step2"/>
+                            <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                            <f:selectItems value="#{gradeClearanceBean.nationalJobRoles}" var="role" itemLabel="#{role.description}" itemValue="#{role.description}"/>
+                        </p:selectOneMenu>
+                    </b:formGroup>
+                    <p:outputPanel id="responsibilities">
+                        <b:panelGrid colSpans="12"  size="lg" styleClass="ui-fluid" rendered="#{not empty(gradeClearanceBean.entity.nationalJobRole)}">
+                            <b:formGroup>
+                                <p:outputLabel value="Responsibility 1"/>
+                                <p:selectOneMenu disabled="#{gradeClearanceBean.disabled}" value="#{gradeClearanceBean.entity.responsibilityOne}">
+                                    <p:ajax event="change" listener="#{gradeClearanceBean.stepListener}" update="outcome step2 step4 responsibility2"/>
+                                    <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                    <f:selectItems value="#{gradeClearanceBean.nationalalResponsibilities}" var="responsibility" itemLabel="#{responsibility.description}" itemValue="#{responsibility.description}"/>
+                                </p:selectOneMenu>
+                            </b:formGroup>
+                            <p:outputPanel id="responsibility2">
+                                <b:formGroup rendered="#{not empty(gradeClearanceBean.entity.responsibilityOne) and (gradeClearanceBean.entity.outcome ne 'Automatic High Risk. Please proceed to Step 4')}">
+                                    <p:outputLabel value="Responsibility 2"/>
+                                    <p:selectOneMenu disabled="#{gradeClearanceBean.disabled}" value="#{gradeClearanceBean.entity.responsibilityTwo}">
+                                        <p:ajax event="change" listener="#{gradeClearanceBean.stepListener}" update="outcome step2 responsibility3"/>
+                                        <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                        <f:selectItems value="#{gradeClearanceBean.nationalalResponsibilities}" var="responsibility" itemLabel="#{responsibility.description}" itemValue="#{responsibility.description}"/>
+                                    </p:selectOneMenu>
+                                </b:formGroup>
+                            </p:outputPanel>
+                            <p:outputPanel id="responsibility3">
+                                <b:formGroup rendered="#{not empty(gradeClearanceBean.entity.responsibilityTwo) and (gradeClearanceBean.entity.outcome ne 'Automatic High Risk. Please proceed to Step 4')}">
+                                    <p:outputLabel value="Responsibility 3"/>
+                                    <p:selectOneMenu disabled="#{gradeClearanceBean.disabled}" value="#{gradeClearanceBean.entity.responsibilityThree}">
+                                        <p:ajax event="change" listener="#{gradeClearanceBean.stepListener}" update="outcome step2"/>
+                                        <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                        <f:selectItems value="#{gradeClearanceBean.nationalalResponsibilities}" var="responsibility" itemLabel="#{responsibility.description}" itemValue="#{responsibility.description}"/>
+                                    </p:selectOneMenu>
+                                </b:formGroup>
+                            </p:outputPanel>
+                        </b:panelGrid>
+                    </p:outputPanel>
+                    <p:outputPanel id="outcome">
+                        <b:panelGrid colSpans="6,6"  size="lg" styleClass="ui-fluid">
+                            <b:formGroup>
+                                <p:fieldset legend="STEP 1: Outcome Damage Level">
+                                    <p:inputText readonly="true" value="#{gradeClearanceBean.entity.damageLevel}" styleClass="outcomeCSS"/> 
+                                </p:fieldset>
+                            </b:formGroup>
+                            <b:formGroup>
+                                <p:fieldset legend="STEP 1: Outcome Step">
+                                    <p:inputText readonly="true" value="#{gradeClearanceBean.entity.outcome}" styleClass="stepCSS"/> 
+                                </p:fieldset>
+                            </b:formGroup>
+                        </b:panelGrid>
+                    </p:outputPanel>
+                </p:fieldset>
+                <p:outputPanel id="step2">
+                    <p:separator rendered="#{gradeClearanceBean.entity.outcome eq 'Medium to Low Risk. Please Proceed to Step 2' or gradeClearanceBean.entity.outcome eq 'If not applicable, proceed to step 2'}"/>                
+                    <p:fieldset legend="STEP 2: SUITABILITY REQUIREMENTS OF THE POSITION" rendered="#{gradeClearanceBean.entity.outcome eq 'Medium to Low Risk. Please Proceed to Step 2' or gradeClearanceBean.entity.outcome eq 'If not applicable, proceed to step 2'}">
+                        <b:formGroup>
+                            <p:outputLabel value="Job Role"/>
+                            <p:selectOneMenu disabled="#{gradeClearanceBean.disabled}" value="#{gradeClearanceBean.entity.sustainableJobRole}" required="true" requiredMessage="Please select a role">
+                                <p:ajax event="change" listener="#{gradeClearanceBean.step2Listner}" update="sustainable"/>
+                                <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                <f:selectItems value="#{gradeClearanceBean.sustainabilityJobRoles}" var="role" itemLabel="#{role.description}" itemValue="#{role.description}"/>
+                            </p:selectOneMenu>
+                        </b:formGroup>  
+                        <b:formGroup>
+                            <p:outputLabel value="Sub Area"/>
+                            <p:selectOneMenu disabled="#{gradeClearanceBean.disabled}" value="#{gradeClearanceBean.entity.subArea}" required="true" converter="entityConverter" requiredMessage="Please select a sub-area">
+                                <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                <f:selectItems value="#{gradeClearanceBean.subAreas}" var="subarea" itemLabel="#{subarea.description}" itemValue="#{subarea}"/>
+                            </p:selectOneMenu>
+                        </b:formGroup>
+                        <p:outputPanel id="sustainable">
+                            <b:panelGrid colSpans="12"  size="lg" styleClass="ui-fluid" rendered="#{not empty(gradeClearanceBean.entity.sustainableJobRole)}">
+                                <b:formGroup>
+                                    <p:outputLabel value="Responsibility A"/>
+                                    <p:selectOneMenu disabled="#{gradeClearanceBean.disabled}" value="#{gradeClearanceBean.entity.responsibilityA}">
+                                        <p:ajax event="change" listener="#{gradeClearanceBean.stepListener2}" update="outcomeSustanabile step3 responsibilityB"/>
+                                        <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                        <f:selectItems value="#{gradeClearanceBean.sustainableResponsibilities}" var="responsibility" itemLabel="#{responsibility.description}" itemValue="#{responsibility.description}"/>
+                                    </p:selectOneMenu>
+                                </b:formGroup>
+                                <p:outputPanel id="responsibilityB">
+                                    <b:formGroup rendered="#{not empty(gradeClearanceBean.entity.responsibilityA)}">
+                                        <p:outputLabel value="Responsibility B"/>
+                                        <p:selectOneMenu disabled="#{gradeClearanceBean.disabled}" value="#{gradeClearanceBean.entity.responsibilityB}">
+                                            <p:ajax event="change" listener="#{gradeClearanceBean.stepListener2}" update="outcomeSustanabile step3 responsibilityC"/>
+                                            <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                            <f:selectItems value="#{gradeClearanceBean.sustainableResponsibilities}" var="responsibility" itemLabel="#{responsibility.description}" itemValue="#{responsibility.description}"/>
+                                        </p:selectOneMenu>
+                                    </b:formGroup>
+                                </p:outputPanel>
+                                <p:outputPanel id="responsibilityC">
+                                    <b:formGroup rendered="#{not empty(gradeClearanceBean.entity.responsibilityB)}">
+                                        <p:outputLabel value="Responsibility C"/>
+                                        <p:selectOneMenu disabled="#{gradeClearanceBean.disabled}" value="#{gradeClearanceBean.entity.responsibilityC}">
+                                            <p:ajax event="change" listener="#{gradeClearanceBean.stepListener2}" update="outcomeSustanabile step3"/>
+                                            <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                            <f:selectItems value="#{gradeClearanceBean.sustainableResponsibilities}" var="responsibility" itemLabel="#{responsibility.description}" itemValue="#{responsibility.description}"/>
+                                        </p:selectOneMenu>
+                                    </b:formGroup>
+                                </p:outputPanel>
+                            </b:panelGrid>
+                        </p:outputPanel>                        
+                        <p:outputPanel id="outcomeSustanabile">
+                            <b:panelGrid colSpans="6,6"  size="lg" styleClass="ui-fluid">
+                                <b:formGroup>
+                                    <p:fieldset legend="STEP 2: Outcome Value">
+                                        <p:inputText readonly="true" value="#{gradeClearanceBean.entity.outcomeValue}" styleClass="outcomeCSS"/> 
+                                    </p:fieldset>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:fieldset legend="STEP 2: Outcome Step">
+                                        <p:inputText readonly="true" value="#{gradeClearanceBean.entity.step2outcome}" styleClass="stepCSS"/> 
+                                    </p:fieldset>
+                                </b:formGroup>
+                            </b:panelGrid>
+                        </p:outputPanel>
+                    </p:fieldset>
+                </p:outputPanel>
+                <p:outputPanel id="step3">
+                    <p:separator rendered="#{(gradeClearanceBean.entity.outcome eq 'Medium to Low Risk. Please Proceed to Step 2' or gradeClearanceBean.entity.outcome eq 'If not applicable, proceed to step 2') and gradeClearanceBean.entity.outcomeValue ne null}"/>
+                    <p:fieldset legend="STEP 3: POINT ADJUSTMENT" rendered="#{(gradeClearanceBean.entity.outcome eq 'Medium to Low Risk. Please Proceed to Step 2' or gradeClearanceBean.entity.outcome eq 'If not applicable, proceed to step 2') and gradeClearanceBean.entity.outcomeValue ne null}">
+                        <b:formGroup>
+                            <p:outputLabel value="Adjustment Category"/>
+                            <p:selectOneMenu disabled="#{gradeClearanceBean.disabled}" value="#{gradeClearanceBean.entity.adjustmentCategory}" required="true" converter="entityConverter" requiredMessage="Please select a Adjustment Category">
+                                <p:ajax event="change" listener="#{gradeClearanceBean.step3Listner}" update="program"/>
+                                <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                <f:selectItems value="#{gradeClearanceBean.adjustmentCategory}" var="category" itemLabel="#{category.description}" itemValue="#{category}"/>
+                            </p:selectOneMenu>
+                        </b:formGroup>
+                        <p:outputPanel id="program">
+                            <b:formGroup rendered="#{gradeClearanceBean.entity.adjustmentCategory ne null}">
+                                <p:outputLabel value="Applicable Scope of programme"/>
+                                <p:selectOneMenu disabled="#{gradeClearanceBean.disabled}" value="#{gradeClearanceBean.entity.scopeProgramme}" required="true" requiredMessage="Please select a Applicable Scope of programme">
+                                    <p:ajax event="change" listener="#{gradeClearanceBean.stepListener3}" update="result step4"/>
+                                    <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                    <f:selectItems value="#{gradeClearanceBean.adjustmentResponsibilities}" var="scope" itemLabel="#{scope.description}" itemValue="#{scope.description}"/>
+                                </p:selectOneMenu>
+                            </b:formGroup>
+                        </p:outputPanel>
+                        <p:outputPanel id="result">
+                            <b:panelGrid colSpans="4,4,4"  size="lg" styleClass="ui-fluid">
+                                <p:fieldset legend="STEP 3: Outcome Value">
+                                    <b:formGroup>
+                                        <p:inputText readonly="true" value="#{gradeClearanceBean.entity.adjustmentValue}" styleClass="outcomeCSS"/> 
+                                    </b:formGroup>
+                                </p:fieldset>
+                                <p:fieldset legend="STEP 3: Outcome Risk Level">
+                                    <b:formGroup>                            
+                                        <p:inputText readonly="true" value="#{gradeClearanceBean.entity.riskLevel.toString()}" styleClass="outcomeCSS"/> 
+                                    </b:formGroup>
+                                </p:fieldset>
+                                <p:fieldset legend="STEP 3: Outcome step">
+                                    <b:formGroup>                            
+                                        <p:inputText readonly="true" value="#{gradeClearanceBean.entity.step3outcome}" styleClass="stepCSS"/> 
+                                    </b:formGroup>
+                                </p:fieldset>
+                            </b:panelGrid>
+                        </p:outputPanel>
+                    </p:fieldset>
+                </p:outputPanel>
+                <p:outputPanel id="step4">
+                    <p:separator rendered="#{gradeClearanceBean.entity.riskLevel ne null or gradeClearanceBean.entity.outcome eq 'Automatic High Risk. Please proceed to Step 4'}"/>
+                    <p:fieldset legend="STEP 4: FINAL POSITION DESIGNATION " rendered="#{gradeClearanceBean.entity.riskLevel ne null or gradeClearanceBean.entity.outcome eq 'Automatic High Risk. Please proceed to Step 4'}">
+                        <b:panelGrid colSpans="6,6"  size="lg" styleClass="ui-fluid">
+                            <b:formGroup>
+                                <p:outputLabel value="Appliable Security Level"/>
+                                <p:inputText readonly="true" value="#{gradeClearanceBean.entity.appliableSecurityLevel.toString()}" styleClass="stepCSS"/> 
+                            </b:formGroup>
+                            <b:formGroup>
+                                <p:outputLabel value="Result Base On"/>
+                                <p:inputText readonly="true" value="#{gradeClearanceBean.entity.resultBased}" styleClass="outcomeCSS"/> 
+                            </b:formGroup>
+                        </b:panelGrid>
+                    </p:fieldset>
+                </p:outputPanel>
+                <p:spacer height="10px"/>
+                <p:fieldset legend="Comment">
+                    <b:panelGrid colSpans="12"  size="lg" styleClass="ui-fluid">
+                        <b:formGroup>
+                            <p:textEditor allowLinks="false" allowImages="false" value="#{gradeClearanceBean.entity.commentSummary}" height="200px" required="true" requiredMessage="please provide a comment">
+                                <f:facet name="toolbar">
+                                    <span class="ql-formats">
+                                        <select class="ql-font" />
+                                        <select class="ql-size" />
+                                    </span>
+                                    <span class="ql-formats">
+                                        <button class="ql-bold" />
+                                        <button class="ql-italic" />
+                                        <button class="ql-underline" />
+                                        <button class="ql-strike" />
+                                    </span>
+                                    <span class="ql-formats">
+                                        <select class="ql-color" />
+                                        <select class="ql-background" />
+                                    </span>
+                                    <span class="ql-formats">
+                                        <button class="ql-header" value="1" />
+                                        <button class="ql-header" value="2" />
+                                        <button class="ql-blockquote" />
+                                        <button class="ql-code-block" />
+                                    </span>
+                                    <span class="ql-formats">
+                                        <button class="ql-list" value="ordered" />
+                                        <button class="ql-list" value="bullet" />
+                                        <button class="ql-indent" value="-1" />
+                                        <button class="ql-indent" value="+1" />
+                                    </span>
+                                    <span class="ql-formats">
+                                        <button class="ql-direction" value="rtl" />
+                                        <select class="ql-align" />
+                                    </span>      
+                                </f:facet>
+                            </p:textEditor>
+                        </b:formGroup>
+                    </b:panelGrid>
+                </p:fieldset>
+            </b:panelGrid>
+        </b:panel>
+    </h:body>
+</html>

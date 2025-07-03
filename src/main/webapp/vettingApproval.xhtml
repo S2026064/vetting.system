@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <ui:composition template="/template/template.xhtml">
+            <ui:define name="maincontent">
+                <b:panel rendered="#{vettingFormApprovalBean.list}" look="default"  collapsible="false">
+                    <f:facet name="heading">
+                    </f:facet>
+                    <b:tabView>
+                        <b:tab title="Allocated Vetting Files">
+                            <b:panel>
+                                <p:outputPanel rendered="#{empty vettingFormApprovalBean.vettingRecords}">
+                                    <p:outputLabel value="No Vetting records found."/>
+                                </p:outputPanel>
+                                <p:dataTable rendered="#{not empty vettingFormApprovalBean.vettingRecords}" stripedRows="true" showGridlines="true" value="#{vettingFormApprovalBean.vettingRecords}" var="vettingRecord" paginatorAlwaysVisible="false" reflow="true">
+                                    <p:column headerText="Date Initiated"  styleClass="large" sortBy="#{vettingRecord.createdDate}">
+                                        <h:outputText value="#{vettingRecord.createdDate}">
+                                            <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="S-ID"  styleClass="large" sortBy="#{vettingRecord.employee.sid}">
+                                        <h:outputText value="#{vettingRecord.employee.sid}"/>
+                                    </p:column>
+                                    <p:column headerText="Name" sortBy="#{vettingRecord.employee.fullNames}">
+                                        <h:outputText value="#{vettingRecord.employee.fullNames}"/>
+                                    </p:column>                                    
+                                    <p:column headerText="TAT Days"  styleClass="large" sortBy="#{vettingRecord.tat}">
+                                        <h:outputText value="#{vettingRecord.tat}"/>
+                                    </p:column>
+                                    <p:column headerText="Date Updated"  styleClass="large" sortBy="#{vettingRecord.updatedDate}">
+                                        <h:outputText value="#{vettingRecord.updatedDate}">
+                                            <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="VSC Admin" sortBy="#{vettingRecord.vettingProcessingOfficer.fullNames}">
+                                        <h:outputText value="#{vettingRecord.vettingProcessingOfficer.fullNames}"/>
+                                    </p:column>
+                                    <p:column headerText="Officer" sortBy="#{vettingRecord.vettingOfficer}">
+                                        <h:outputText value="#{vettingRecord.vettingOfficer}"/>
+                                    </p:column>
+                                    <p:column headerText="Clearance" sortBy="#{vettingRecord.clearanceLevel}">
+                                        <h:outputText value="#{vettingRecord.clearanceLevel.toString()}"/>
+                                    </p:column>
+                                    <p:column headerText="Status" sortBy="#{vettingRecord.vettingStatus}">
+                                        <h:outputText value="#{vettingRecord.vettingStatus.toString()}"/>
+                                    </p:column>
+                                    <p:column headerText="Action" styleClass="medium">
+                                        <p:commandButton styleClass="ui-button-primary btn-size-sm" value="View" action="#{vettingFormApprovalBean.loadApprovalVettingForm(vettingRecord)}" update="@form"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </b:panel>
+                        </b:tab>
+                        <b:tab title="Completed Vetting Files">
+                            <b:panel>
+                                <p:outputPanel rendered="#{empty vettingFormApprovalBean.completedVetting}">
+                                    <p:outputLabel value="No Vetting records found."/>
+                                </p:outputPanel>
+                                <p:dataTable rendered="#{not empty vettingFormApprovalBean.completedVetting}" stripedRows="true" showGridlines="true" value="#{vettingFormApprovalBean.completedVetting}" var="vettingRecord" paginatorAlwaysVisible="false" reflow="true">
+                                    <p:column headerText="Date Initiated"  styleClass="large" sortBy="#{vettingRecord.createdDate}">
+                                        <h:outputText value="#{vettingRecord.createdDate}">
+                                            <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="S-ID"  styleClass="large" sortBy="#{vettingRecord.employee.sid}">
+                                        <h:outputText value="#{vettingRecord.employee.sid}"/>
+                                    </p:column>
+                                    <p:column headerText="Name" sortBy="#{vettingRecord.employee.fullNames}">
+                                        <h:outputText value="#{vettingRecord.employee.fullNames}"/>
+                                    </p:column>                                    
+                                    <p:column headerText="TAT Days"  styleClass="large" sortBy="#{vettingRecord.tat}">
+                                        <h:outputText value="#{vettingRecord.tat}"/>
+                                    </p:column>
+                                    <p:column headerText="Date Updated"  styleClass="large" sortBy="#{vettingRecord.updatedDate}">
+                                        <h:outputText value="#{vettingRecord.updatedDate}">
+                                            <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="VSC Admin" sortBy="#{vettingRecord.vettingProcessingOfficer.fullNames}">
+                                        <h:outputText value="#{vettingRecord.vettingProcessingOfficer.fullNames}"/>
+                                    </p:column>
+                                    <p:column headerText="Officer" sortBy="#{vettingRecord.vettingOfficer}">
+                                        <h:outputText value="#{vettingRecord.vettingOfficer}"/>
+                                    </p:column>
+                                    <p:column headerText="Clearance" sortBy="#{vettingRecord.clearanceLevel}">
+                                        <h:outputText value="#{vettingRecord.clearanceLevel.toString()}"/>
+                                    </p:column>
+                                    <p:column headerText="Status" sortBy="#{vettingRecord.vettingStatus}">
+                                        <h:outputText value="#{vettingRecord.vettingStatus.toString()}"/>
+                                    </p:column>
+                                    <p:column headerText="Action" styleClass="medium">
+                                        <p:commandButton styleClass="ui-button-primary btn-size-sm" value="View" action="#{vettingFormApprovalBean.loadApprovalVettingForm(vettingRecord)}" update="@form"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </b:panel>
+                        </b:tab>
+                        <b:tab title="Unallocated Vetting Files">
+                            <b:panel>
+                                <p:outputPanel rendered="#{empty vettingFormApprovalBean.activeVetting}">
+                                    <p:outputLabel value="No Vetting records found."/>
+                                </p:outputPanel>
+                                <p:dataTable rendered="#{not empty vettingFormApprovalBean.activeVetting}" stripedRows="true" showGridlines="true" value="#{vettingFormApprovalBean.activeVetting}" var="vettingRecord" paginatorAlwaysVisible="false" reflow="true">
+                                    <p:column headerText="Date Initiated"  styleClass="large" sortBy="#{vettingRecord.createdDate}">
+                                        <h:outputText value="#{vettingRecord.createdDate}">
+                                            <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="S-ID"  styleClass="large" sortBy="#{vettingRecord.employee.sid}">
+                                        <h:outputText value="#{vettingRecord.employee.sid}"/>
+                                    </p:column>
+                                    <p:column headerText="Name" sortBy="#{vettingRecord.employee.fullNames}">
+                                        <h:outputText value="#{vettingRecord.employee.fullNames}"/>
+                                    </p:column>                                    
+                                    <p:column headerText="TAT Days"  styleClass="large" sortBy="#{vettingRecord.tat}">
+                                        <h:outputText value="#{vettingRecord.tat}"/>
+                                    </p:column>
+                                    <p:column headerText="Date Updated"  styleClass="large" sortBy="#{vettingRecord.updatedDate}">
+                                        <h:outputText value="#{vettingRecord.updatedDate}">
+                                            <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="VSC Admin" sortBy="#{vettingRecord.vettingProcessingOfficer.fullNames}">
+                                        <h:outputText value="#{vettingRecord.vettingProcessingOfficer.fullNames}"/>
+                                    </p:column>
+                                    <p:column headerText="Officer" sortBy="#{vettingRecord.vettingOfficer}">
+                                        <h:outputText value="#{vettingRecord.vettingOfficer}"/>
+                                    </p:column>
+                                    <p:column headerText="Clearance" sortBy="#{vettingRecord.clearanceLevel}">
+                                        <h:outputText value="#{vettingRecord.clearanceLevel.toString()}"/>
+                                    </p:column>
+                                    <p:column headerText="Status" sortBy="#{vettingRecord.vettingStatus}">
+                                        <h:outputText value="#{vettingRecord.vettingStatus.toString()}"/>
+                                    </p:column>
+                                    <p:column headerText="Action" styleClass="medium">
+                                        <p:commandButton styleClass="ui-button-primary btn-size-sm" value="View" action="#{vettingFormApprovalBean.loadApprovalVettingForm(vettingRecord)}" update="@form"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </b:panel>
+                        </b:tab>
+                    </b:tabView>
+                </b:panel>
+                <b:panel rendered="#{vettingFormApprovalBean.approve}" look="default"  collapsible="false">
+                    <f:facet name="heading">
+                        <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                            <p:outputLabel value="Vetting Form" styleClass="panel-title-css"/>
+                        </b:panelGrid>
+                    </f:facet>
+                    <p:tabView id="wiz" activeIndex="#{vettingFormApprovalBean.activeTab}" dynamic="true" cache="false"> 
+                        <p:tab title="Additional Information" id="commentTab" rendered="#{not empty vettingFormApprovalBean.comments}">
+                            <p:fieldset legend="List of Additional Information">
+                                <b:panelGrid colSpans="2,2,8" size="lg" styleClass="ui-fluid">
+                                    <p:outputLabel value="Date"/>
+                                    <p:outputLabel value="Name"/>
+                                    <p:outputLabel value="Notes"/>
+                                </b:panelGrid>                    
+                                <p:separator/>
+                                <p:outputPanel>
+                                    <ui:repeat value="#{vettingFormApprovalBean.comments}" var="comment" varStatus="commentVarStatus">
+                                        <b:panelGrid colSpans="2,2,8" size="lg" styleClass="ui-fluid">
+                                            <b:formGroup>
+                                                <h:outputText  value="#{comment.createdDate}" styleClass="customCSS">
+                                                    <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                                                </h:outputText>
+                                            </b:formGroup>
+                                            <b:formGroup>
+                                                <h:outputText value="#{comment.loggedOnUserFullName}" styleClass="customCSS"/>
+                                            </b:formGroup>
+                                            <b:formGroup>
+                                                <p:textEditor toolbarVisible="false" readonly="true" allowBlocks="false"  value="#{comment.description}"/>
+                                            </b:formGroup>
+                                        </b:panelGrid>
+                                    </ui:repeat>
+                                </p:outputPanel>
+                            </p:fieldset>
+                            <p:separator/>
+                            <p:commandButton value="Back" action="#{vettingFormApprovalBean.prev}" styleClass="left-button" update="wiz"/>
+                            <p:commandButton value="Next" action="#{vettingFormApprovalBean.next}" styleClass="right-button" update="wiz"/>
+                        </p:tab>
+                        <p:tab title="Recommendations" id="noteTab" rendered="#{not empty vettingFormApprovalBean.notesAdded}">
+                            <p:fieldset legend="List of Recommendations">
+                                <b:panelGrid colSpans="2,2,8" size="lg" styleClass="ui-fluid">
+                                    <p:outputLabel value="Date"/>
+                                    <p:outputLabel value="Name"/>
+                                    <p:outputLabel value="Notes"/>
+                                </b:panelGrid>                    
+                                <p:separator/>
+                                <p:outputPanel>
+                                    <ui:repeat value="#{vettingFormApprovalBean.notesAdded}" var="note" varStatus="noteVarStatus">
+                                        <b:panelGrid colSpans="2,2,8" size="lg" styleClass="ui-fluid">
+                                            <b:formGroup>
+                                                <h:outputText  value="#{note.createdDate}" styleClass="customCSS">
+                                                    <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                                                </h:outputText>
+                                            </b:formGroup>
+                                            <b:formGroup>
+                                                <h:outputText value="#{note.loggedOnUserFullName} (#{note.roleDescription})" styleClass="customCSS"/>
+                                            </b:formGroup>
+                                            <b:formGroup>
+                                                <p:textEditor toolbarVisible="false" readonly="true" allowBlocks="false"  value="#{note.description}"/>
+                                            </b:formGroup>
+                                        </b:panelGrid>
+                                    </ui:repeat>
+                                </p:outputPanel>
+                            </p:fieldset> 
+                            <p:separator/>
+                            <p:commandButton value="Back" action="#{vettingFormApprovalBean.prev}" styleClass="left-button" update="wiz"/>
+                            <p:commandButton value="Next" action="#{vettingFormApprovalBean.next}" styleClass="right-button" update="wiz"/>
+                        </p:tab>
+                        <p:tab title="Attatchments" id="attachmentTab">
+                            <ui:include src="attachment.xhtml"></ui:include> 
+                            <p:separator/>
+                            <p:commandButton value="Back" action="#{vettingFormApprovalBean.prev}" styleClass="left-button" update="wiz"/>
+                            <p:commandButton value="Next" action="#{vettingFormApprovalBean.next}" styleClass="right-button" update="wiz"/>
+                        </p:tab>
+                        <p:tab title="Vetting File" id="fileAttachmentTab">
+                            <ui:include src="vettingFileAttach.xhtml"></ui:include>
+                            <b:panelGrid colSpans="3,3,3,3" size="md" styleClass="ui-fluid" rendered="#{vettingFormApprovalBean.entity.vettingStatus eq 'CLEARANCE_ISSUED'}">
+                                <b:commandButton large-screen="full-width" value="Approve" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()" look="primary" size="lg" icon-awesome="fa-check" update="@(form)" action="#{vettingFormApprovalBean.approveVetting(vettingFormApprovalBean.entity)}"/>
+                                <b:commandButton large-screen="full-width" value="SendBack" look="primary" update="@(form)" size="lg" action="#{vettingFormApprovalBean.addNote('rework')}" iconAwesome="reply" immediate="true" ajax="true" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()"/>                              
+                                <b:commandButton large-screen="full-width" value="Allocate to next level" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()" look="danger" size="lg" icon="send" update="@(form)" action="#{vettingFormApprovalBean.addNote('approverNote')}"/>
+                                <b:commandButton large-screen="full-width" value="Cancel" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()" look="warning" size="lg" iconAwesome="window-close" process="@this"  update="@(form)" action="#{vettingFormApprovalBean.cancel()}"/>
+                            </b:panelGrid>
+                            <b:panelGrid colSpans="12" size="md" styleClass="ui-fluid" rendered="#{vettingFormApprovalBean.entity.vettingStatus ne 'CLEARANCE_ISSUED'}">
+                                <b:commandButton large-screen="full-width" value="Back" look="primary" iconAwesome="window-close" process="@this"  update="@(form)" size="lg" action="#{vettingFormApprovalBean.cancel()}" immediate="true" ajax="true" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()"/> 
+                            </b:panelGrid>
+                            <p:separator/>
+                            <p:commandButton value="Back" action="#{vettingFormApprovalBean.prev}" styleClass="left-button" update="wiz"/>
+                        </p:tab>
+                    </p:tabView>
+                </b:panel>
+                <b:panel rendered="#{vettingFormApprovalBean.notes}">
+                    <p:fieldset legend="Add Notes">
+                        <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                            <b:formGroup>
+                                <p:textEditor allowLinks="false" allowImages="false" value="#{vettingFormApprovalBean.note.description}">
+                                    <f:facet name="toolbar">
+                                        <span class="ql-formats">
+                                            <select class="ql-font" />
+                                            <select class="ql-size" />
+                                        </span>
+                                        <span class="ql-formats">
+                                            <button class="ql-bold" />
+                                            <button class="ql-italic" />
+                                            <button class="ql-underline" />
+                                            <button class="ql-strike" />
+                                        </span>
+                                        <span class="ql-formats">
+                                            <select class="ql-color" />
+                                            <select class="ql-background" />
+                                        </span>
+                                        <span class="ql-formats">
+                                            <button class="ql-header" value="1" />
+                                            <button class="ql-header" value="2" />
+                                            <button class="ql-blockquote" />
+                                            <button class="ql-code-block" />
+                                        </span>
+                                        <span class="ql-formats">
+                                            <button class="ql-list" value="ordered" />
+                                            <button class="ql-list" value="bullet" />
+                                            <button class="ql-indent" value="-1" />
+                                            <button class="ql-indent" value="+1" />
+                                        </span>
+                                        <span class="ql-formats">
+                                            <button class="ql-direction" value="rtl" />
+                                            <select class="ql-align" />
+                                        </span>      
+                                    </f:facet>
+                                </p:textEditor>
+                            </b:formGroup>
+                        </b:panelGrid>
+                    </p:fieldset>
+                    <f:facet name="footer">
+                        <b:row>
+                            <b:panelGrid colSpans="6,6" size="lg" styleClass="ui-fluid" rendered="#{vettingFormApprovalBean.note.clickedButton eq 'approverNote'}">
+                                <b:commandButton large-screen="full-width" size="lg"  look="success" icon="check"  value="Submit" action="#{vettingFormApprovalBean.denied(vettingFormApprovalBean.entity)}" update="@form"/>
+                                <b:commandButton large-screen="full-width" size="lg" value="Cancel" iconAwesome="window-close" look="danger" action="#{vettingFormQAReviewBean.cancelNote(vettingFormQAReviewBean.note)}" immediate="true" process="@this"  update="@(form)"/>
+                            </b:panelGrid>
+                            <b:panelGrid colSpans="6,6" size="lg" styleClass="ui-fluid" rendered="#{vettingFormApprovalBean.note.clickedButton eq 'rework'}">
+                                <b:commandButton size="lg" icon="check" large-screen="full-width" look="success" value="Submit" action="#{vettingFormApprovalBean.rework(vettingFormApprovalBean.entity)}" update="@form"/>
+                                <b:commandButton large-screen="full-width" size="lg" value="Cancel" iconAwesome="window-close" look="danger" action="#{vettingFormQAReviewBean.cancelNote(vettingFormQAReviewBean.note)}"  immediate="true" process="@this"  update="@(form)"/>
+                            </b:panelGrid>
+                        </b:row>
+                    </f:facet>
+                </b:panel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

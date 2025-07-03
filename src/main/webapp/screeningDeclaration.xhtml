@@ -1,0 +1,881 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <b:panel look="default"  collapsible="false">
+            <b:panelGrid col-spans="12" size="lg" styleClass="ui-fluid">
+                <p:fieldset legend="Subject Personal Information" styleClass="panel-title-css">
+                    <b:panelGrid col-spans="2,10" size="md" styleClass="ui-fluid">
+                        <b:formGroup>
+                            <p:outputLabel value="Full Names"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel  value="#{screeningDeclarationBean.employee.fullNames}" /> 
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="ID Number"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel  value="#{screeningDeclarationBean.employee.identityNumber}" /> 
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="EID"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel  value="#{screeningDeclarationBean.employee.employeeNumber}" /> 
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="S-ID"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel  value="#{screeningDeclarationBean.employee.sid}" /> 
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Gender"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel  value="#{screeningDeclarationBean.employee.gender}" /> 
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Position Title"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel  value="#{screeningDeclarationBean.employee.positionTitle}" /> 
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Org Unit Name"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel  value="#{screeningDeclarationBean.employee.orgName}" /> 
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Manager Full Names"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel  value="#{screeningDeclarationBean.employee.managerFullName}" /> 
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Manager S-ID"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel  value="#{screeningDeclarationBean.employee.managerSID}" /> 
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Manager Position"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel  value="#{screeningDeclarationBean.employee.managerPosition}" /> 
+                        </b:formGroup>                        
+                        <b:formGroup>
+                            <p:outputLabel value="Date"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel  value="#{screeningDeclarationBean.entity.screeningDate}">
+                                <f:convertDateTime pattern="dd MMM yyyy"/>
+                            </p:outputLabel> 
+                        </b:formGroup> 
+                        <b:formGroup>
+                            <p:outputLabel value="Cellphone Number"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <b:inputText disabled="#{screeningDeclarationBean.disabled}" value="#{screeningDeclarationBean.employee.contactDetail.cellPhoneNumber}" fieldSize="lg"  maxlength="16" required="true" requiredMessage="Enter cellphone number"/> 
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="email Address"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel  value="#{screeningDeclarationBean.employee.contactDetail.emailAddress}"/>
+                        </b:formGroup>
+                    </b:panelGrid>
+                    <p:separator rendered="#{not empty screeningDeclarationBean.employee.addresses}"/>
+                    <ui:repeat  value="#{screeningDeclarationBean.employee.addresses}" var="address" >
+                        <p:fieldset legend="Home Address" rendered="#{address.addressType eq 'RESIDENTIAL'}">
+                            <b:panelGrid col-spans="6,6" size="lg" styleClass="ui-fluid">
+                                <b:formGroup>
+                                    <p:outputLabel value="Line 1"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:outputLabel value="#{address.line1}"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:outputLabel value="Line 2"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:outputLabel value="#{address.line2}"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:outputLabel value="Line 3"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:outputLabel value="#{address.line3}"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:outputLabel value="Area"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:outputLabel value="#{address.area}"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:outputLabel value="Code"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:outputLabel value="#{address.code}"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:outputLabel value="Country Name"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:outputLabel value="#{address.countryName}"/>
+                                </b:formGroup>
+                            </b:panelGrid>
+                        </p:fieldset>
+                    </ui:repeat>
+                </p:fieldset>
+                <p:separator/>
+            </b:panelGrid>
+            <b:panelGrid col-spans="12" size="lg" styleClass="ui-fluid">
+                <p:fieldset legend="Declaration By Candidate">
+                    <b:panelGrid colSpans="2,3,7" size="lg" styleClass="ui-fluid">
+                        <p:outputLabel value="Dropdown Option" styleClass="questionStyle"/>                        
+                        <p:toggleSwitch value="#{screeningDeclarationBean.useDropdown}" label="Switch" onIcon="ui-icon-check" offIcon="ui-icon-close" style="width: 11%;" immediate="true">
+                            <p:ajax update="questionTab" listener="#{screeningDeclarationBean.addMessage}"/>
+                        </p:toggleSwitch>
+                        <h:outputText value=""/>
+                    </b:panelGrid>
+                    <p:spacer height="2px"/>
+                    <p:fieldset legend="Questionnaire">
+                        <b:panelGrid id="questionTab" col-spans="12" size="lg" styleClass="ui-fluid"> 
+                            <b:panelGrid col-spans="8,4" size="lg" styleClass="ui-fluid">
+                                <p:outputLabel value="Are you currently working for SARS ?" styleClass="questionStyle"/>
+                                <b:panelGrid col-spans="12" size="lg" styleClass="ui-fluid"> 
+                                    <b:formGroup rendered="#{!screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneRadio disabled="#{screeningDeclarationBean.disabled}"  value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.currentSarsEmployee}" layout="lineDirection" required="true" requiredMessage="Are you currently working for SARS?">
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneRadio>
+                                    </b:formGroup>
+                                    <b:formGroup rendered="#{screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneMenu disabled="#{screeningDeclarationBean.disabled}" value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.currentSarsEmployee}" converter="entityConverter" required="true" requiredMessage="Are you currently working for SARS?">
+                                            <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneMenu>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </b:panelGrid>
+                            <p:separator/>
+                            <b:panelGrid col-spans="8,4" size="lg" styleClass="ui-fluid">
+                                <p:outputLabel value="Are you a former SARS employee ?" styleClass="questionStyle"/>
+                                <b:panelGrid col-spans="12" size="lg" styleClass="ui-fluid"> 
+                                    <b:formGroup rendered="#{!screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneRadio disabled="#{screeningDeclarationBean.disabled}"  value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.formerSarsEmployee}" layout="lineDirection" required="true" requiredMessage="Are you a former SARS employee?">
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneRadio>
+                                    </b:formGroup>
+                                    <b:formGroup rendered="#{screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneMenu disabled="#{screeningDeclarationBean.disabled}" value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.formerSarsEmployee}" converter="entityConverter" required="true" requiredMessage="Are you a former SARS employee?">
+                                            <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneMenu>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </b:panelGrid>
+                            <p:separator/>
+                            <b:panelGrid col-spans="8,4" size="lg" styleClass="ui-fluid">
+                                <p:outputLabel value="Are you a registered taxpayer ?" styleClass="questionStyle"/>
+                                <b:panelGrid col-spans="12" size="lg" styleClass="ui-fluid"> 
+                                    <b:formGroup rendered="#{!screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneRadio disabled="#{screeningDeclarationBean.disabled}"  value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.registeredTaxpayer}" layout="lineDirection" required="true" requiredMessage="Are you a former SARS employee?">
+                                            <p:ajax event="change" update="taxPayer"/>
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneRadio>
+                                    </b:formGroup>
+                                    <b:formGroup rendered="#{screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneMenu disabled="#{screeningDeclarationBean.disabled}" value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.registeredTaxpayer}" converter="entityConverter" required="true" requiredMessage="Are you a former SARS employee?">
+                                            <p:ajax event="change" update="taxPayer"/>
+                                            <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneMenu>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </b:panelGrid>
+                            <h:panelGroup id="taxPayer">
+                                <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid" rendered="#{screeningDeclarationBean.entity.screeningDeclarationResponse.registeredTaxpayer eq 'YES'}">
+                                    <p:separator/>
+                                    <b:formGroup>
+                                        <p:outputLabel value="if yes, please provide your tax reference number"/>
+                                        <p:inputMask mask="999999999" maxlength="10" disabled="#{screeningDeclarationBean.disabled}" required="true" requiredMessage="Provide Tax Practiner number" value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.taxNo}"/>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </h:panelGroup>
+                            <p:separator/>
+                            <h:panelGroup>
+                                <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                                    <b:formGroup>
+                                        <p:outputLabel value="Tax reference number. Note: Your tax status will be verified as part of the screening process to ascertain compliance and your (potential) employer will be informed thereof." styleClass="questionStyle"/>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </h:panelGroup>
+                            <p:separator/>
+                            <b:panelGrid col-spans="8,4" size="lg" styleClass="ui-fluid">
+                                <p:outputLabel value="Are you a RSA Citizen ? (If not, attach your work permit / refugee status document /permanent residence status document. Note: This information will be verified to ascertain its authenticity and validity.)" styleClass="questionStyle"/>
+                                <b:panelGrid col-spans="12" size="lg" styleClass="ui-fluid"> 
+                                    <b:formGroup rendered="#{!screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneRadio disabled="#{screeningDeclarationBean.disabled}"  value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.rsaCitizen}" layout="lineDirection" required="true" requiredMessage="Are you a RSA Citizen ? (If not, attach your work permit / refugee status document /permanent residence status document. Note: This information will be verified to ascertain its authenticity and validity.)">
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneRadio>
+                                    </b:formGroup>
+                                    <b:formGroup rendered="#{screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneMenu disabled="#{screeningDeclarationBean.disabled}" value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.rsaCitizen}" converter="entityConverter" required="true" requiredMessage="Are you a RSA Citizen ? (If not, attach your work permit / refugee status document /permanent residence status document. Note: This information will be verified to ascertain its authenticity and validity.)">
+                                            <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneMenu>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </b:panelGrid>
+                            <p:separator/>
+                            <b:panelGrid col-spans="8,4" size="lg" styleClass="ui-fluid">
+                                <p:outputLabel value="Are you holding dual citizenship?" styleClass="questionStyle"/>
+                                <b:panelGrid col-spans="12" size="lg" styleClass="ui-fluid"> 
+                                    <b:formGroup rendered="#{!screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneRadio disabled="#{screeningDeclarationBean.disabled}"  value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.dualCitizenship}" layout="lineDirection" required="true" requiredMessage="Are you holding dual citizenship?">
+                                            <p:ajax event="change" update="dualCitizenTab" listener="#{screeningDeclarationBean.addCitizenship}"/>
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneRadio>
+                                    </b:formGroup>
+                                    <b:formGroup rendered="#{screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneMenu disabled="#{screeningDeclarationBean.disabled}" value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.dualCitizenship}" converter="entityConverter" required="true" requiredMessage="Are you holding dual citizenship?">
+                                            <p:ajax event="change" update="dualCitizenTab" listener="#{screeningDeclarationBean.addCitizenship}"/>
+                                            <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneMenu>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </b:panelGrid>
+                            <h:panelGroup id="dualCitizenTab">
+                                <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid" rendered="#{screeningDeclarationBean.entity.screeningDeclarationResponse.dualCitizenship eq 'YES'}">
+                                    <b:formGroup>
+                                        <p:separator/>
+                                        <b:panelGrid col-spans="11,1" size="lg" styleClass="ui-fluid" rendered="#{not empty screeningDeclarationBean.entity.screeningDeclarationResponse.citizenships}">
+                                            <p:outputLabel value="If yes, which countries"/>
+                                            <p:outputLabel value="Action"/>
+                                        </b:panelGrid>
+                                        <p:separator rendered="#{not empty screeningDeclarationBean.entity.screeningDeclarationResponse.citizenships}"/>
+                                        <p:outputPanel id="dualCitizenOutputPanel">
+                                            <ui:repeat value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.citizenships}" var="citizen" varStatus="citizenVarStatus">
+                                                <b:panelGrid col-spans="11,1" size="lg" styleClass="ui-fluid">
+                                                    <b:formGroup>
+                                                        <p:inputText disabled="#{screeningDeclarationBean.disabled}" required="true" requiredMessage="Provide a country name" value="#{citizen.description}"/> 
+                                                    </b:formGroup>
+                                                    <b:formGroup>
+                                                        <b:row>
+                                                            <b:commandButton disabled="#{screeningDeclarationBean.disabled}" action="#{screeningDeclarationBean.removeCitizenship(citizen)}" iconAwesome="fa-close" large-screen="full-width" size="lg" look="danger" update="@form" immediate="true"/>
+                                                        </b:row>
+                                                    </b:formGroup>
+                                                </b:panelGrid>
+                                            </ui:repeat>
+                                        </p:outputPanel>
+                                        <b:panelGrid col-spans="3,3,3,3" size="lg" styleClass="ui-fluid" rendered="#{screeningDeclarationBean.vettingStatus eq 'FORMS_ISSUED'}">
+                                            <b:row>
+                                                <b:commandButton rendered="#{screeningDeclarationBean.vettingStatus eq 'FORMS_ISSUED'}" action="#{screeningDeclarationBean.addCitizenship()}" value="Add Another Record" iconAwesome="fa-plus" large-screen="full-width" size="lg" look="primary" process="dualCitizenOutputPanel" update="dualCitizenOutputPanel"/>
+                                            </b:row>
+                                        </b:panelGrid>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </h:panelGroup>
+                            <p:separator/>
+                            <b:panelGrid col-spans="8,4" size="lg" styleClass="ui-fluid">
+                                <p:outputLabel value="To the best of your knowledge have you ever been “blacklisted”?" styleClass="questionStyle"/>
+                                <b:panelGrid col-spans="12" size="lg" styleClass="ui-fluid"> 
+                                    <b:formGroup rendered="#{!screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneRadio disabled="#{screeningDeclarationBean.disabled}"  value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.blacklisted}" layout="lineDirection" required="true" requiredMessage="To the best of your knowledge have you ever been “blacklisted”?">
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneRadio>
+                                    </b:formGroup>
+                                    <b:formGroup rendered="#{screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneMenu disabled="#{screeningDeclarationBean.disabled}" value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.blacklisted}" converter="entityConverter" required="true" requiredMessage="To the best of your knowledge have you ever been “blacklisted”?">
+                                            <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneMenu>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </b:panelGrid>
+                            <p:separator/>
+                            <b:panelGrid col-spans="8,4" size="lg" styleClass="ui-fluid">
+                                <p:outputLabel value="Are all your qualifications authentic, valid and true?" styleClass="questionStyle"/>
+                                <b:panelGrid col-spans="12" size="lg" styleClass="ui-fluid"> 
+                                    <b:formGroup rendered="#{!screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneRadio disabled="#{screeningDeclarationBean.disabled}"  value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.validQualification}" layout="lineDirection" required="true" requiredMessage="Are all your qualifications authentic, valid and true?">
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneRadio>
+                                    </b:formGroup>
+                                    <b:formGroup rendered="#{screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneMenu disabled="#{screeningDeclarationBean.disabled}" value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.validQualification}" converter="entityConverter" required="true" requiredMessage="Are all your qualifications authentic, valid and true?">
+                                            <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneMenu>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </b:panelGrid>
+                            <p:separator/>
+                            <b:panelGrid col-spans="8,4" size="lg" styleClass="ui-fluid">
+                                <p:outputLabel value="Do you take any illegal drugs?" styleClass="questionStyle"/>
+                                <b:panelGrid col-spans="12" size="lg" styleClass="ui-fluid"> 
+                                    <b:formGroup rendered="#{!screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneRadio disabled="#{screeningDeclarationBean.disabled}"  value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.illegalDrug}" layout="lineDirection" required="true" requiredMessage="Do you take any drugs?">
+                                            <p:ajax event="change" update="illegalDrugsTab" listener="#{screeningDeclarationBean.addIllegalDrug}"/>
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneRadio>
+                                    </b:formGroup>
+                                    <b:formGroup rendered="#{screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneMenu disabled="#{screeningDeclarationBean.disabled}" value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.illegalDrug}" converter="entityConverter" required="true" requiredMessage="Do you take any drugs?">
+                                            <p:ajax event="change" update="illegalDrugsTab" listener="#{screeningDeclarationBean.addIllegalDrug}"/>
+                                            <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneMenu>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </b:panelGrid>
+                            <h:panelGroup id="illegalDrugsTab">
+                                <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid" rendered="#{screeningDeclarationBean.entity.screeningDeclarationResponse.illegalDrug eq 'YES'}">
+                                    <b:formGroup>
+                                        <p:separator/>
+                                        <b:panelGrid col-spans="6,5,1" size="lg" styleClass="ui-fluid" rendered="#{not empty screeningDeclarationBean.entity.screeningDeclarationResponse.illegalDrugs}">
+                                            <p:outputLabel value="If yes,what kind"/>
+                                            <p:outputLabel value="Are You Willing To Underago Rehabilitation?"/>
+                                            <p:outputLabel value="Action"/>
+                                        </b:panelGrid>
+                                        <p:separator rendered="#{not empty screeningDeclarationBean.entity.screeningDeclarationResponse.illegalDrugs}"/>
+                                        <p:outputPanel id="illegalDrugOutputPanel">
+                                            <ui:repeat value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.illegalDrugs}" var="drug" varStatus="drugVarStatus">
+                                                <b:panelGrid col-spans="6,5,1" size="lg" styleClass="ui-fluid">
+                                                    <b:formGroup>
+                                                        <p:inputText disabled="#{screeningDeclarationBean.disabled}" required="true" requiredMessage="Provide kind of Illegal" value="#{drug.drugName}"/> 
+                                                    </b:formGroup>
+                                                    <b:formGroup>
+                                                        <p:inputText disabled="#{screeningDeclarationBean.disabled}" required="true" requiredMessage="Provide if You Willing To Underago Rehabilitation?" value="#{drug.rehabilitation}"/> 
+                                                    </b:formGroup>
+                                                    <b:formGroup>
+                                                        <b:row>
+                                                            <b:commandButton disabled="#{screeningDeclarationBean.disabled}" action="#{screeningDeclarationBean.removeIllegalDrug(drug)}" iconAwesome="fa-close" large-screen="full-width" size="lg" look="danger" update="@form" immediate="true"/>
+                                                        </b:row>
+                                                    </b:formGroup>
+                                                </b:panelGrid>
+                                            </ui:repeat>
+                                        </p:outputPanel>
+                                        <b:panelGrid col-spans="3,3,3,3" size="lg" styleClass="ui-fluid" rendered="#{screeningDeclarationBean.vettingStatus eq 'FORMS_ISSUED'}">
+                                            <b:row>
+                                                <b:commandButton rendered="#{screeningDeclarationBean.vettingStatus eq 'FORMS_ISSUED'}" action="#{screeningDeclarationBean.addIllegalDrug()}" value="Add Another Record" iconAwesome="fa-plus" large-screen="full-width" size="lg" look="primary" process="illegalDrugOutputPanel" update="illegalDrugOutputPanel"/>
+                                            </b:row>
+                                        </b:panelGrid>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </h:panelGroup>
+                            <p:separator/>
+                            <b:panelGrid col-spans="8,4" size="lg" styleClass="ui-fluid">
+                                <p:outputLabel value="Have you ever had any criminal charges laid against you?" styleClass="questionStyle"/>
+                                <b:panelGrid col-spans="12" size="lg" styleClass="ui-fluid"> 
+                                    <b:formGroup rendered="#{!screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneRadio disabled="#{screeningDeclarationBean.disabled}"  value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.criminalCharges}" layout="lineDirection" required="true" requiredMessage="Have you ever had any criminal charges laid against you?">
+                                            <p:ajax event="change" update="laidAgainstTab" listener="#{screeningDeclarationBean.addLiadCharge}"/>
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneRadio>
+                                    </b:formGroup>
+                                    <b:formGroup rendered="#{screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneMenu disabled="#{screeningDeclarationBean.disabled}" value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.criminalCharges}" converter="entityConverter" required="true" requiredMessage="Have you ever had any criminal charges laid against you?">
+                                            <p:ajax event="change" update="laidAgainstTab" listener="#{screeningDeclarationBean.addLiadCharge}"/>
+                                            <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneMenu>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </b:panelGrid>
+                            <h:panelGroup id="laidAgainstTab">
+                                <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid" rendered="#{screeningDeclarationBean.entity.screeningDeclarationResponse.criminalCharges eq 'YES'}">
+                                    <b:formGroup rendered="#{!screeningDeclarationBean.useDropdown}">
+                                        <p:separator/>
+                                        <b:panelGrid col-spans="6,5,1" size="lg" styleClass="ui-fluid" rendered="#{not empty screeningDeclarationBean.entity.screeningDeclarationResponse.laidCriminalCharges}">
+                                            <p:outputLabel value="If yes,state the nature of the charge"/>
+                                            <p:outputLabel value="What was the outcome of the case"/>
+                                            <p:outputLabel value="Action"/>
+                                        </b:panelGrid>
+                                        <p:separator rendered="#{not empty screeningDeclarationBean.entity.screeningDeclarationResponse.criminalCharges}"/>
+                                        <p:outputPanel id="laidAgainstOutputPanel">
+                                            <ui:repeat value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.laidCriminalCharges}" var="laidAgainst" varStatus="laidVarStatus">
+                                                <b:panelGrid col-spans="6,5,1" size="lg" styleClass="ui-fluid">
+                                                    <b:formGroup>
+                                                        <p:inputText disabled="#{screeningDeclarationBean.disabled}" required="true" requiredMessage="Provide nature of charge" value="#{laidAgainst.nature}"/> 
+                                                    </b:formGroup>
+                                                    <b:formGroup>
+                                                        <p:inputText disabled="#{screeningDeclarationBean.disabled}" required="true" requiredMessage="Provide outcome of the case" value="#{laidAgainst.outcome}"/> 
+                                                    </b:formGroup>
+                                                    <b:formGroup>
+                                                        <b:row>
+                                                            <b:commandButton disabled="#{screeningDeclarationBean.disabled}" action="#{screeningDeclarationBean.removeLiadCahrge(laidAgainst)}" iconAwesome="fa-close" large-screen="full-width" size="lg" look="danger" update="@form" immediate="true"/>
+                                                        </b:row>
+                                                    </b:formGroup>
+                                                </b:panelGrid>
+                                            </ui:repeat>
+                                        </p:outputPanel>
+                                        <b:panelGrid col-spans="3,3,3,3" size="lg" styleClass="ui-fluid" rendered="#{screeningDeclarationBean.vettingStatus eq 'FORMS_ISSUED'}">
+                                            <b:row>
+                                                <b:commandButton rendered="#{screeningDeclarationBean.vettingStatus eq 'FORMS_ISSUED'}" action="#{screeningDeclarationBean.addLiadCharge()}" value="Add Another Record" iconAwesome="fa-plus" large-screen="full-width" size="lg" look="primary" process="laidAgainstOutputPanel" update="laidAgainstOutputPanel"/>
+                                            </b:row>
+                                        </b:panelGrid>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </h:panelGroup>
+                            <p:separator/>
+                            <b:panelGrid col-spans="8,4" size="lg" styleClass="ui-fluid">
+                                <p:outputLabel value="Have you ever been convicted of a criminal offence?" styleClass="questionStyle"/>
+                                <b:panelGrid col-spans="12" size="lg" styleClass="ui-fluid"> 
+                                    <b:formGroup rendered="#{!screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneRadio disabled="#{screeningDeclarationBean.disabled}"  value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.criminalConviction}" layout="lineDirection" required="true" requiredMessage="Have you ever been convicted of a criminal offence?">
+                                            <p:ajax event="change" update="criminalOffenceTab" listener="#{screeningDeclarationBean.addCriminalOffence}"/>
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneRadio>
+                                    </b:formGroup>
+                                    <b:formGroup rendered="#{screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneMenu disabled="#{screeningDeclarationBean.disabled}" value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.criminalConviction}" converter="entityConverter" required="true" requiredMessage="Have you ever been convicted of a criminal offence?">
+                                            <p:ajax event="change" update="criminalOffenceTab" listener="#{screeningDeclarationBean.addCriminalOffence}"/>
+                                            <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneMenu>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </b:panelGrid>
+                            <h:panelGroup id="criminalOffenceTab">
+                                <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid" rendered="#{screeningDeclarationBean.entity.screeningDeclarationResponse.criminalConviction eq 'YES'}">
+                                    <b:formGroup>
+                                        <p:separator/>
+                                        <b:panelGrid col-spans="4,4,3,1" size="lg" styleClass="ui-fluid" rendered="#{not empty screeningDeclarationBean.entity.screeningDeclarationResponse.convictedCriminalCharges}">
+                                            <p:outputLabel value="If yes,what was the charge"/>
+                                            <p:outputLabel value="When did it take place"/>
+                                            <p:outputLabel value="What was the verdict"/>
+                                            <p:outputLabel value="Action" />
+                                        </b:panelGrid>
+                                        <p:separator rendered="#{not empty screeningDeclarationBean.entity.screeningDeclarationResponse.convictedCriminalCharges}"/>
+                                        <p:outputPanel id="criminalOffenceOutputPanel">
+                                            <ui:repeat value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.convictedCriminalCharges}" var="convictedCrime" varStatus="convictedVarStatus">
+                                                <b:panelGrid col-spans="4,4,3,1" size="lg" styleClass="ui-fluid">
+                                                    <b:formGroup>
+                                                        <p:inputText disabled="#{screeningDeclarationBean.disabled}" required="true" requiredMessage="Provide nature of charge" value="#{convictedCrime.natureOfCharge}"/> 
+                                                    </b:formGroup>
+                                                    <b:formGroup>
+                                                        <p:inputText disabled="#{screeningDeclarationBean.disabled}" required="true" requiredMessage="Provide When did it take place" value="#{convictedCrime.outcome}"/> 
+                                                    </b:formGroup>
+                                                    <b:formGroup>
+                                                        <p:inputText disabled="#{screeningDeclarationBean.disabled}" required="true" requiredMessage="Provide verdict" value="#{convictedCrime.verdict}"/> 
+                                                    </b:formGroup>
+                                                    <b:formGroup>
+                                                        <b:row>
+                                                            <b:commandButton disabled="#{screeningDeclarationBean.disabled}" action="#{screeningDeclarationBean.removeCriminalOffence(convictedCrime)}" iconAwesome="fa-close" large-screen="full-width" size="lg" look="danger" update="@form" immediate="true"/>
+                                                        </b:row>
+                                                    </b:formGroup>
+                                                </b:panelGrid>
+                                            </ui:repeat>
+                                        </p:outputPanel>
+                                        <b:panelGrid col-spans="3,3,3,3" size="lg" styleClass="ui-fluid" rendered="#{screeningDeclarationBean.vettingStatus eq 'FORMS_ISSUED'}">
+                                            <b:row>
+                                                <b:commandButton rendered="#{screeningDeclarationBean.vettingStatus eq 'FORMS_ISSUED'}" action="#{screeningDeclarationBean.addCriminalOffence()}" value="Add Another Record" iconAwesome="fa-plus" large-screen="full-width" size="lg" look="primary" process="criminalOffenceOutputPanel" update="criminalOffenceOutputPanel"/>
+                                            </b:row>
+                                        </b:panelGrid>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </h:panelGroup>
+                            <p:separator/>
+                            <b:panelGrid col-spans="8,4" size="lg" styleClass="ui-fluid">
+                                <p:outputLabel value="Have you ever been involved in a disciplinary hearing at your current employment?" styleClass="questionStyle"/>
+                                <b:panelGrid col-spans="12" size="lg" styleClass="ui-fluid"> 
+                                    <b:formGroup rendered="#{!screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneRadio disabled="#{screeningDeclarationBean.disabled}"  value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.disciplinaryHearingAtCurrent}" layout="lineDirection" required="true" requiredMessage="Have you ever been involved in a disciplinary hearing at your current employment?">
+                                            <p:ajax event="change" update="hearingTab" listener="#{screeningDeclarationBean.addDisciplinaryHearingAtCurrent}"/>
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneRadio>
+                                    </b:formGroup>
+                                    <b:formGroup rendered="#{screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneMenu disabled="#{screeningDeclarationBean.disabled}" value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.disciplinaryHearingAtCurrent}" converter="entityConverter" required="true" requiredMessage="Have you ever been involved in a disciplinary hearing at your current employment?">
+                                            <p:ajax event="change" update="hearingTab" listener="#{screeningDeclarationBean.addDisciplinaryHearingAtCurrent}"/>
+                                            <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneMenu>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </b:panelGrid>
+                            <h:panelGroup id="hearingTab">
+                                <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid" rendered="#{screeningDeclarationBean.entity.screeningDeclarationResponse.disciplinaryHearingAtCurrent eq 'YES'}">
+                                    <b:formGroup>
+                                        <p:separator/>
+                                        <b:panelGrid col-spans="6,5,1" size="lg" styleClass="ui-fluid" rendered="#{not empty screeningDeclarationBean.entity.screeningDeclarationResponse.currentEmpDisciplinaryHearings}">
+                                            <p:outputLabel value="If yes,what was the charge"/>
+                                            <p:outputLabel value="What was the outcome?"/>
+                                            <p:outputLabel value="Action"/>
+                                        </b:panelGrid>
+                                        <p:separator rendered="#{not empty screeningDeclarationBean.entity.screeningDeclarationResponse.currentEmpDisciplinaryHearings}"/>
+                                        <p:outputPanel id="hearingOutputPanel">
+                                            <ui:repeat value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.currentEmpDisciplinaryHearings}" var="currentEmpHearing" varStatus="currentVarStatus">
+                                                <b:panelGrid col-spans="6,5,1" size="lg" styleClass="ui-fluid">
+                                                    <b:formGroup>
+                                                        <p:inputText disabled="#{screeningDeclarationBean.disabled}" required="true" requiredMessage="Provide nature of charge" value="#{currentEmpHearing.charge}"/> 
+                                                    </b:formGroup>
+                                                    <b:formGroup>
+                                                        <p:inputText disabled="#{screeningDeclarationBean.disabled}" required="true" requiredMessage="Provide outcome" value="#{currentEmpHearing.outcome}"/> 
+                                                    </b:formGroup>
+                                                    <b:formGroup>
+                                                        <b:row>
+                                                            <b:commandButton disabled="#{screeningDeclarationBean.disabled}" action="#{screeningDeclarationBean.removeDisciplinaryHearingAtCurrent(currentEmpHearing)}" iconAwesome="fa-close" large-screen="full-width" size="lg" look="danger" update="@form" immediate="true"/>
+                                                        </b:row>
+                                                    </b:formGroup>
+                                                </b:panelGrid>
+                                            </ui:repeat>
+                                        </p:outputPanel>
+                                        <b:panelGrid col-spans="3,3,3,3" size="lg" styleClass="ui-fluid" rendered="#{screeningDeclarationBean.vettingStatus eq 'FORMS_ISSUED'}">
+                                            <b:row>
+                                                <b:commandButton rendered="#{screeningDeclarationBean.vettingStatus eq 'FORMS_ISSUED'}" action="#{screeningDeclarationBean.addDisciplinaryHearingAtCurrent()}" value="Add Another Record" iconAwesome="fa-plus" large-screen="full-width" size="lg" look="primary" process="hearingOutputPanel" update="hearingOutputPanel"/>
+                                            </b:row>
+                                        </b:panelGrid>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </h:panelGroup>
+                            <p:separator/>
+                            <b:panelGrid col-spans="8,4" size="lg" styleClass="ui-fluid">
+                                <p:outputLabel value="Have you ever been involved in a disciplinary hearing at any of your former employment?" styleClass="questionStyle"/>
+                                <b:panelGrid col-spans="12" size="lg" styleClass="ui-fluid"> 
+                                    <b:formGroup rendered="#{!screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneRadio disabled="#{screeningDeclarationBean.disabled}"  value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.disciplinaryHearingAtFormer}" layout="lineDirection" required="true" requiredMessage="Have you ever been involved in a disciplinary hearing at any of your former employment?">
+                                            <p:ajax event="change" update="displinaryHearingTab" listener="#{screeningDeclarationBean.addFormerDisciplinaryHearing}"/>
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneRadio>
+                                    </b:formGroup>
+                                    <b:formGroup rendered="#{screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneMenu disabled="#{screeningDeclarationBean.disabled}" value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.disciplinaryHearingAtFormer}" converter="entityConverter" required="true" requiredMessage="Have you ever been involved in a disciplinary hearing at any of your former employment?">
+                                            <p:ajax event="change" update="displinaryHearingTab" listener="#{screeningDeclarationBean.addFormerDisciplinaryHearing}"/>
+                                            <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneMenu>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </b:panelGrid>
+                            <h:panelGroup id="displinaryHearingTab">
+                                <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid" rendered="#{screeningDeclarationBean.entity.screeningDeclarationResponse.disciplinaryHearingAtFormer eq 'YES'}">
+                                    <b:formGroup>
+                                        <p:separator/>
+                                        <b:panelGrid col-spans="6,5,1" size="lg" styleClass="ui-fluid" rendered="#{not empty screeningDeclarationBean.entity.screeningDeclarationResponse.formerEmpDisciplinaryHearings}">
+                                            <p:outputLabel value="If yes,what was the charge"/>
+                                            <p:outputLabel value="What was the outcome?"/>
+                                            <p:outputLabel value="Action" />
+                                        </b:panelGrid>
+                                        <p:separator rendered="#{not empty screeningDeclarationBean.entity.screeningDeclarationResponse.formerEmpDisciplinaryHearings}"/>
+                                        <p:outputPanel id="displinaryHearingOutputPanel">
+                                            <ui:repeat value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.formerEmpDisciplinaryHearings}" var="formerEmpHearing" varStatus="formerVarStatus">
+                                                <b:panelGrid col-spans="6,5,1" size="lg" styleClass="ui-fluid">
+                                                    <b:formGroup>
+                                                        <p:inputText disabled="#{screeningDeclarationBean.disabled}" required="true" requiredMessage="Provide nature of charge" value="#{formerEmpHearing.charge}"/> 
+                                                    </b:formGroup>
+                                                    <b:formGroup>
+                                                        <p:inputText disabled="#{screeningDeclarationBean.disabled}" required="true" requiredMessage="Provide outcome" value="#{formerEmpHearing.outcome}"/> 
+                                                    </b:formGroup>
+                                                    <b:formGroup>
+                                                        <b:row>
+                                                            <b:commandButton disabled="#{screeningDeclarationBean.disabled}" action="#{screeningDeclarationBean.removeFormerDisciplinaryHearing(formerEmpHearing)}" iconAwesome="fa-close" immediate="true" large-screen="full-width" size="lg" look="danger" update="@form"/>
+                                                        </b:row>
+                                                    </b:formGroup>
+                                                </b:panelGrid>
+                                            </ui:repeat>
+                                        </p:outputPanel>
+                                        <b:panelGrid col-spans="3,3,3,3" size="lg" styleClass="ui-fluid" rendered="#{screeningDeclarationBean.vettingStatus eq 'FORMS_ISSUED'}">
+                                            <b:row>
+                                                <b:commandButton rendered="#{screeningDeclarationBean.vettingStatus eq 'FORMS_ISSUED'}" action="#{screeningDeclarationBean.addFormerDisciplinaryHearing()}" value="Add Another Record" iconAwesome="fa-plus" large-screen="full-width" size="lg" look="primary" process="displinaryHearingOutputPanel" update="displinaryHearingOutputPanel"/>
+                                            </b:row>
+                                        </b:panelGrid>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </h:panelGroup>
+                            <p:separator/>
+                            <b:panelGrid col-spans="8,4" size="lg" styleClass="ui-fluid">
+                                <p:outputLabel value="Have you ever been investigated for any allegation of misconduct?" styleClass="questionStyle"/>
+                                <b:panelGrid col-spans="12" size="lg" styleClass="ui-fluid"> 
+                                    <b:formGroup rendered="#{!screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneRadio disabled="#{screeningDeclarationBean.disabled}"  value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.investigatedForMisconduct}" layout="lineDirection" required="true" requiredMessage="Have you ever been investigated for any allegation of misconduct?">
+                                            <p:ajax event="change" update="misconductTab" listener="#{screeningDeclarationBean.addMisconductAllegation}"/>
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneRadio>
+                                    </b:formGroup>
+                                    <b:formGroup rendered="#{screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneMenu disabled="#{screeningDeclarationBean.disabled}" value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.investigatedForMisconduct}" converter="entityConverter" required="true" requiredMessage="Have you ever been investigated for any allegation of misconduct?">
+                                            <p:ajax event="change" update="misconductTab" listener="#{screeningDeclarationBean.addMisconductAllegation}"/>
+                                            <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneMenu>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </b:panelGrid>
+                            <h:panelGroup id="misconductTab">
+                                <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid" rendered="#{screeningDeclarationBean.entity.screeningDeclarationResponse.investigatedForMisconduct eq 'YES'}">
+                                    <b:formGroup>
+                                        <p:separator/>
+                                        <b:panelGrid col-spans="6,5,1" size="lg" styleClass="ui-fluid" rendered="#{not empty screeningDeclarationBean.entity.screeningDeclarationResponse.misconductAllegations}">
+                                            <p:outputLabel value="If yes,what was the charge"/>
+                                            <p:outputLabel value="What was the outcome?"/>
+                                            <p:outputLabel value="Action"/>
+                                        </b:panelGrid>
+                                        <p:separator rendered="#{not empty screeningDeclarationBean.entity.screeningDeclarationResponse.misconductAllegations}"/>
+                                        <p:outputPanel id="misconductOutputPanel">
+                                            <ui:repeat value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.misconductAllegations}" var="misconduct" varStatus="misconductVarStatus">
+                                                <b:panelGrid col-spans="6,5,1" size="lg" styleClass="ui-fluid">
+                                                    <b:formGroup>
+                                                        <p:inputText disabled="#{screeningDeclarationBean.disabled}" required="true" requiredMessage="Provide nature of charge" value="#{misconduct.charge}"/> 
+                                                    </b:formGroup>
+                                                    <b:formGroup>
+                                                        <p:inputText disabled="#{screeningDeclarationBean.disabled}" required="true" requiredMessage="Provide outcome" value="#{misconduct.outcome}"/> 
+                                                    </b:formGroup>
+                                                    <b:formGroup>
+                                                        <b:row>
+                                                            <b:commandButton disabled="#{screeningDeclarationBean.disabled}" action="#{screeningDeclarationBean.removeMisconductAllegation(misconduct)}" iconAwesome="fa-close" large-screen="full-width" size="lg" look="danger" update="@form" immediate="true"/>
+                                                        </b:row>
+                                                    </b:formGroup>
+                                                </b:panelGrid>
+                                            </ui:repeat>
+                                        </p:outputPanel>
+                                        <b:panelGrid col-spans="3,3,3,3" size="lg" styleClass="ui-fluid" rendered="#{screeningDeclarationBean.vettingStatus eq 'FORMS_ISSUED'}">
+                                            <b:row>
+                                                <b:commandButton rendered="#{screeningDeclarationBean.vettingStatus eq 'FORMS_ISSUED'}" action="#{screeningDeclarationBean.addMisconductAllegation()}" value="Add Another Record" iconAwesome="fa-plus" large-screen="full-width" size="lg" look="primary" process="misconductOutputPanel" update="misconductOutputPanel"/>
+                                            </b:row>
+                                        </b:panelGrid>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </h:panelGroup>
+                            <p:separator/>
+                            <b:panelGrid col-spans="8,4" size="lg" styleClass="ui-fluid">
+                                <p:outputLabel value="Are you a tax practitioner?" styleClass="questionStyle"/>
+                                <b:panelGrid col-spans="12" size="lg" styleClass="ui-fluid"> 
+                                    <b:formGroup rendered="#{!screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneRadio disabled="#{screeningDeclarationBean.disabled}"  value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.taxPractitioner}" layout="lineDirection" required="true" requiredMessage="Are you a tax practitioner?">
+                                            <p:ajax event="change" update="taxPractitionerTab"/>
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneRadio>
+                                    </b:formGroup>
+                                    <b:formGroup rendered="#{screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneMenu disabled="#{screeningDeclarationBean.disabled}" value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.taxPractitioner}" converter="entityConverter" required="true" requiredMessage="Are you a tax practitioner?">
+                                            <p:ajax event="change" update="taxPractitionerTab"/>
+                                            <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneMenu>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </b:panelGrid>
+                            <h:panelGroup id="taxPractitionerTab">
+                                <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid" rendered="#{screeningDeclarationBean.entity.screeningDeclarationResponse.taxPractitioner eq 'YES'}">
+                                    <b:formGroup>
+                                        <p:outputLabel value="if yes, what is Tax Practiner number?"/>
+                                        <p:inputMask mask="999999999" maxlength="10" disabled="#{screeningDeclarationBean.disabled}" required="true" requiredMessage="Provide Tax Practiner number" value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.taxPractitionerNo}"/>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </h:panelGroup>
+                            <p:separator/>
+                            <b:panelGrid col-spans="8,4" size="lg" styleClass="ui-fluid">
+                                <p:outputLabel value="Are you clearing agent?" styleClass="questionStyle"/>
+                                <b:panelGrid col-spans="12" size="lg" styleClass="ui-fluid"> 
+                                    <b:formGroup rendered="#{!screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneRadio disabled="#{screeningDeclarationBean.disabled}"  value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.clearingAgent}" layout="lineDirection" required="true" requiredMessage="Are you clearing agent?">
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneRadio>
+                                    </b:formGroup>
+                                    <b:formGroup rendered="#{screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneMenu disabled="#{screeningDeclarationBean.disabled}" value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.clearingAgent}" converter="entityConverter" required="true" requiredMessage="Are you clearing agent?">
+                                            <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneMenu>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </b:panelGrid>
+                            <p:separator/>
+                            <b:panelGrid col-spans="8,4" size="lg" styleClass="ui-fluid">
+                                <p:outputLabel value="Are you conducting any business with any organ of the State such as a municipality, government department, parastatal, or university ?" styleClass="questionStyle"/>
+                                <b:panelGrid col-spans="12" size="lg" styleClass="ui-fluid"> 
+                                    <b:formGroup rendered="#{!screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneRadio disabled="#{screeningDeclarationBean.disabled}"  value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.businnessWithStateOrgan}" layout="lineDirection" required="true" requiredMessage="Are you conducting any business with any organ of the State such as a municipality, government department, parastatal, or university ?">
+                                            <p:ajax event="change" update="conductingTab"  listener="#{screeningDeclarationBean.addStateOrganBusiness}"/>
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneRadio>
+                                    </b:formGroup>
+                                    <b:formGroup rendered="#{screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneMenu disabled="#{screeningDeclarationBean.disabled}" value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.businnessWithStateOrgan}" converter="entityConverter" required="true" requiredMessage="Are you conducting any business with any organ of the State such as a municipality, government department, parastatal, or university ?">
+                                            <p:ajax event="change" update="conductingTab"  listener="#{screeningDeclarationBean.addStateOrganBusiness}"/>
+                                            <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneMenu>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </b:panelGrid>
+                            <h:panelGroup id="conductingTab">
+                                <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid" rendered="#{screeningDeclarationBean.entity.screeningDeclarationResponse.businnessWithStateOrgan eq 'YES'}">
+                                    <b:formGroup>
+                                        <p:separator/>
+                                        <b:panelGrid col-spans="6,5,1" size="lg" styleClass="ui-fluid" rendered="#{not empty screeningDeclarationBean.entity.screeningDeclarationResponse.stateOrganBusinesses}">
+                                            <p:outputLabel value="If yes, please provide name of organ of State."/>
+                                            <p:outputLabel value="When is the contract expiring?"/>
+                                            <p:outputLabel value="Action" />
+                                        </b:panelGrid>
+                                        <p:separator rendered="#{not empty screeningDeclarationBean.entity.screeningDeclarationResponse.stateOrganBusinesses}"/>
+                                        <p:outputPanel id="conductingOutputPanel">
+                                            <ui:repeat value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.stateOrganBusinesses}" var="businessOrgan" varStatus="businessOrgVarStatus">
+                                                <b:panelGrid col-spans="6,5,1" size="lg" styleClass="ui-fluid">
+                                                    <b:formGroup>
+                                                        <p:inputText disabled="#{screeningDeclarationBean.disabled}" required="true" requiredMessage="Provide name of organ of state" value="#{businessOrgan.stateOrgan}"/> 
+                                                    </b:formGroup>
+                                                    <b:formGroup>
+                                                        <b:dateTimePicker disabled="#{screeningDeclarationBean.disabled}" required="true" requiredMessage="Provide contract expiring date" format="DD MMMM YYYY" locale="en" value="#{businessOrgan.contractExpiringDate}" icon-position="left" field-size="lg"/>
+                                                    </b:formGroup>
+                                                    <b:formGroup>
+                                                        <b:row>
+                                                            <b:commandButton disabled="#{screeningDeclarationBean.disabled}" action="#{screeningDeclarationBean.removeStateOrganBusiness(businessOrgan)}" iconAwesome="fa-close" large-screen="full-width" size="lg" look="danger" immediate="true" update="@form"/>
+                                                        </b:row>
+                                                    </b:formGroup>
+                                                </b:panelGrid>
+                                            </ui:repeat>
+                                        </p:outputPanel>
+                                        <b:panelGrid col-spans="3,3,3,3" size="lg" styleClass="ui-fluid" rendered="#{screeningDeclarationBean.vettingStatus eq 'FORMS_ISSUED'}">
+                                            <b:row>
+                                                <b:commandButton rendered="#{screeningDeclarationBean.vettingStatus eq 'FORMS_ISSUED'}" action="#{screeningDeclarationBean.addStateOrganBusiness()}" value="Add Another Record" iconAwesome="fa-plus" large-screen="full-width" size="lg" look="primary" process="conductingOutputPanel" update="conductingOutputPanel"/>
+                                            </b:row>
+                                        </b:panelGrid>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </h:panelGroup>
+                            <p:separator/>
+                            <b:panelGrid col-spans="8,4" size="lg" styleClass="ui-fluid">
+                                <p:outputLabel value="Are you a member, director or board member of any corporation, business entity/state entity?" styleClass="questionStyle"/>
+                                <b:panelGrid col-spans="12" size="lg" styleClass="ui-fluid"> 
+                                    <b:formGroup rendered="#{!screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneRadio disabled="#{screeningDeclarationBean.disabled}"  value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.boardMembership}" layout="lineDirection" required="true" requiredMessage="Are you a member, director or board member of any corporation, business entity/state entity?">
+                                            <p:ajax event="change" update="directorTab" listener="#{screeningDeclarationBean.addBoardMembership}"/>
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneRadio>
+                                    </b:formGroup>
+                                    <b:formGroup rendered="#{screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneMenu disabled="#{screeningDeclarationBean.disabled}" value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.boardMembership}" converter="entityConverter" required="true" requiredMessage="Are you a member, director or board member of any corporation, business entity/state entity?">
+                                            <p:ajax event="change" update="directorTab" listener="#{screeningDeclarationBean.addBoardMembership}"/>
+                                            <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneMenu>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </b:panelGrid>
+                            <h:panelGroup id="directorTab">
+                                <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid" rendered="#{screeningDeclarationBean.entity.screeningDeclarationResponse.boardMembership eq 'YES'}">
+                                    <b:formGroup>
+                                        <p:separator/>
+                                        <b:panelGrid col-spans="6,5,1" size="lg" styleClass="ui-fluid" rendered="#{not empty screeningDeclarationBean.entity.screeningDeclarationResponse.boardMemberships}">
+                                            <p:outputLabel value="If yes, please indicate your role"/>
+                                            <p:outputLabel value=" the name of the corporation, or business entity"/>
+                                            <p:outputLabel value="Action" />
+                                        </b:panelGrid>
+                                        <p:separator rendered="#{not empty screeningDeclarationBean.entity.screeningDeclarationResponse.boardMemberships}"/>
+                                        <p:outputPanel id="directorTabOutputPanel">
+                                            <ui:repeat value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.boardMemberships}" var="boardMembership" varStatus="boardVarStatus">
+                                                <b:panelGrid col-spans="6,5,1" size="lg" styleClass="ui-fluid">
+                                                    <b:formGroup>
+                                                        <p:inputText disabled="#{screeningDeclarationBean.disabled}" required="true" requiredMessage="Provide the role" value="#{boardMembership.corporationRole}"/> 
+                                                    </b:formGroup>
+                                                    <b:formGroup>
+                                                        <p:inputText disabled="#{screeningDeclarationBean.disabled}" required="true" requiredMessage="Provide name of the corporation / business entity" value="#{boardMembership.nameOfCorporation}"/> 
+                                                    </b:formGroup>
+                                                    <b:formGroup>
+                                                        <b:row>
+                                                            <b:commandButton disabled="#{screeningDeclarationBean.disabled}" action="#{screeningDeclarationBean.removeBoardMembership(boardMembership)}" iconAwesome="fa-close" large-screen="full-width" size="lg" look="danger" update="@form" immediate="true"/>
+                                                        </b:row>
+                                                    </b:formGroup>
+                                                </b:panelGrid>
+                                            </ui:repeat>
+                                        </p:outputPanel>
+                                        <b:panelGrid col-spans="3,3,3,3" size="lg" styleClass="ui-fluid" rendered="#{screeningDeclarationBean.vettingStatus eq 'FORMS_ISSUED'}">
+                                            <b:row>
+                                                <b:commandButton rendered="#{screeningDeclarationBean.vettingStatus eq 'FORMS_ISSUED'}" action="#{screeningDeclarationBean.addBoardMembership()}" value="Add Another Record" iconAwesome="fa-plus" large-screen="full-width" size="lg" look="primary" process="directorTabOutputPanel" update="directorTabOutputPanel"/>
+                                            </b:row>
+                                        </b:panelGrid>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </h:panelGroup>
+                            <p:separator/>
+                            <b:panelGrid col-spans="8,4" size="lg" styleClass="ui-fluid">
+                                <p:outputLabel value="Is any immediate member of your family (spouse, child or parent) a member, director or board member of any corporation, business or State entity?" styleClass="questionStyle"/>
+                                <b:panelGrid col-spans="12" size="lg" styleClass="ui-fluid"> 
+                                    <b:formGroup rendered="#{!screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneRadio disabled="#{screeningDeclarationBean.disabled}"  value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.familyMembersBoardMembership}" layout="lineDirection" required="true" requiredMessage="Is any immediate member of your family (spouse, child or parent) a member, director or board member of any corporation, business or State entity?">
+                                            <p:ajax event="change" update="corporationTab" listener="#{screeningDeclarationBean.addFamilyBoardMembership}"/>
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneRadio>
+                                    </b:formGroup>
+                                    <b:formGroup rendered="#{screeningDeclarationBean.useDropdown}">
+                                        <p:selectOneMenu disabled="#{screeningDeclarationBean.disabled}" value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.familyMembersBoardMembership}" converter="entityConverter" required="true" requiredMessage="Is any immediate member of your family (spouse, child or parent) a member, director or board member of any corporation, business or State entity?">
+                                            <p:ajax event="change" update="corporationTab" listener="#{screeningDeclarationBean.addFamilyBoardMembership}"/>
+                                            <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                            <f:selectItems value="#{screeningDeclarationBean.screeningResponseOptions}" var="option" itemLabel="#{option}" itemValue="#{option}"/>
+                                        </p:selectOneMenu>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </b:panelGrid>
+                            <h:panelGroup id="corporationTab">
+                                <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid" rendered="#{screeningDeclarationBean.entity.screeningDeclarationResponse.familyMembersBoardMembership eq 'YES'}">
+                                    <b:formGroup>
+                                        <p:separator/>
+                                        <b:panelGrid col-spans="6,5,1" size="lg" styleClass="ui-fluid" rendered="#{not empty screeningDeclarationBean.entity.screeningDeclarationResponse.familyBoardMemberships}">
+                                            <p:outputLabel value="If yes, please indicate your immediate family member’s role"/>
+                                            <p:outputLabel value="the name of the corporation, or business entity"/>
+                                            <p:outputLabel value="Action" />
+                                        </b:panelGrid>
+                                        <p:separator rendered="#{not empty screeningDeclarationBean.entity.screeningDeclarationResponse.familyBoardMemberships}"/>
+                                        <p:outputPanel id="corporationOutputPanel">
+                                            <ui:repeat value="#{screeningDeclarationBean.entity.screeningDeclarationResponse.familyBoardMemberships}" var="familyBoardMembership" varStatus="familyBoardVarStatus">
+                                                <b:panelGrid col-spans="6,5,1" size="lg" styleClass="ui-fluid">
+                                                    <b:formGroup>
+                                                        <p:inputText disabled="#{screeningDeclarationBean.disabled}" required="true" requiredMessage="Indicate your immediate family memebr's role" value="#{familyBoardMembership.corporationRole}"/> 
+                                                    </b:formGroup>
+                                                    <b:formGroup>
+                                                        <p:inputText disabled="#{screeningDeclarationBean.disabled}" required="true" requiredMessage="Provide name of corporation / business entity" value="#{familyBoardMembership.corporationName}"/> 
+                                                    </b:formGroup>
+                                                    <b:formGroup>
+                                                        <b:row>
+                                                            <b:commandButton disabled="#{screeningDeclarationBean.disabled}" action="#{screeningDeclarationBean.removeFamilyBoardMembership(familyBoardMembership)}" iconAwesome="fa-close" large-screen="full-width" size="lg" look="danger" update="@form" immediate="true"/>
+                                                        </b:row>
+                                                    </b:formGroup>
+                                                </b:panelGrid>
+                                            </ui:repeat>
+                                        </p:outputPanel>
+                                        <b:panelGrid col-spans="3,3,3,3" size="lg" styleClass="ui-fluid" rendered="#{screeningDeclarationBean.vettingStatus eq 'FORMS_ISSUED'}">
+                                            <b:row>
+                                                <b:commandButton rendered="#{screeningDeclarationBean.vettingStatus eq 'FORMS_ISSUED'}" action="#{screeningDeclarationBean.addFamilyBoardMembership()}" value="Add Another Record" iconAwesome="fa-plus" large-screen="full-width" size="lg" look="primary" process="corporationOutputPanel" update="corporationOutputPanel"/>
+                                            </b:row>
+                                        </b:panelGrid>
+                                    </b:formGroup>
+                                </b:panelGrid>
+                            </h:panelGroup>
+                            <p:separator/>
+                            <b:panelGrid colSpans="12" size="md" styleClass="ui-fluid">
+                                <h5>
+                                    <p>I hereby authorize the SARS Vetting, Screening and Conflict of Interest Unit to forward any personal information, including my fingerprints, name and ID to verification information suppliers acting on behalf of
+                                        SARS (including but not limited to background checks and screening companies, AFISwitch, the South African Police Services, the South African Criminal Record Centre, the Government of the RSA, and any
+                                        relevant educational, training and credit organizations) for the purpose of verifying my personal credentials and records. I furthermore authorize the SARS Vetting, Screening and COI Unit to furnish information
+                                        regarding my tax compliance, license, criminal, credit, disciplinary, and professional and educational history to the relevant authorities within SARS. I furthermore indemnify SARS and its verification information
+                                        suppliers against any liability that may result from the bona fide furnishing and verification of my personal information for the sole purpose of verifying my personal credentials and records.</p>
+                                    <p>I furthermore authorize the SARS Vetting, Screening and COI Unit to obtain the relevant information where it concerns my tax status/affairs.</p>
+                                    <p>I understand that it is a condition of SARS’ verification information suppliers that this information is furnished by them solely for the purposes of my proposed / continuation of employment via the SARS Vetting,
+                                        Screening and COI Unit.
+                                    </p>
+                                </h5>
+                                <b:formGroup>
+                                    <p:selectBooleanCheckbox disabled="#{screeningDeclarationBean.disabled}" itemLabel="I hereby declare that the above information is true and complete." value="#{screeningDeclarationBean.entity.candidateSignature}" required="true" requiredMessage="Please declare before you continue" styleClass="outcomeCSS"/>
+                                </b:formGroup>
+                            </b:panelGrid>
+                        </b:panelGrid>
+                    </p:fieldset>
+                </p:fieldset>
+            </b:panelGrid>
+        </b:panel>
+    </h:body>
+</html>

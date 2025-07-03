@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+    </h:head>
+    <h:body>
+        <ui:composition template="/template/maintemplate.xhtml">
+            <ui:define name="maincontent">
+                <b:panel collapsed="false" collapsible="false">
+                    <b:panelGrid col-spans="12" styleClass="ui-fluid">
+                        <p:fieldset legend="Administration">
+                            <b:commandButton disabled="#{not homeBean.activeUser.userRole.adminSetting.administrator}"  action="#{homeBean.routeToAdministration()}" size="lg" large-screen="full-width" icon-size="3x" iconAwesome="fa-users" look="success"/>
+                        </p:fieldset>
+                        <p:separator/>
+                        <p:fieldset legend="Vetting Process">
+                            <b:commandButton disabled="#{not homeBean.activeUser.userRole.vettingSetting.vetting}" action="#{homeBean.routeToVetting()}"  size="lg" large-screen="full-width" icon-size="3x" iconAwesome="fa-database" look="success"/>
+                        </p:fieldset>
+                        <p:separator/>
+                        <p:fieldset legend="Draw Reports">
+                            <b:commandButton disabled="#{not homeBean.activeUser.userRole.reportSetting.report}" action="#{homeBean.routeToReports()}"  size="lg" large-screen="full-width" icon-size="3x" iconAwesome="fa-folder-open-o" look="success"/>
+                        </p:fieldset>
+                    </b:panelGrid>
+                </b:panel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

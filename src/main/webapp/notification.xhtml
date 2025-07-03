@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <ui:composition template="/template/template.xhtml">
+            <ui:define name="maincontent">
+                <b:panel rendered="#{emailNotificationBean.list}" look="default"  collapsible="false">
+                    <f:facet name="heading">
+                        <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                            <p:outputLabel value="#{emailNotificationBean.panelTitleName}" styleClass="panel-title-css"/>
+                            <p:separator/>
+                        </b:panelGrid>
+                    </f:facet>
+                    <p:outputPanel rendered="#{empty emailNotificationBean.emailNotifications}">
+                        <p:outputLabel value="No Email notification found."/>
+                    </p:outputPanel>
+                    <p:dataTable globalFilterOnly="true" rowIndexVar="rowIndex" widgetVar="notificationTable" rendered="#{not empty emailNotificationBean.emailNotifications}" value="#{emailNotificationBean.emailNotifications}" var="notification" paginator="true" paginatorPosition="top" paginatorAlwaysVisible="false" reflow="true" rows="10" stripedRows="true">
+                        <f:facet name="header">                          
+                            <p:toolbar>
+                                <p:toolbarGroup rendered="false">
+                                    <b:commandButton style="width:30rem" large-screen="full-width" iconSize="md" size="lg" icon="plus" look="primary" value="New" action="#{emailNotificationBean.addOrUpdate(null)}" update="@form"/>
+                                </p:toolbarGroup>
+                                <p:toolbarGroup align="right">
+                                    <p:inputText placeholder="Filter by all fields" id="globalFilter" style="width:30rem" onkeyup="PF('notificationTable').filter()"/>
+                                </p:toolbarGroup>
+                            </p:toolbar>
+                        </f:facet>
+                        <p:column headerText="No." styleClass="small">
+                            <h:outputText value="#{rowIndex+1}"/>
+                        </p:column>
+                        <p:column headerText="Email Subject" sortBy="#{notification.emailSubject}">
+                            <h:outputText value="#{notification.emailSubject}"/>
+                        </p:column>
+                        <p:column headerText="Action" styleClass="small">
+                            <p:commandButton styleClass="ui-button-primary btn-size-sm" disabled="#{not emailNotificationBean.activeUser.employeeRole.permission.update}" value="Edit" action="#{emailNotificationBean.addOrUpdate(notification)}" update="@form"/>
+                        </p:column>
+                    </p:dataTable>
+                </b:panel>
+                <b:panel rendered="#{emailNotificationBean.add}" look="default" collapsible="false">
+                    <f:facet name="heading">
+                        <p:outputLabel value="#{emailNotificationBean.panelTitleName}" styleClass="panel-title-css"/>
+                    </f:facet>
+                    <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                        <b:formGroup>
+                            <p:outputLabel value="Notification Type"/>
+                            <p:selectOneMenu disabled="#{emailNotificationBean.disabled}" value="#{emailNotificationBean.entity.notificationType}" required="true" converter="entityConverter" label="Status" requiredMessage="Please select a notification type">
+                                <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                <f:selectItems value="#{emailNotificationBean.notificationTypes}" var="notificationTypesOption" itemLabel="#{notificationTypesOption.toString()}" itemValue="#{notificationTypesOption}"/>
+                            </p:selectOneMenu>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Email Subject"/>
+                            <b:inputText value="#{emailNotificationBean.entity.emailSubject}" field-size="lg" required="true" requiredMessage="Please enter email subject"/>
+                        </b:formGroup> 
+                        <b:formGroup>
+                            <p:outputLabel value="Email Content"/>
+                            <p:textEditor widgetVar="editor1" value="#{emailNotificationBean.entity.description}" height="300px"  />
+                        </b:formGroup> 
+                    </b:panelGrid>
+                    <f:facet name="footer">
+                        <b:row>
+                            <b:panelGrid colSpans="6,6" size="lg" styleClass="ui-fluid">
+                                <b:commandButton large-screen="full-width" size="lg" value="Save" icon="check" look="success" action="#{emailNotificationBean.save(emailNotificationBean.entity)}" update="@form" />
+                                <b:commandButton large-screen="full-width" size="lg" value="Cancel" iconAwesome="window-close" look="danger" action="#{emailNotificationBean.cancel(emailNotificationBean.entity)}" immediate="true" process="@this"  update="@(form)"/>
+                            </b:panelGrid>
+                        </b:row>
+                    </f:facet>
+                </b:panel>  
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

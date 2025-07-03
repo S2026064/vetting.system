@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <ui:composition template="/template/template.xhtml">
+            <ui:define name="maincontent">
+                <b:panel rendered="#{emailNotificationBean.list}" look="default"  collapsible="false">
+                    <f:facet name="heading">
+                        <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                            <p:outputLabel value="#{emailNotificationBean.panelTitleName}" styleClass="panel-title-css"/>
+                            <p:separator/>
+                        </b:panelGrid>
+                    </f:facet>
+                    <p:outputPanel rendered="#{empty emailNotificationBean.emailNotifications}">
+                        <p:outputLabel value="No Email notification found."/>
+                    </p:outputPanel>
+                    <p:dataTable rendered="#{not empty emailNotificationBean.emailNotifications}" value="#{emailNotificationBean.emailNotifications}" var="notification" reflow="true" rows="10" showGridlines="true" stripedRows="true" size="small">
+                        <p:column headerText="Email Subject">
+                            <h:outputText value="#{notification.emailSubject}"/>
+                        </p:column>
+                        <p:column headerText="Line 1">
+                            <h:outputText value="#{notification.line1}"/>
+                        </p:column>
+                        <p:column headerText="Line 2">
+                            <h:outputText value="#{notification.line2}"/>
+                        </p:column>
+                        <p:column headerText="Action" styleClass="medium">
+                            <p:commandButton styleClass="ui-button-primary btn-size-sm" disabled="#{not emailNotificationBean.activeUser.employeeRole.permission.update}" value="Edit" action="#{emailNotificationBean.addOrUpdate(notification)}" update="@form"/>
+                        </p:column>
+                    </p:dataTable>
+                </b:panel>
+                <b:panel rendered="#{emailNotificationBean.add}" look="default" collapsible="false">
+                    <f:facet name="heading">
+                        <p:outputLabel value="#{emailNotificationBean.panelTitleName}" styleClass="panel-title-css"/>
+                    </f:facet>
+                    <b:panelGrid colSpans="6,6" size="lg" styleClass="ui-fluid">
+                        <b:formGroup>
+                            <p:outputLabel value="Email Subject"/>
+                            <b:inputText value="#{emailNotificationBean.entity.emailSubject}" field-size="lg" required="true" requiredMessage="Please enter email subject"/>
+                        </b:formGroup> 
+                        <b:formGroup>
+                            <p:outputLabel value="Line 1"/>
+                            <b:inputText value="#{emailNotificationBean.entity.line1}" field-size="lg" required="true" requiredMessage="Please enter Line 1"/>
+                        </b:formGroup> 
+                        <b:formGroup>
+                            <p:outputLabel value="Line 2"/>
+                            <b:inputText value="#{emailNotificationBean.entity.line2}" field-size="lg" required="true" requiredMessage="Please enter Line 2"/>
+                        </b:formGroup> 
+                        <b:formGroup>
+                            <p:outputLabel value="Line 3"/>
+                            <b:inputText value="#{emailNotificationBean.entity.line3}" field-size="lg" required="true" requiredMessage="Please enter Line 3"/>
+                        </b:formGroup> 
+                        <b:formGroup>
+                            <p:outputLabel value="Line 4"/>
+                            <b:inputText value="#{emailNotificationBean.entity.line4}" field-size="lg" required="true" requiredMessage="Please enter Line 4"/>
+                        </b:formGroup>
+                    </b:panelGrid>
+                    <f:facet name="footer">
+                        <b:row>
+                            <b:panelGrid colSpans="6,6" size="lg" styleClass="ui-fluid">
+                                <b:commandButton large-screen="full-width" size="lg" value="Save" icon="check" look="success" action="#{emailNotificationBean.save(emailNotificationBean.entity)}" update="@form" />
+                                <b:commandButton large-screen="full-width" size="lg" value="Cancel" iconAwesome="window-close" look="danger" action="#{emailNotificationBean.cancel(emailNotificationBean.entity)}" immediate="true" process="@this"  update="@(form)"/>
+                            </b:panelGrid>
+                        </b:row>
+                    </f:facet>
+                </b:panel>  
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

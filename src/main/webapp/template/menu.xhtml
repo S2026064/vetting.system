@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui">
+    <h:body>
+        <ui:composition>
+            <b:navBar brandStyle="font-size: smaller"  brand="Super Administration" fluid="true" styleClass="menucss" brandHref="#" rendered="#{menuBean.activeUser.router.superAdmin}">
+                <b:navbarLinks style="font-size: smaller">
+                    <b:navCommandLink iconAwesome="fa-home" action="#{menuBean.route('/home')}" immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="Roles" action="#{menuBean.route('/employeeRoles')}" rendered="#{menuBean.activeUser.employeeRole.adminSetting.employeeRole}" immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="Users" action="#{menuBean.route('/employees')}" rendered="#{menuBean.activeUser.employeeRole.adminSetting.users}" immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="Grade of Clearance Tools" action="#{menuBean.route('/clearance')}" rendered="#{menuBean.activeUser.employeeRole.adminSetting.subArea}" immediate="true"></b:navCommandLink>
+                    <b:navCommandLink  value="Sub-Area" action="#{menuBean.route('/subArea')}" rendered="false" immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="Job Role" action="#{menuBean.route('/jobRole')}" rendered="false" immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="Adjustment Category" action="#{menuBean.route('/adjustmentCategory')}" rendered="false" immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="Email Notification" action="#{menuBean.route('/notification')}" rendered="#{menuBean.activeUser.employeeRole.adminSetting.notification}" immediate="true"></b:navCommandLink>
+                </b:navbarLinks>
+            </b:navBar> 
+            <b:navBar brandStyle="font-size: smaller"  brand="Administration" fluid="true" styleClass="menucss"   brandHref="#" rendered="#{menuBean.activeUser.router.administrator}">
+                <b:navbarLinks style="font-size: smaller">
+                    <b:navCommandLink iconAwesome="fa-home" action="#{menuBean.route('/home')}" immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="Escalated Vetting Records" action="#{menuBean.route('/vettingEscalation')}" rendered="#{menuBean.activeUser.employeeRole.adminSetting.escalation}" immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="Reroute Vetting" action="#{menuBean.route('/rerouteVetting')}" rendered="#{menuBean.activeUser.employeeRole.adminSetting.reroute}" immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="SSA/SARS Upload" action="#{menuBean.route('/vettingResponse')}" rendered="#{menuBean.activeUser.employeeRole.adminSetting.uploadSsaSars}" immediate="true"></b:navCommandLink>
+                </b:navbarLinks>
+            </b:navBar> 
+            <b:navBar brandStyle="font-size: smaller"  brand="Vetting Initiation" fluid="true" styleClass="menucss"   brandHref="#" rendered="#{menuBean.activeUser.router.vettingInitiation}">
+                <b:navbarLinks style="font-size: smaller">
+                    <b:navCommandLink iconAwesome="fa-home" action="#{menuBean.route('/home')}" immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="Initiate" action="#{menuBean.route('/vettingInitiation')}" rendered="#{menuBean.activeUser.employeeRole.initiateVettingSetting.vettingInitiation}" immediate="true"></b:navCommandLink>
+                </b:navbarLinks>
+            </b:navBar>
+            <b:navBar brandStyle="font-size: smaller"  brand="Vetting Completion" fluid="true" styleClass="menucss"   brandHref="#" rendered="#{menuBean.activeUser.router.vettingCompletion}">
+                <b:navbarLinks style="font-size: smaller">
+                    <b:navCommandLink iconAwesome="fa-home" action="#{menuBean.route('/home')}" immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="Vettting Form" action="#{menuBean.redirectPage('/vettingCompletion')}" rendered="#{menuBean.activeUser.employeeRole.completeVettingSetting.completeVetting}" immediate="true"></b:navCommandLink>
+                </b:navbarLinks>
+            </b:navBar>
+            <b:navBar brandStyle="font-size: smaller"  brand="Vetting Review" fluid="true" styleClass="menucss"   brandHref="#" rendered="#{menuBean.activeUser.router.vettingReview}">
+                <b:navbarLinks style="font-size: smaller">
+                    <b:navCommandLink iconAwesome="fa-home" action="#{menuBean.route('/home')}" immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="Review" action="#{menuBean.route('/vettingReview')}" rendered="#{menuBean.activeUser.employeeRole.reviewVettingSetting.analistReview}" immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="Review" action="#{menuBean.route('/processVetting')}" rendered="#{menuBean.activeUser.employeeRole.reviewVettingSetting.officerReview}" immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="Review" action="#{menuBean.route('/qaReview')}" rendered="#{menuBean.activeUser.employeeRole.reviewVettingSetting.qaReview}" immediate="true"></b:navCommandLink>
+                </b:navbarLinks>
+            </b:navBar>
+            <b:navBar brandStyle="font-size: smaller" brand="Manager Review" fluid="true" styleClass="menucss"   brandHref="#" rendered="#{menuBean.activeUser.router.managerReview}">
+                <b:navbarLinks style="font-size: smaller">
+                    <b:navCommandLink iconAwesome="fa-home" action="#{menuBean.route('/home')}" immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="Review" action="#{menuBean.route('/vettingManager')}" rendered="#{menuBean.activeUser.employeeRole.reviewVettingSetting.managerReview}" immediate="true"></b:navCommandLink>
+                </b:navbarLinks>
+            </b:navBar>
+            <b:navBar brandStyle="font-size: smaller"  brand="Vetting Approval" fluid="true" styleClass="menucss"   brandHref="#" rendered="#{menuBean.activeUser.router.vettingApproval}">
+                <b:navbarLinks style="font-size: smaller">
+                    <b:navCommandLink iconAwesome="fa-home" action="#{menuBean.route('/home')}" immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="Approve" action="#{menuBean.route('/vettingApproval')}" rendered="#{menuBean.activeUser.employeeRole.vettingApprovalSetting.approveVetting}" immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="Approve" action="#{menuBean.route('/vettingSecondLevelApproval')}" rendered="#{menuBean.activeUser.employeeRole.vettingApprovalSetting.approveSecondLevel}" immediate="true"></b:navCommandLink>
+                </b:navbarLinks>
+            </b:navBar>
+            <b:navBar brandStyle="font-size: smaller" brand="Reports" fluid="true" styleClass="menucss"   brandHref="#" rendered="#{menuBean.activeUser.router.reports}">
+                <b:navbarLinks style="font-size: smaller">
+                    <b:navCommandLink iconAwesome="fa-home" action="#{menuBean.route('/home')}" immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="Report" action="#{menuBean.route('/report')}" rendered="#{menuBean.activeUser.employeeRole.reportSetting.report}" immediate="true"></b:navCommandLink>
+                </b:navbarLinks>
+            </b:navBar> 
+            <b:navBar brandStyle="font-size: smaller" brand="Vetting Files" fluid="true" styleClass="menucss"   brandHref="#" rendered="#{menuBean.activeUser.router.vettingFiles}">
+                <b:navbarLinks style="font-size: smaller">
+                    <b:navCommandLink iconAwesome="fa-home" action="#{menuBean.route('/home')}" immediate="true"></b:navCommandLink>
+                    <b:navCommandLink value="Vetting Files" action="#{menuBean.route('/vettingFiles')}" rendered="#{menuBean.activeUser.employeeRole.adminSetting.vettingFiles}" immediate="true"></b:navCommandLink>
+                </b:navbarLinks>
+            </b:navBar> 
+        </ui:composition>
+    </h:body>
+</html>
+
+

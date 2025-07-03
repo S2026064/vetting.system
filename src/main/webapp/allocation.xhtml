@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <ui:composition template="/template/template.xhtml">
+            <ui:define name="maincontent">
+                <b:panel rendered="#{vettingAllocationBean.list}" look="default"  collapsible="false">
+                    <f:facet name="heading">
+                        <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                            <p:outputLabel value="Allocate Vetting" styleClass="panel-title-css"/>
+                        </b:panelGrid>
+                    </f:facet>
+                    <p:outputPanel rendered="#{empty vettingAllocationBean.vettingRecords}">
+                        <p:outputLabel value="No Vetting records found."/>
+                    </p:outputPanel>
+                    <p:dataTable rendered="#{not empty vettingAllocationBean.vettingRecords}" stripedRows="true" showGridlines="true" rowKey="#{vettingRecord.id}" selection="#{vettingAllocationBean.selectedVettingRecord}" value="#{vettingAllocationBean.vettingRecords}" var="vettingRecord" paginatorAlwaysVisible="false" reflow="true">
+                        <f:facet name="header">
+                            <p:toolbar>
+                                <f:facet name="left">
+                                    <p:outputLabel value="[#{vettingAllocationBean.pageNumber}]"/>
+                                </f:facet>
+                                <f:facet name="right">
+                                    <b:commandButton rendered="#{vettingAllocationBean.previousPage}" icon-awesome="fa-step-backward"  size="sm" value="Prev" look="success" action="#{vettingAllocationBean.previousVettingRecords()}" update="@form" />
+                                    <p:spacer rendered="#{vettingAllocationBean.previousPage}" width="5px"/>
+                                    <b:commandButton rendered="#{vettingAllocationBean.nextPage}" icon-awesome="fa-step-forward"  size="sm" value="Next" look="success" action="#{vettingAllocationBean.nextVettingRecords()}" update="@form" />
+                                </f:facet>
+                            </p:toolbar>
+                        </f:facet>
+                        <p:column headerText="Date"  styleClass="large">
+                            <h:outputText value="#{vettingRecord.createdDate}">
+                                <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="S-ID"  styleClass="large">
+                            <h:outputText value="#{vettingRecord.employee.sid}"/>
+                        </p:column>
+                        <p:column headerText="Name">
+                            <h:outputText value="#{vettingRecord.employee.fullNames}"/>
+                        </p:column>
+                        <p:column headerText="Officer">
+                            <h:outputText value="#{vettingRecord.vettingProcessingOfficer.fullNames}"/>
+                        </p:column>
+                        <p:column headerText="Status">
+                            <h:outputText value="#{vettingRecord.vettingStatus.toString()}"/>
+                        </p:column>
+                        <p:column headerText="Action" styleClass="large">
+                            <p:commandButton styleClass="ui-button-primary btn-size-sm" value="Allocate" action="#{vettingAllocationBean.loadAllocateVettingForm(vettingRecord)}"  update="@form"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:toolbar>
+                                <f:facet name="left">
+                                    <p:outputLabel value="[#{vettingAllocationBean.pageNumber}]"/>
+                                </f:facet>
+                                <f:facet name="right">
+                                    <b:commandButton rendered="#{vettingAllocationBean.previousPage}" icon-awesome="fa-step-backward"  size="sm" value="Prev" look="success" action="#{vettingAllocationBean.previousVettingRecords()}" update="@form" />
+                                    <p:spacer rendered="#{vettingAllocationBean.previousPage}" width="5px"/>
+                                    <b:commandButton rendered="#{vettingAllocationBean.nextPage}" icon-awesome="fa-step-forward"  size="sm" value="Next" look="success" action="#{vettingAllocationBean.nextVettingRecords()}" update="@form" />
+                                </f:facet>
+                            </p:toolbar>
+                        </f:facet>
+                    </p:dataTable>
+                </b:panel>
+                <b:panel rendered="#{vettingAllocationBean.allocate}" look="default"  collapsible="false">
+                    <f:facet name="heading">
+                        <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                            <p:outputLabel value="ALLOCATE VETTING" styleClass="panel-title-css"/>
+                        </b:panelGrid>
+                    </f:facet>
+                    <b:panelGrid col-spans="6,6" size="lg" styleClass="ui-fluid">
+                        <b:formGroup>
+                            <p:fieldset legend="Full Names">
+                                <p:inputText value="#{vettingAllocationBean.entity.employee.fullNames}" readonly="true"/> 
+                            </p:fieldset>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:fieldset legend="S-ID">
+                                <p:inputText value="#{vettingAllocationBean.entity.employee.sid}" readonly="true"/>
+                            </p:fieldset>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:fieldset legend="Employee Number">
+                                <p:inputText value="#{vettingAllocationBean.entity.employee.employeeNumber}" readonly="true"/>
+                            </p:fieldset>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:fieldset legend="Assign Officer">
+                                <p:selectOneMenu value="#{vettingAllocationBean.entity.vettingProcessingOfficer}" converter="entityConverter" required="true" requiredMessage="Select vetting officer" filter="true">
+                                    <f:selectItems value="#{vettingAllocationBean.vettingOfficers}" var="officer" itemLabel="[#{officer.fullNames}][#{officer.sid}]" itemValue="#{officer}" />
+                                </p:selectOneMenu>
+                            </p:fieldset>
+                        </b:formGroup>
+                    </b:panelGrid>
+                    <f:facet name="footer">
+                        <b:row>
+                            <b:panelGrid colSpans="6,6" size="md" styleClass="ui-fluid">
+                                <b:commandButton large-screen="full-width"  value="Allocate Vetting" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()" look="success" size="lg" action="#{vettingAllocationBean.allocateVetting(vettingAllocationBean.entity)}" icon-awesome="fa-save" update="@(form)"/>
+                                <b:commandButton large-screen="full-width"  value="Cancel" look="danger" iconAwesome="window-close" process="@this"  update="@(form)" size="lg"  action="#{vettingAllocationBean.cancel()}" immediate="true" ajax="true" onclick="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()"/>                               
+                            </b:panelGrid>
+                        </b:row>
+                    </f:facet>
+                </b:panel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

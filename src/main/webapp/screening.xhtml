@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <b:panel look="default"  collapsible="false">
+            <b:panelGrid col-spans="12" size="lg" styleClass="ui-fluid">
+                <p:fieldset legend="Qualification Details">
+                    <p:outputPanel rendered="#{empty screeningBean.entity.employee.qualifications}">
+                        <p:outputLabel value="No Qualification records found."/>
+                    </p:outputPanel>
+                    <p:separator rendered="#{not empty screeningBean.entity.employee.qualifications}"/>
+                    <b:panelGrid col-spans="4,4,2,2" size="lg" styleClass="ui-fluid" rendered="#{not empty screeningBean.entity.employee.qualifications}">
+                        <p:outputLabel value="Qualification Name"/>
+                        <p:outputLabel value="Institution Name"/>
+                        <p:outputLabel value="Date Obtained"/>
+                        <p:outputLabel value="Qualification Verified"/>
+                    </b:panelGrid>
+                    <p:separator rendered="#{not empty screeningBean.entity.employee.qualifications}"/>
+                    <ui:repeat value="#{screeningBean.entity.employee.qualifications}" var="qualif" varStatus="mieVarStatus" rendered="#{not empty screeningBean.entity.employee.qualifications}">
+                        <b:panelGrid col-spans="4,4,2,2" size="lg" styleClass="ui-fluid">
+                            <b:formGroup>
+                                <h:outputText styleClass="displaycss" value="#{qualif.qualificationName}"/> 
+                            </b:formGroup>
+                            <b:formGroup>
+                                <h:outputText styleClass="displaycss"  value="#{qualif.institution}"/> 
+                            </b:formGroup>
+                            <b:formGroup>
+                                <h:outputText styleClass="displaycss"  value="#{qualif.dateObtained}"/>
+                            </b:formGroup>
+                            <b:formGroup>
+                                <h:outputText styleClass="displaycss" value="#{qualif.verification}"/> 
+                            </b:formGroup>
+                        </b:panelGrid>
+                    </ui:repeat>
+                </p:fieldset>
+                <p:separator/>
+                <p:fieldset legend="Tax Registration Details">
+                    <b:panelGrid col-spans="6,6" size="lg" styleClass="ui-fluid">
+                        <b:formGroup>
+                            <p:fieldset legend="Is Subject registered for Income Tax?">
+                                <b:formGroup>
+                                    <p:inputText rendered="#{screeningBean.entity.screening.taxDetails.taxRegistered.toString() eq null}" readonly="true" value="No Screening record found"/> 
+                                    <p:inputText rendered="#{screeningBean.entity.screening.taxDetails.taxRegistered.toString() ne null}" readonly="true" value="#{screeningBean.entity.screening.taxDetails.taxRegistered.toString()}"/> 
+                                </b:formGroup>
+                            </p:fieldset>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:fieldset legend="Income Tax Number">
+                                <p:inputText rendered="#{screeningBean.entity.screening.taxDetails.incomeTaxNumber eq null}" readonly="true" value="No Screening record found"/> 
+                                <p:inputText rendered="#{screeningBean.entity.screening.taxDetails.incomeTaxNumber ne null}" readonly="true" value="#{screeningBean.entity.screening.taxDetails.incomeTaxNumber}"/> 
+                            </p:fieldset>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:fieldset legend="Last Assessment">
+                                <p:inputText rendered="#{screeningBean.entity.screening.taxDetails.lastAssesmentDate eq null}" readonly="true" value="No Screening record found"/>
+                                <p:inputText rendered="#{screeningBean.entity.screening.taxDetails.lastAssesmentDate ne null}" readonly="true" value="#{screeningBean.entity.screening.taxDetails.lastAssesmentDate}"/>
+                            </p:fieldset>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:fieldset legend="Returns Outstanding">
+                                <p:inputText rendered="#{screeningBean.entity.screening.taxDetails.outstandingReturn eq null}" readonly="true" value="No Screening record found" /> 
+                                <p:inputText rendered="#{screeningBean.entity.screening.taxDetails.outstandingReturn ne null}" readonly="true" value="#{screeningBean.entity.screening.taxDetails.outstandingReturn}" /> 
+                            </p:fieldset>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:fieldset legend="Money Owed to SARS">
+                                <p:inputText readonly="true" rendered="#{screeningBean.entity.screening.taxDetails.outstandingReturn eq null}" value="No Screening record found"/> 
+                                <p:inputText readonly="true" rendered="#{screeningBean.entity.screening.taxDetails.outstandingReturn ne null}" value="#{screeningBean.entity.screening.taxDetails.moneyOwNedToSars}"/> 
+                            </p:fieldset>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:fieldset legend="Tax Status">
+                                <p:inputText rendered="#{screeningBean.entity.screening.taxDetails.status eq null}" readonly="true" value="No Screening record found"/> 
+                                <p:inputText rendered="#{screeningBean.entity.screening.taxDetails.status ne null}" readonly="true" value="#{screeningBean.entity.screening.taxDetails.status}"/> 
+                            </p:fieldset>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:fieldset legend="Date Modified">
+                                <p:inputText rendered="#{screeningBean.entity.screening.latestUpdateDate eq null}" readonly="true" value="No Screening record found"/> 
+                                <p:inputText rendered="#{screeningBean.entity.screening.latestUpdateDate ne null}" readonly="true" value="#{screeningBean.entity.screening.latestUpdateDate}">
+                                    <f:convertDateTime  pattern="dd MMMM yyyy"/>
+                                </p:inputText>
+                            </p:fieldset>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:fieldset legend="Status"> 
+                                <p:inputText rendered="#{screeningBean.entity.screening.screenStatus eq null}" readonly="true" value="No Screening record found"/> 
+                                <p:inputText rendered="#{screeningBean.entity.screening.screenStatus ne null}" readonly="true" value="#{screeningBean.entity.screening.screenStatus}"/> 
+                            </p:fieldset>
+                        </b:formGroup>
+                    </b:panelGrid>
+                    <b:panelGrid col-spans="3,3,3,3" size="lg" styleClass="ui-fluid" rendered="false">
+                        <b:row>
+                            <b:commandButton action="#{screeningBean.refreshRecord(screeningBean.entity)}" value="Refresh Record" iconAwesome="fa-repeat" large-screen="full-width" size="lg" look="primary"/>                 
+                        </b:row>
+                    </b:panelGrid>
+                </p:fieldset>
+            </b:panelGrid>
+        </b:panel>
+    </h:body>
+</html>

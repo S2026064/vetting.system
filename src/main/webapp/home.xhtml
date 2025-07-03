@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+    </h:head>
+    <h:body>
+        <ui:composition template="/template/maintemplate.xhtml">
+            <ui:define name="maincontent">
+                <b:panel collapsed="false" collapsible="false">
+                    <p:outputLabel value="" />
+                    <b:panelGrid col-spans="12" styleClass="ui-fluid" >
+                        <b:row>
+                            <b:column col-sm="4" col-md="4" styleClass="ui-fluid">
+                                <b:commandButton value="Subject" disabled="#{not homeBean.activeUser.employeeRole.completeVettingSetting.completeVetting}" action="#{homeBean.routeToVettingCompletion()}" size="lg" large-screen="full-width" icon-size="5x" iconAwesome="fa-edit" look="#{homeBean.activeUser.employeeRole.completeVettingSetting.completeVetting eq 'true' ? 'primary' : 'danger'}"/>
+                                <p:spacer height="5px"/>
+                            </b:column>
+                            <b:column col-sm="4" col-md="4" styleClass="ui-fluid">
+                                <b:commandButton value="Initiator" disabled="#{not homeBean.activeUser.employeeRole.initiateVettingSetting.vettingInitiation}" action="#{homeBean.routeToInitiateVetting()}" size="lg" large-screen="full-width" icon-size="5x" iconAwesome="fa-rocket" look="#{homeBean.activeUser.employeeRole.initiateVettingSetting.vettingInitiation eq 'true' ? 'primary' : 'danger'}"/>
+                                <p:spacer height="5px"/>
+                            </b:column>
+                            <b:column col-sm="4" col-md="4" styleClass="ui-fluid">
+                                <b:commandButton value="Analyst / Officer / QA" disabled="#{not (homeBean.activeUser.employeeRole.reviewVettingSetting.analistReview or  homeBean.activeUser.employeeRole.reviewVettingSetting.officerReview or  homeBean.activeUser.employeeRole.reviewVettingSetting.qaReview)}" action="#{homeBean.routeToVettingReview()}" size="lg" large-screen="full-width" icon-size="5x" iconAwesome="fa-list-alt" look="#{(homeBean.activeUser.employeeRole.reviewVettingSetting.analistReview or homeBean.activeUser.employeeRole.reviewVettingSetting.officerReview or homeBean.activeUser.employeeRole.reviewVettingSetting.qaReview) eq 'true' ? 'primary' : 'danger'}"/>
+                                <p:spacer height="5px"/>
+                            </b:column>
+                            <b:column col-sm="4" col-md="4" styleClass="ui-fluid">
+                                <b:commandButton value="1st / 2nd Approver" disabled="#{not homeBean.activeUser.employeeRole.vettingApprovalSetting.vettingApproval}" action="#{homeBean.routeToVettingApproval()}" size="lg" large-screen="full-width" icon-size="5x" iconAwesome="fa-check-square-o" look="#{homeBean.activeUser.employeeRole.vettingApprovalSetting.vettingApproval eq 'true' ? 'primary' : 'danger'}"/>
+                                <p:spacer height="5px"/>
+                            </b:column> 
+                            <b:column col-sm="4" col-md="4">
+                                <b:commandButton value="Manager" disabled="#{not homeBean.activeUser.employeeRole.reviewVettingSetting.managerReview}" action="#{homeBean.routeToVettingManager()}" size="lg" large-screen="full-width" icon-size="5x" iconAwesome="fa-database" look="#{homeBean.activeUser.employeeRole.reviewVettingSetting.managerReview eq 'true' ? 'primary' : 'danger'}"/>
+                                <p:spacer height="5px"/>
+                            </b:column>
+                            <b:column col-sm="4" col-md="4" styleClass="ui-fluid" rendered="#{homeBean.activeUser.employeeRole.reportSetting.report}">
+                                <b:commandButton value="Reports" disabled="#{not homeBean.activeUser.employeeRole.reportSetting.report}" action="#{homeBean.routeToReports()}" size="lg" large-screen="full-width" icon-size="5x" iconAwesome="fa-copy" look="#{homeBean.activeUser.employeeRole.reportSetting.report eq 'true' ? 'primary' : 'danger'}"/>
+                                <p:spacer height="5px"/>
+                            </b:column>
+                            <b:column col-sm="4" col-md="4" styleClass="ui-fluid">
+                                <b:commandButton value="Administrator" disabled="#{not homeBean.activeUser.employeeRole.adminSetting.administrator}" action="#{homeBean.routeToAdministration()}" size="lg" large-screen="full-width" icon-size="5x" iconAwesome="fa-users" look="#{homeBean.activeUser.employeeRole.adminSetting.administrator eq 'true' ? 'primary' : 'danger'}"/>
+                                <p:spacer height="5px"/>
+                            </b:column>
+                            <b:column col-sm="4" col-md="4" styleClass="ui-fluid">
+                                <b:commandButton value="Vetting Files" disabled="#{not homeBean.activeUser.employeeRole.adminSetting.vettingFiles}" action="#{homeBean.routeToVettingFile()}" size="lg" large-screen="full-width" icon-size="5x" iconAwesome="fa-send" look="#{homeBean.activeUser.employeeRole.adminSetting.administrator eq 'true' ? 'primary' : 'danger'}"/>
+                                <p:spacer height="5px"/>
+                            </b:column>
+                            <b:column col-sm="4" col-md="4" styleClass="ui-fluid">
+                                <b:commandButton value="Super Administrator" disabled="#{not homeBean.activeUser.employeeRole.adminSetting.superAdministrator}" action="#{homeBean.routeToSuperAdministration()}" size="lg" large-screen="full-width" icon-size="5x" iconAwesome="fa-lock" look="#{homeBean.activeUser.employeeRole.adminSetting.administrator eq 'true' ? 'primary' : 'danger'}"/>
+                                <p:spacer height="5px"/>
+                            </b:column>
+                        </b:row>
+                    </b:panelGrid>
+                    <p:outputLabel value="" />
+                </b:panel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

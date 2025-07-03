@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <b:panel look="default" collapsible="false" id="expenditurePanel">
+            <b:panelGrid col-spans="12" size="lg" styleClass="ui-fluid">
+                <b:panelGrid col-spans="6,6" size="lg" styleClass="ui-fluid">
+                    <b:formGroup>
+                        <p:fieldset legend="Employee Income">
+                            <b:inputText disabled="#{incomeExpenditureBean.disabled}"  value="#{incomeExpenditureBean.entity.income.employeeIncome}" field-size="lg">
+                                <f:convertNumber pattern="#0.00"/>
+                                <f:facet name="prepend">
+                                    <h:outputText value="R"/>                                        
+                                </f:facet>
+                            </b:inputText>
+                        </p:fieldset>
+                    </b:formGroup>
+                </b:panelGrid>
+                <p:separator />
+                <p:fieldset legend="Additional Income">
+                    <b:panelGrid col-spans="6,5,1" size="lg" styleClass="ui-fluid">
+                        <p:outputLabel value="Description" />
+                        <p:outputLabel value="Amount" />
+                        <p:outputLabel value="Action" rendered="#{screeningDeclarationBean.vettingStatus eq 'FORMS_ISSUED'}"/>
+                    </b:panelGrid>
+                    <p:separator />
+                    <p:outputPanel id="incomeOutputPanel">                                
+                        <ui:repeat value="#{incomeExpenditureBean.entity.additionalIncomes}" var="additionalIncome" id="amaounts" varStatus="amaountVarStatus">
+                            <b:panelGrid col-spans="6,5,1" size="lg" styleClass="ui-fluid">
+                                <b:formGroup>
+                                    <p:inputText disabled="#{incomeExpenditureBean.disabled}" value="#{additionalIncome.description}" />
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <b:inputText disabled="#{incomeExpenditureBean.disabled}"  value="#{additionalIncome.amount}" field-size="lg">
+                                        <f:convertNumber pattern="#0.00"/>
+                                        <f:facet name="prepend">
+                                            <h:outputText value="R"/>                                        
+                                        </f:facet>
+                                    </b:inputText>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <b:row>
+                                        <b:commandButton rendered="#{screeningDeclarationBean.vettingStatus eq 'FORMS_ISSUED'}" action="#{incomeExpenditureBean.removeAdditionalIncome(additionalIncome)}" iconAwesome="fa-close" large-screen="full-width" size="md" look="danger" update="@form" immediate="true"/>
+                                    </b:row>
+                                </b:formGroup>                            
+                            </b:panelGrid>
+                        </ui:repeat>
+                    </p:outputPanel>
+                    <b:panelGrid col-spans="3,3,3,3" size="lg" styleClass="ui-fluid">
+                        <b:row>
+                            <b:commandButton rendered="#{screeningDeclarationBean.vettingStatus eq 'FORMS_ISSUED'}" action="#{incomeExpenditureBean.addAdditionalIncome()}" value="Add Income" iconAwesome="fa-plus" large-screen="full-width" size="lg" look="primary" update="incomeOutputPanel" />  
+                        </b:row>
+                    </b:panelGrid>
+                </p:fieldset>
+                <p:separator />
+                <p:fieldset legend="Expenditures">
+                    <b:panelGrid col-spans="3,4,4,1" size="lg" styleClass="ui-fluid">
+                        <p:outputLabel value="Expenditure Type" />
+                        <p:outputLabel value="Expenditure Name" />
+                        <p:outputLabel value="Amount" />
+                        <p:outputLabel value="Action" rendered="#{screeningDeclarationBean.vettingStatus eq 'FORMS_ISSUED'}"/>
+                    </b:panelGrid>
+                    <p:separator />
+                    <p:outputPanel id="expenditureOutputPanel">                                
+                        <ui:repeat value="#{incomeExpenditureBean.entity.expenditures}" var="exp" id="elements" varStatus="expVarStatus">
+                            <b:panelGrid col-spans="3,4,4,1" size="lg" styleClass="ui-fluid">
+                                <b:formGroup>
+                                    <p:selectOneMenu disabled="#{incomeExpenditureBean.disabled}"  value="#{exp.expenditureType}" converter="entityConverter">
+                                        <p:ajax event="change" update="expType" />
+                                        <f:selectItem itemLabel="Select One" noSelectionOption="true" />
+                                        <f:selectItems value="#{incomeExpenditureBean.expenditureTypes}" var="expenditureType" itemLabel="#{expenditureType.toString()}" itemValue="#{expenditureType}" />
+                                    </p:selectOneMenu>
+                                </b:formGroup>
+                                <b:formGroup id="expType">
+                                    <p:selectOneMenu disabled="#{incomeExpenditureBean.disabled}"  rendered="#{exp.expenditureType eq 'EXPENDITURE'}" value="#{exp.expenditureDescription}" converter="entityConverter">
+                                        <f:selectItem itemLabel="Select One" noSelectionOption="true" />
+                                        <f:selectItems value="#{incomeExpenditureBean.expenditureDescriptions}" var="expenditure" itemLabel="#{expenditure.toString()}" itemValue="#{expenditure}" />
+                                    </p:selectOneMenu>
+                                    <p:inputText disabled="#{incomeExpenditureBean.disabled}" rendered="#{exp.expenditureType eq 'OTHER_EXPENDITURE'}" value="#{exp.description}" />
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <b:inputText disabled="#{incomeExpenditureBean.disabled}"  value="#{exp.amount}" field-size="lg">
+                                        <f:convertNumber pattern="#0.00"/>
+                                        <f:facet name="prepend">
+                                            <h:outputText value="R"/>                                        
+                                        </f:facet>
+                                    </b:inputText>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <b:row>
+                                        <b:commandButton rendered="#{screeningDeclarationBean.vettingStatus eq 'FORMS_ISSUED'}" action="#{incomeExpenditureBean.removeExpenditure(exp)}" iconAwesome="fa-close" large-screen="full-width" size="md" look="danger" update="@form" immediate="true"/>
+                                    </b:row>
+                                </b:formGroup>                            
+                            </b:panelGrid>
+                        </ui:repeat>
+                    </p:outputPanel>
+                    <b:panelGrid col-spans="3,3,3,3" size="lg" styleClass="ui-fluid">
+                        <b:row>
+                            <b:commandButton rendered="#{screeningDeclarationBean.vettingStatus eq 'FORMS_ISSUED'}" action="#{incomeExpenditureBean.addExpenditureItem()}" value="Add Expenditure" iconAwesome="fa-plus" large-screen="full-width" size="lg" look="primary" update="expenditureOutputPanel" />                 
+                        </b:row>
+                    </b:panelGrid>
+                </p:fieldset>
+            </b:panelGrid>           
+            <p:spacer height="5px"/>               
+            <b:panelGrid col-spans="3,3,3,3" size="lg" styleClass="ui-fluid" rendered="#{screeningDeclarationBean.vettingStatus eq 'FORMS_ISSUED'}">
+                <b:row>
+                    <b:commandButton action="#{incomeExpenditureBean.calculate()}" value="Refresh Totals" iconAwesome="fa-repeat" large-screen="full-width" size="lg" look="primary"/>                 
+                </b:row>
+            </b:panelGrid>
+            <p:spacer height="10px"/>
+            <b:panelGrid col-spans="6,6" size="lg" styleClass="ui-fluid">
+                <b:formGroup>
+                    <p:fieldset legend="Expenditure Total (Employee Income - Total Expenditures)">
+                        <b:inputText readonly="true"  value="#{incomeExpenditureBean.entity.employeeTotalIncome}" field-size="lg">
+                            <f:convertNumber pattern="#0.00"/>
+                            <f:facet name="prepend">
+                                <h:outputText value="R"/>                                        
+                            </f:facet>
+                        </b:inputText>
+                    </p:fieldset>
+                </b:formGroup>
+                <b:formGroup>
+                    <p:fieldset legend="Difference (Totral Additional Incomes - Total Other Expenditures)">
+                        <b:inputText  readonly="true"  value="#{incomeExpenditureBean.entity.spouseTotalIncome}" field-size="lg">
+                            <f:convertNumber pattern="#0.00"/>
+                            <f:facet name="prepend">
+                                <h:outputText value="R"/>                                        
+                            </f:facet>
+                        </b:inputText>
+                    </p:fieldset>
+                </b:formGroup>
+            </b:panelGrid>
+        </b:panel>
+    </h:body>
+</html>

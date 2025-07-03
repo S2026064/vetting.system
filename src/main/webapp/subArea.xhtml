@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <b:panel rendered="#{subAreaBean.list}" look="default"  collapsible="false">
+            <f:facet name="heading">
+                <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                    <p:outputLabel value="Sub-Area" styleClass="panel-title-css"/>
+                    <p:separator/>
+                </b:panelGrid>
+            </f:facet>
+            <p:outputPanel rendered="#{empty subAreaBean.subAreas}">
+                <p:outputLabel value="No Sub-Area record found."/>
+            </p:outputPanel>
+            <p:dataTable rowKey="#{subarea.id}"  rendered="#{not empty subAreaBean.subAreas}" value="#{subAreaBean.subAreas}" var="subarea" paginator="true" paginatorAlwaysVisible="false" reflow="true" rows="10">
+                <f:facet name="header">
+                    <p:toolbar>
+                        <f:facet name="left">
+                            <b:commandButton style="width:30rem" large-screen="full-width" iconSize="md" size="lg" icon="plus" look="primary" value="New" action="#{subAreaBean.addOrUpdate(null)}" update="templateForm"/>
+                        </f:facet>
+                    </p:toolbar>
+                </f:facet>
+                <p:column style="width:35px">
+                    <p:rowToggler />
+                </p:column>
+                <p:column headerText="Added Date">
+                    <h:outputText value="#{subarea.createdDate}">
+                        <f:convertDateTime  pattern="dd MMM yyyy"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Description">
+                    <h:outputText value="#{subarea.description}"/>
+                </p:column>
+                <p:rowExpansion>
+                    <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid"> 
+                        <p:dataTable value="#{subarea.areas}" var="area">
+                            <f:facet name="header" >
+                                Area
+                            </f:facet>
+                            <p:columnGroup type="header">
+                                <p:row>
+                                    <p:column headerText="Area"/>
+                                    <p:column headerText="Area Description"/>
+                                </p:row>
+                            </p:columnGroup>
+                            <p:column>
+                                <h:outputText value="#{area.subAreaDescription}"/>
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{area.areaDescription}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </b:panelGrid>
+                </p:rowExpansion>
+                <p:column headerText="Action" styleClass="large">
+                    <p:commandButton styleClass="ui-button-primary btn-size-sm" disabled="#{not subAreaBean.activeUser.employeeRole.permission.update}" value="Edit" action="#{subAreaBean.addOrUpdate(subarea)}" update="@form"/>
+                    <p:spacer width="5px"/>
+                    <p:commandButton styleClass="ui-button-danger btn-size-sm" disabled="#{not subAreaBean.activeUser.employeeRole.permission.delete}" value="Delete"  action="#{subAreaBean.delete(subarea)}" update="@form">
+                        <p:confirm header="Confirmation" message="Do you really want to delete this record" icon="pi pin-info-circle"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </b:panel>
+        <b:panel rendered="#{subAreaBean.add}" look="default" collapsible="false">
+            <f:facet name="heading">
+                <p:outputLabel value="Add/Update Sub-Area" styleClass="panel-title-css"/>
+            </f:facet>
+            <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                    <b:formGroup>
+                        <p:outputLabel value="Description"/>
+                        <b:inputText value="#{subAreaBean.entity.description}" required="true" requiredMessage="Please enter description"/>
+                    </b:formGroup> 
+                    <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                        <p:fieldset legend="Area">
+                            <b:formGroup>
+                                <b:panelGrid col-spans="5,6,1" size="lg" styleClass="ui-fluid">
+                                    <p:outputLabel value="Area"/>
+                                    <p:outputLabel value="Area Description"/>
+                                    <p:outputLabel value="Action"/>
+                                </b:panelGrid>
+                                <p:separator/>
+                                <p:outputPanel id="areaPanel">
+                                    <ui:repeat value="#{subAreaBean.entity.areas}" var="area" varStatus="areaVarStatus">
+                                        <b:panelGrid col-spans="5,6,1" size="lg" styleClass="ui-fluid">
+                                            <b:formGroup>
+                                                <p:inputText required="true" requiredMessage="Provide area" value="#{area.subAreaDescription}"/> 
+                                            </b:formGroup>
+                                            <b:formGroup>
+                                                <p:inputText value="#{area.areaDescription}"/> 
+                                            </b:formGroup>
+                                            <b:formGroup>
+                                                <b:row>
+                                                    <b:commandButton action="#{subAreaBean.removeArea(area)}" iconAwesome="fa-close" large-screen="full-width" size="lg" look="danger" update="@form" immediate="true"/>
+                                                </b:row>
+                                            </b:formGroup>
+                                        </b:panelGrid>
+                                    </ui:repeat>
+                                </p:outputPanel>
+                                <b:row>
+                                    <b:commandButton action="#{subAreaBean.addOrUpdateArea()}" value="Add Another Record" iconAwesome="fa-plus" large-screen="full-width" size="lg" look="primary" update="areaPanel"/>
+                                </b:row>
+                            </b:formGroup>
+                        </p:fieldset>
+                    </b:panelGrid>
+                </b:panelGrid>
+            </b:panelGrid>
+            <f:facet name="footer">
+                <b:row>
+                    <b:panelGrid colSpans="6,6" size="lg" styleClass="ui-fluid">
+                        <b:commandButton large-screen="full-width" size="lg" value="Save" icon="check" look="success" action="#{subAreaBean.save(subAreaBean.entity)}" update="@form" />
+                        <b:commandButton large-screen="full-width" size="lg" value="Cancel" iconAwesome="window-close" look="danger" action="#{subAreaBean.cancel(subAreaBean.entity)}" immediate="true" process="@this"  update="@(form)"/>
+                    </b:panelGrid>
+                </b:row>
+            </f:facet>
+        </b:panel>  
+
+    </h:body>
+</html>

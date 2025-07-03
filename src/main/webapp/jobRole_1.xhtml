@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <ui:composition template="/template/template.xhtml">
+            <ui:define name="maincontent">
+                <b:panel rendered="#{jobRoleBean.list}" look="default"  collapsible="false">
+                    <f:facet name="heading">
+                        <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                            <p:outputLabel value="Jobe Roles" styleClass="panel-title-css"/>
+                            <p:separator/>
+                        </b:panelGrid>
+                    </f:facet>
+                    <p:outputPanel rendered="#{empty jobRoleBean.jobRoles}">
+                        <p:outputLabel value="No Potential Damages record found."/>
+                    </p:outputPanel>
+                    <p:dataTable rowKey="#{jobRole.id}" value="#{jobRoleBean.jobRoles}" var="jobRole" paginator="true" paginatorAlwaysVisible="false" reflow="true" rows="10">
+                        <f:facet name="header">
+                            <p:toolbar>
+                                <p:toolbarGroup>
+                                    <b:commandButton style="width:30rem" large-screen="full-width" iconSize="md" size="lg" icon="plus" look="primary" value="New" action="#{jobRoleBean.addOrUpdate(null)}" update="templateForm"/>
+                                </p:toolbarGroup>
+                                <p:toolbarGroup align="right">
+                                    <h:outputFormat value="{0}" styleClass="pagenumberStyle">
+                                        <f:param value="[#{jobRoleBean.pageNumber}]"/>
+                                    </h:outputFormat>
+                                    <p:spacer width="5px"/>
+                                    <b:commandButton rendered="#{jobRoleBean.previousPage}"  icon-awesome="fa-step-backward" size="md" value="Prev" look="success" action="#{jobRoleBean.previousDocuments()}" update="@form"/>
+                                    <p:spacer rendered="#{jobRoleBean.previousPage}" width="5px"/>
+                                    <b:commandButton rendered="#{jobRoleBean.nextPage}" icon-awesome="fa-step-forward" size="md" value="Next" look="success" action="#{jobRoleBean.nextDocuments()}" update="@form"/> 
+                                </p:toolbarGroup>
+                            </p:toolbar>
+                        </f:facet>
+                        <p:column style="width:35px">
+                            <p:rowToggler />
+                        </p:column>
+                        <p:column headerText="Added Date" styleClass="large">
+                            <h:outputText value="#{jobRole.createdDate}">
+                                <f:convertDateTime  pattern="dd MMM yyyy"/>
+                            </h:outputText>
+                        </p:column>                        
+                        <p:column headerText="Job Role Type" styleClass="large">
+                            <h:outputText value="#{jobRole.jobRoleType.toString()}"/>
+                        </p:column>
+                        <p:column headerText="Description">
+                            <h:outputText value="#{jobRole.description}"/>
+                        </p:column>
+                        <p:rowExpansion>
+                            <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid"> 
+                                <p:dataTable value="#{jobRole.responsibilities}" var="responsibility">
+                                    <f:facet name="header" >
+                                        Responsibilities
+                                    </f:facet>
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column headerText="Description"/>
+                                            <p:column headerText="Value" styleClass="medium"/>
+                                            <p:column headerText="Impact" styleClass="xlarge"/>
+                                        </p:row>
+                                    </p:columnGroup>
+                                    <p:column>
+                                        <h:outputText value="#{responsibility.description}"/>
+                                    </p:column>
+                                    <p:column>
+                                        <h:outputText value="#{responsibility.responsibilityValue}" styleClass="small"/>
+                                    </p:column>
+                                    <p:column>
+                                        <h:outputText value="#{responsibility.damageLevel.toString()}" styleClass="xlarge"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </b:panelGrid>
+                        </p:rowExpansion>
+                        <p:column headerText="Action" styleClass="large">
+                            <p:commandButton styleClass="ui-button-primary btn-size-sm" disabled="#{not jobRoleBean.activeUser.employeeRole.permission.update}" value="Edit" action="#{jobRoleBean.addOrUpdate(jobRole)}" update="@form"/>
+                            <p:spacer width="5px"/>
+                            <p:commandButton styleClass="ui-button-danger btn-size-sm" disabled="#{not jobRoleBean.activeUser.employeeRole.permission.delete}" value="Delete"  action="#{jobRoleBean.delete(jobRole)}" update="@form">
+                                <p:confirm header="Confirmation" message="Do you really want to delete this record" icon="pi pin-info-circle"/>
+                            </p:commandButton>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:toolbar>
+                                <p:toolbarGroup align="left">
+                                </p:toolbarGroup>
+                                <p:toolbarGroup align="right">
+                                    <b:row>
+                                        <h:outputFormat value="{0}" styleClass="pagenumberStyle">
+                                            <f:param value="[#{jobRoleBean.pageNumber}]"/>
+                                        </h:outputFormat>
+                                        <p:spacer width="5px"/>
+                                        <b:commandButton rendered="#{jobRoleBean.previousPage}"  icon-awesome="fa-step-backward" size="md" value="Prev" look="success" action="#{jobRoleBean.previousDocuments()}" update="@form"/>
+                                        <p:spacer rendered="#{jobRoleBean.previousPage}" width="5px"/>
+                                        <b:commandButton rendered="#{jobRoleBean.nextPage}" icon-awesome="fa-step-forward" size="md" value="Next" look="success" action="#{jobRoleBean.nextDocuments()}" update="@form"/> 
+                                    </b:row>
+                                </p:toolbarGroup>
+                            </p:toolbar>
+                        </f:facet>
+                    </p:dataTable>
+                </b:panel>
+                <b:panel rendered="#{jobRoleBean.add}" look="default" collapsible="false">
+                    <f:facet name="heading">
+                        <p:outputLabel value="Add/Update Jobe Role" styleClass="panel-title-css"/>
+                    </f:facet>
+                    <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                        <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                            <b:formGroup>
+                                <p:fieldset legend="Job Role Type" >
+                                    <p:selectOneMenu value="#{jobRoleBean.entity.jobRoleType}" required="true" converter="entityConverter" requiredMessage="Please select job role type">
+                                        <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                        <f:selectItems value="#{jobRoleBean.jobRoleTypes}" var="jobRoleType" itemLabel="#{jobRoleType.toString()}" itemValue="#{jobRoleType}"/>
+                                    </p:selectOneMenu>
+                                </p:fieldset>
+                            </b:formGroup>
+                            <b:formGroup>
+                                <p:fieldset legend="Job Role Description" >
+                                    <b:inputText value="#{jobRoleBean.entity.description}" required="true" requiredMessage="Please enter description"/>
+                                </p:fieldset>
+                            </b:formGroup> 
+                        </b:panelGrid>
+                        <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                            <p:fieldset legend="Job Responsibiliy">
+                                <b:formGroup>
+                                    <b:panelGrid col-spans="7,2,2,1" size="lg" styleClass="ui-fluid">
+                                        <p:outputLabel value="Responsibility Description"/>
+                                        <p:outputLabel value="Value"/>
+                                        <p:outputLabel value="Damage Level"/>
+                                        <p:outputLabel value="Action"/>
+                                    </b:panelGrid>
+                                    <p:separator/>
+                                    <p:outputPanel id="responsibilityPanel">
+                                        <ui:repeat value="#{jobRoleBean.entity.responsibilities}" var="responsibility" varStatus="damageVarStatus">
+                                            <b:panelGrid col-spans="7,2,2,1" size="lg" styleClass="ui-fluid">
+                                                <b:formGroup>
+                                                    <p:inputText required="true" requiredMessage="Provide responsibility description" value="#{responsibility.description}"/> 
+                                                </b:formGroup>
+                                                <b:formGroup>
+                                                    <p:inputText required="true" requiredMessage="Provide value" value="#{responsibility.responsibilityValue}"/> 
+                                                </b:formGroup>
+                                                <b:formGroup>
+                                                    <p:selectOneMenu value="#{responsibility.damageLevel}" converter="entityConverter">
+                                                        <f:selectItem itemLabel="Select One" noSelectionOption="true" />
+                                                        <f:selectItems value="#{jobRoleBean.damageLevels}" var="damage" itemLabel="#{damage.toString()}" itemValue="#{damage}" />
+                                                    </p:selectOneMenu>
+                                                </b:formGroup>
+                                                <b:formGroup>
+                                                    <b:row>
+                                                        <b:commandButton action="#{jobRoleBean.removeResponsibility(responsibility)}" iconAwesome="fa-close" large-screen="full-width" size="lg" look="danger" update="@form" immediate="true"/>
+                                                    </b:row>
+                                                </b:formGroup>
+                                            </b:panelGrid>
+                                        </ui:repeat>
+                                    </p:outputPanel>
+                                    <b:row>
+                                        <b:commandButton action="#{jobRoleBean.addOrUpdateResponsibility()}" value="Add Another Record" iconAwesome="fa-plus" large-screen="full-width" size="lg" look="primary" update="responsibilityPanel"/>
+                                    </b:row>
+                                </b:formGroup>
+                            </p:fieldset>
+                        </b:panelGrid>
+                    </b:panelGrid>
+                    <f:facet name="footer">
+                        <b:row>
+                            <b:panelGrid colSpans="6,6" size="lg" styleClass="ui-fluid">
+                                <b:commandButton large-screen="full-width" size="lg" value="Save" icon="check" look="success" action="#{jobRoleBean.save(jobRoleBean.entity)}" update="@form" />
+                                <b:commandButton large-screen="full-width" size="lg" value="Cancel" iconAwesome="window-close" look="danger" action="#{jobRoleBean.cancel(jobRoleBean.entity)}" immediate="true" process="@this"  update="@(form)"/>
+                            </b:panelGrid>
+                        </b:row>
+                    </f:facet>
+                </b:panel>  
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

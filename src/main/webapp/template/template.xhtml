@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <h:outputStylesheet name="vetting.css" library="css"/>
+        <h:outputStylesheet name="bootstrap.min.css" library="css"/>
+    </h:head>
+    <h:body>
+        <div class="card">
+            <h:form prependId="false"  id="templateForm" enctype="multipart/form-data">
+                <b:growl id="messages" showDetail="true" showSummary="false" allowDismiss="true" placementAlign="center"/>
+                <b:container fluid="true" >
+                    <b:row>
+                        <b:column small-screen="12">
+                            <p:spacer height="2px"/>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column small-screen="12">
+                            <b:panel collapsible="false">
+                                <ui:insert name="header">
+                                    <ui:include src="/template/header.xhtml"/>
+                                </ui:insert>
+                            </b:panel>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column small-screen="12">
+                            <ui:insert name="menu">
+                                <ui:include src="/template/menu.xhtml"/>
+                            </ui:insert>
+                        </b:column>
+                    </b:row>
+                    <b:row>
+                        <b:column small-screen="12">
+                            <ui:insert name="maincontent">
+                                <ui:include src="/template/content.xhtml"/>
+                            </ui:insert>
+                        </b:column>
+                    </b:row>
+                </b:container>
+                <pe:blockUI widgetVar="blockUI" cssOverlay="{opacity:0.5}">  
+                    <h:panelGrid columns="2">  
+                        <h:graphicImage library="images" name="load.png"  
+                                        style="margin-right: 12px; vertical-align: middle;"/>  
+                        <h:outputText value="Please wait..." style="white-space: nowrap;"/>  
+                    </h:panelGrid>  
+                </pe:blockUI>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350" height="80">
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes ui-button-success btn-size-sm" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-danger btn-size-sm" icon="ui-icon-close" />
+                </p:confirmDialog>
+            </h:form>
+            <p:blockUI block="templateForm" animate="true"/>
+            <p:dialog closable="false" id="sessionExpirationDialogId" style="text-align: center;"  resizable="false" modal="true" blockScroll="true" header="Session Expiration" widgetVar="alertExpire" onShow="startIdleMonitor()" width="400">
+                <p:outputLabel style="color: #0081c2 !important;font-weight: bold;font-size:1.4em !important;" value="Your browser session is expiring in  [" />
+                <p:outputLabel style="color: red !important;font-weight: bold;font-size:1.6em !important;" id="dialog-countdown"/>
+                <p:outputLabel style="color: #0081c2 !important;font-weight: bold;font-size:1.4em !important;" value="  ] second." />
+                <br/>
+                <p:outputLabel style="color: #0081c2 !important;font-weight: bold;font-size:1.4em !important;" value="Do you want to continue your session?" />
+                <f:facet name="footer">
+                    <h:form id="dialogForm">
+                        <p:toolbar>
+                            <f:facet name="left">
+                                <p:commandButton styleClass="ui-button-raised ui-button-primary btn-size-md" value="Yes" process="@this" update="sessionExpirationDialogId" onclick="stopCount()"/>
+                            </f:facet>
+                            <f:facet name="right">
+                                <p:commandButton styleClass="ui-button-raised ui-button-danger btn-size-md" value="No" process="@this" update="sessionExpirationDialogId" action="#{headerBean.logout}"/>
+                                <p:remoteCommand name="logout" action="#{headerBean.logout}"/>
+                            </f:facet>
+                        </p:toolbar>
+                    </h:form>
+                </f:facet>
+                <script type="text/javascript">
+                    var TIME = 15;// in seconds
+                    var countTimer = TIME;
+                    var processTimer;
+                    var timer_is_on = 0;
+                    var countDownDiv = "dialog-countdown";
+                    var txtCountDown = null;
+                    if (!txtCountDown)
+                        txtCountDown = document.getElementById(countDownDiv);
+
+                    function startIdleMonitor() {
+                        countTimer = TIME;
+                        txtCountDown.innerHTML = countTimer;
+                        doTimer();
+                    }
+                    function timedCount() {
+                        txtCountDown.innerHTML = countTimer;
+                        if (countTimer === 0) {
+                            stopCount();
+                            logout();
+                            return;
+                        }
+                        countTimer = countTimer - 1;
+                        processTimer = setTimeout("timedCount()", 1000);
+                    }
+                    function doTimer() {
+                        if (!timer_is_on) {
+                            timer_is_on = 1;
+                            timedCount();
+                        }
+                    }
+                    function stopCount() {
+                        clearTimeout(processTimer);
+                        timer_is_on = 0;
+                    }
+                </script>
+            </p:dialog>
+        </div>
+    </h:body>
+</html>

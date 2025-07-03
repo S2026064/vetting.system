@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <ui:composition template="/template/template.xhtml">
+            <ui:define name="maincontent">
+                <b:panel rendered="#{employeeRoleBean.list}" look="default"  collapsible="false">
+                    <f:facet name="heading">
+                        <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                            <p:outputLabel value="User Roles" styleClass="panel-title-css"/>
+                            <p:separator/>
+                        </b:panelGrid>
+                    </f:facet>
+                    <p:outputPanel rendered="#{empty employeeRoleBean.employeeRoles}">
+                        <p:outputLabel value="No Employee roles found."/>
+                    </p:outputPanel>
+                    <p:dataTable rendered="#{not empty employeeRoleBean.employeeRoles}" value="#{employeeRoleBean.employeeRoles}" var="employeeRole" reflow="true" rows="10">
+                        <f:facet name="header">
+                            <p:toolbar>
+                                <f:facet name="left">
+                                    <b:commandButton style="width:30rem" large-screen="full-width" iconSize="md" size="lg" icon="plus" look="primary" value="New" action="#{employeeRoleBean.addOrUpdate(null)}" update="templateForm"/>
+                                </f:facet>
+                            </p:toolbar>
+                        </f:facet>
+                        <p:column headerText="Added Date">
+                            <h:outputText value="#{employeeRole.createdDate}">
+                                <f:convertDateTime  pattern="dd MMM yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Role">
+                            <h:outputText value="#{employeeRole.description}"/>
+                        </p:column>
+                        <p:column headerText="Action" styleClass="large">
+                            <p:commandButton styleClass="ui-button-primary btn-size-sm" disabled="#{not employeeRoleBean.activeUser.employeeRole.permission.update}" value="Edit" action="#{employeeRoleBean.addOrUpdate(employeeRole)}" update="@form"/>
+                            <p:spacer width="5px"/>
+                            <p:commandButton styleClass="ui-button-danger btn-size-sm" disabled="#{not employeeRoleBean.activeUser.employeeRole.permission.delete}" value="Delete"  action="#{employeeRoleBean.delete(employeeRole)}" update="@form">
+                                <p:confirm header="Confirmation" message="Do you really want to delete this record" icon="pi pin-info-circle"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </b:panel>
+                <b:panel rendered="#{employeeRoleBean.add}" look="default" collapsible="false">
+                    <f:facet name="heading">
+                        <p:outputLabel value="Add/Update User Roles" styleClass="panel-title-css"/>
+                    </f:facet>
+                    <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                        <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                            <b:formGroup>
+                                <p:outputLabel value="Role Description"/>
+                                <b:inputText value="#{employeeRoleBean.entity.description}" required="true" requiredMessage="Please enter role description"/>
+                            </b:formGroup> 
+                        </b:panelGrid>
+                    </b:panelGrid>
+                    <b:panelGrid colSpans="6,6" size="lg" styleClass="ui-fluid">
+                        <p:fieldset legend="Administration">
+                            <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid" >
+                                <b:formGroup>
+                                    <p:selectBooleanCheckbox itemLabel="Vetting Administation" value="#{employeeRoleBean.entity.adminSetting.administrator}"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:selectBooleanCheckbox itemLabel="Vetting Escaltion" value="#{employeeRoleBean.entity.adminSetting.escalation}"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:selectBooleanCheckbox itemLabel="Vetting Reroute" value="#{employeeRoleBean.entity.adminSetting.reroute}"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:selectBooleanCheckbox itemLabel="Vetting SSA/SARS Upload" value="#{employeeRoleBean.entity.adminSetting.uploadSsaSars}"/>
+                                </b:formGroup>
+                            </b:panelGrid>
+                        </p:fieldset>                      
+                        <p:fieldset legend="Permission">
+                            <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                                <b:formGroup>
+                                    <p:selectBooleanCheckbox itemLabel="Update" value="#{employeeRoleBean.entity.permission.update}"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:selectBooleanCheckbox itemLabel="Delete" value="#{employeeRoleBean.entity.permission.delete}"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:selectBooleanCheckbox itemLabel="Add" value="#{employeeRoleBean.entity.permission.add}"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:selectBooleanCheckbox itemLabel="Write" value="#{employeeRoleBean.entity.permission.write}"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:selectBooleanCheckbox itemLabel="Read" value="#{employeeRoleBean.entity.permission.read}"/>
+                                </b:formGroup>
+                            </b:panelGrid>
+                        </p:fieldset> 
+                    </b:panelGrid>
+                    <b:panelGrid colSpans="6,6" size="lg" styleClass="ui-fluid">
+                        <p:fieldset legend="Super Administration">                            
+                            <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid" >
+                                <b:formGroup>
+                                    <p:selectBooleanCheckbox itemLabel="Super Administation" value="#{employeeRoleBean.entity.adminSetting.superAdministrator}"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:selectBooleanCheckbox itemLabel="Vetting Role" value="#{employeeRoleBean.entity.adminSetting.employeeRole}"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:selectBooleanCheckbox itemLabel="Vetting Users" value="#{employeeRoleBean.entity.adminSetting.users}"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:selectBooleanCheckbox  itemLabel="Notification" value="#{employeeRoleBean.entity.adminSetting.notification}"/>
+                                </b:formGroup> 
+                                <b:formGroup>
+                                    <p:selectBooleanCheckbox  itemLabel="Job Role" value="#{employeeRoleBean.entity.adminSetting.jobRole}"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:selectBooleanCheckbox  itemLabel="Sub-Area" value="#{employeeRoleBean.entity.adminSetting.subArea}"/>
+                                </b:formGroup>                                
+                                <b:formGroup>
+                                    <p:selectBooleanCheckbox  itemLabel="Adjustment Category" value="#{employeeRoleBean.entity.adminSetting.adjustmentCategory}"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:selectBooleanCheckbox  itemLabel="Vetting Files" value="#{employeeRoleBean.entity.adminSetting.vettingFiles}"/>
+                                </b:formGroup>
+                            </b:panelGrid>
+                        </p:fieldset>    
+                        <p:fieldset legend="Vetting Process">
+                            <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">                                
+                                <b:formGroup>
+                                    <p:selectBooleanCheckbox itemLabel="Vetting Initiating" value="#{employeeRoleBean.entity.initiateVettingSetting.vettingInitiation}"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:selectBooleanCheckbox itemLabel="Vetting Completion" value="#{employeeRoleBean.entity.completeVettingSetting.completeVetting}"/>
+                                </b:formGroup>   
+                                <b:formGroup>
+                                    <p:selectBooleanCheckbox itemLabel="Vetting Analyst Review" value="#{employeeRoleBean.entity.reviewVettingSetting.analistReview}"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:selectBooleanCheckbox itemLabel="Vetting Officer Review" value="#{employeeRoleBean.entity.reviewVettingSetting.officerReview}"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:selectBooleanCheckbox itemLabel="Vetting QA Review" value="#{employeeRoleBean.entity.reviewVettingSetting.qaReview}"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:selectBooleanCheckbox itemLabel="Vetting Manager Review" value="#{employeeRoleBean.entity.reviewVettingSetting.managerReview}"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:selectBooleanCheckbox itemLabel="Vetting Approval" value="#{employeeRoleBean.entity.vettingApprovalSetting.approveVetting}"/>
+                                </b:formGroup>
+                                <b:formGroup>
+                                    <p:selectBooleanCheckbox itemLabel="Vetting Second Approval" value="#{employeeRoleBean.entity.vettingApprovalSetting.approveSecondLevel}"/>
+                                </b:formGroup>
+                            </b:panelGrid>
+                        </p:fieldset>
+                    </b:panelGrid>
+                    <b:panelGrid colSpans="6,6" size="lg" styleClass="ui-fluid">
+                        <p:fieldset legend="Report">
+                            <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                                <b:formGroup>
+                                    <p:selectBooleanCheckbox itemLabel="Report" value="#{employeeRoleBean.entity.reportSetting.report}"/>
+                                </b:formGroup>
+                            </b:panelGrid>
+                        </p:fieldset>
+                    </b:panelGrid>
+                    <f:facet name="footer">
+                        <b:row>
+                            <b:panelGrid colSpans="6,6" size="lg" styleClass="ui-fluid">
+                                <b:commandButton large-screen="full-width" size="lg" value="Save" icon="check" look="success" action="#{employeeRoleBean.save(employeeRoleBean.entity)}" update="@form" />
+                                <b:commandButton large-screen="full-width" size="lg" value="Cancel" iconAwesome="window-close" look="danger" action="#{employeeRoleBean.cancel(employeeRoleBean.entity)}" immediate="true" process="@this"  update="@(form)"/>
+                            </b:panelGrid>
+                        </b:row>
+                    </f:facet>
+                </b:panel>  
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

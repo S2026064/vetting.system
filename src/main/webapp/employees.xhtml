@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <ui:composition template="/template/template.xhtml">
+            <ui:define name="maincontent">
+                <b:panel rendered="#{employeeBean.list}" look="default"  collapsible="false">
+                    <f:facet name="heading">
+                        <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                            <p:outputLabel value="Users" styleClass="panel-title-css"/>
+                            <p:separator/>
+                            <b:formGroup>
+                                <b:inputText value="#{employeeBean.searchParameter}" placeholder="Search User by SID or First Name or Last Name" fieldSize="lg">
+                                    <f:facet name="prepend">
+                                        <b:commandButton iconSize="lg" iconAwesome="fa-plus" size="lg" look="primary" value="Add" disabled="#{not employeeBean.activeUser.employeeRole.permission.add}"  action="#{employeeBean.addEmployee()}" update="@form"/>
+                                    </f:facet>
+                                    <f:facet name="prepend">
+                                        <p:outputLabel value="Search"/>
+                                    </f:facet>
+                                    <f:facet name="append">
+                                        <b:commandButton icon-awesome="search" value="Search" size="lg" look="primary" disabled="#{not employeeBean.activeUser.employeeRole.permission.read}" action="#{employeeBean.onSystemUserSearchListener()}" ajax="false" update="@form"/>
+                                    </f:facet>
+                                </b:inputText>
+                            </b:formGroup>
+                        </b:panelGrid>
+                    </f:facet>
+                    <p:dataTable id="userReport" widgetVar="filterUserTable" globalFilterOnly="true" rendered="#{not employeeBean.collections.isEmpty()}" value="#{employeeBean.employees}" var="emp" paginator="true" paginatorPosition="top" paginatorAlwaysVisible="false" reflow="true" rows="10">
+                        <f:facet name="header">
+                            <p:toolbar>
+                                <p:toolbarGroup align="right">
+                                    <p:inputText placeholder="Filter by all fields" id="globalFilter" style="width:30rem" onkeyup="PF('filterUserTable').filter()"/>
+                                    <p:spacer width="10px"/>
+                                    <p:commandButton styleClass="ui-button-primary btn-size-lg" value="Download" style="width:15rem">
+                                        <p:dataExporter type="xlsxstream" target="userReport" fileName="User_report"/>
+                                    </p:commandButton>
+                                </p:toolbarGroup>
+                            </p:toolbar>
+                        </f:facet>
+                        <p:column headerText="Full Names" filterBy="#{emp.fullNames}" filterMatchMode="contains" sortBy="#{emp.fullNames}">
+                            <h:outputText value="#{emp.fullNames}"/>
+                        </p:column>
+                        <p:column headerText="S-ID" filterBy="#{emp.sid}" filterMatchMode="contains" sortBy="#{emp.sid}">
+                            <h:outputText value="#{emp.sid}" rendered="#{emp.sid ne null}"/>
+                            <h:outputText value="#{empty emp.sid?emp.passportNumber:emp.identityNumber}" rendered="#{emp.sid eq null}"/>
+                        </p:column>
+                        <p:column headerText="Role" filterBy="#{emp.employeeRole.description}" filterMatchMode="contains" sortBy="#{emp.fullNames}">
+                            <h:outputText value="#{emp.employeeRole.description}"/>
+                        </p:column>
+                        <p:column headerText="Status" filterBy="#{emp.employeeStatus}" filterMatchMode="contains" sortBy="#{emp.employeeStatus}">
+                            <h:outputText value="#{emp.employeeStatus.toString()}"/>
+                        </p:column>
+                        <p:column headerText="Action" styleClass="medium" exportable="false">
+                            <b:commandButton look="primary" value="Edit" size="xs" icon-size="xs" iconBrand="5.2.0" icon-awesome="fa-pencil" disabled="#{not employeeRoleBean.activeUser.employeeRole.permission.update}" action="#{employeeBean.updateEmployee(emp)}" update="@form"/>
+                        </p:column>
+                    </p:dataTable>
+                </b:panel>
+                <b:panel rendered="#{employeeBean.search}" look="default"  collapsible="false">
+                    <f:facet name="heading">
+                        <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                            <p:outputLabel value="Add User" styleClass="panel-title-css"/>
+                            <p:separator/>
+                            <p:fieldset legend="SARS Employee">
+                                <b:formGroup>
+                                    <b:inputText value="#{employeeBean.sid}" placeholder="Search Employee by S-ID" fieldSize="lg">
+                                        <f:facet name="prepend">
+                                            <b:commandButton iconSize="lg" iconAwesome="fa-plus" size="lg" look="primary" value="Add Servive Provider" disabled="#{not employeeBean.activeUser.employeeRole.permission.add}"  action="#{employeeBean.addOrUpdate(null)}" update="@form"/>
+                                        </f:facet>
+                                        <f:facet name="prepend">
+                                            <p:outputLabel value="Search"/>
+                                        </f:facet>
+                                        <f:facet name="append">
+                                            <b:commandButton icon-awesome="search" size="lg" value="Search" look="primary" action="#{employeeBean.searchEmployee()}" ajax="false" update="@form"/>
+                                        </f:facet>
+                                    </b:inputText>
+                                </b:formGroup>
+                            </p:fieldset>
+                        </b:panelGrid>
+                    </f:facet>                   
+                </b:panel>
+                <b:panel rendered="#{employeeBean.step2}" collapsible="false" collapsed="false">
+                    <f:facet name="heading">
+                        <b:panelGrid colSpans="12" size="md" styleClass="ui-fluid">
+                            <p:outputLabel value="Add Service Provider" style="float: left;"/> 
+                        </b:panelGrid>
+                    </f:facet>
+                    <b:panelGrid colSpans="6,6" size="md" styleClass="ui-fluid">
+                        <b:formGroup>
+                            <p:outputLabel value="Full Names :" />
+                            <b:inputText fieldSize="lg" value="#{employeeBean.entity.fullNames}" required="true" requiredMessage="Enter full names" maxlength="50"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="ID Number :"/>
+                            <b:inputText fieldSize="lg" value="#{employeeBean.entity.identityNumber}" maxlength="13"/>                               
+                        </b:formGroup>    
+                        <b:formGroup>
+                            <p:outputLabel value="Gender"/>
+                            <p:selectOneMenu value="#{employeeBean.entity.gender}" required="true" requiredMessage="Please select a gender">
+                                <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                <f:selectItems value="#{employeeBean.genders}" var="gender" itemLabel="#{gender.toString()}" itemValue="#{gender.toString()}"/>
+                            </p:selectOneMenu>
+                        </b:formGroup>                                             
+                        <b:formGroup>
+                            <p:outputLabel value="Passport Number :"/>
+                            <b:inputText fieldSize="lg" value="#{employeeBean.entity.passportNumber}" maxlength="16"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Position Title :"/>
+                            <b:inputText fieldSize="lg" value="#{employeeBean.entity.positionTitle}" required="true" requiredMessage="Enter position title" maxlength="50"/>                               
+                        </b:formGroup>                        
+                        <b:formGroup>
+                            <p:outputLabel value="Cell-phone Number :"/>
+                            <b:inputText fieldSize="lg" value="#{employeeBean.entity.contactDetail.cellPhoneNumber}" maxlength="10" required="true" requiredMessage="Enter cellphone number"/>                             
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Email Address :"/>
+                            <b:inputText fieldSize="lg" value="#{employeeBean.entity.contactDetail.emailAddress}" required="true" requiredMessage="Enter email address" placeholder="example@sars.gov.za" maxlength="50">
+                                <f:validateRegex pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"/>
+                            </b:inputText>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Service Provider / Vendor / Project Name  :"/>
+                            <b:inputText fieldSize="lg" value="#{employeeBean.entity.orgName}" required="true" requiredMessage="Enter service provider name" maxlength="50"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Manager Full Names :" />
+                            <b:inputText fieldSize="lg" value="#{employeeBean.entity.managerFullName}" required="true" requiredMessage="Enter manager full names" maxlength="50"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Manager contact number :" />
+                            <b:inputText fieldSize="lg" value="#{employeeBean.entity.managerContactNumber}" required="true" requiredMessage="Enter manager cellphone number" maxlength="10"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Manager email address :" />
+                            <b:inputText fieldSize="lg" value="#{employeeBean.entity.managerEmailAddress}" required="true" requiredMessage="Enter manager email address" maxlength="50"/>
+                        </b:formGroup>
+                    </b:panelGrid>
+                    <f:facet name="footer">
+                        <b:row>
+                            <b:panelGrid colSpans="6,6" size="lg" styleClass="ui-fluid">
+                                <b:commandButton large-screen="full-width" size="lg" value="Save" icon="check" look="success" action="#{employeeBean.save(employeeBean.entity)}" update="@form" />
+                                <b:commandButton large-screen="full-width" size="lg" value="Cancel" iconAwesome="window-close" look="danger" action="#{employeeBean.back()}" immediate="true" process="@this"  update="@(form)"/>
+                            </b:panelGrid>
+                        </b:row>
+                    </f:facet>
+                </b:panel>
+                <b:panel rendered="#{employeeBean.add}" look="default" collapsible="false">
+                    <f:facet name="heading">
+                        <p:outputLabel value="Add/Update Employee" styleClass="panel-title-css"/>
+                    </f:facet>
+                    <b:panelGrid colSpans="6,6" size="lg" style-class="ui-fluid">                        
+                        <b:formGroup>
+                            <p:outputLabel value="Full Names"/>
+                            <b:inputText readonly="true" value="#{employeeBean.entity.fullNames}" field-size="lg"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="S-ID"/>
+                            <b:inputText readonly="true" value="#{employeeBean.entity.sid}" field-size="lg"/>
+                        </b:formGroup>  
+                        <b:formGroup>
+                            <p:outputLabel value="Org Name"/>
+                            <b:inputText readonly="true" value="#{employeeBean.entity.orgName}" field-size="lg"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Manager-SID"/>
+                            <b:inputText readonly="true" value="#{employeeBean.entity.managerSID}" field-size="lg"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Manager Full Name"/>
+                            <b:inputText readonly="true" value="#{employeeBean.entity.managerFullName}" field-size="lg"/>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Roles"/>
+                            <p:selectOneMenu value="#{employeeBean.entity.employeeRole}" required="true" converter="entityConverter" requiredMessage="Please select a role">
+                                <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                <f:selectItems value="#{employeeBean.employeeRoles}" var="role" itemLabel="#{role.description}" itemValue="#{role}"/>
+                            </p:selectOneMenu>
+                        </b:formGroup>
+                        <b:formGroup>
+                            <p:outputLabel value="Status"/>
+                            <p:selectOneMenu value="#{employeeBean.entity.employeeStatus}" required="true" converter="entityConverter" requiredMessage="Please select a status">
+                                <f:selectItem itemLabel="Select One"  noSelectionOption="true"/>
+                                <f:selectItems value="#{employeeBean.employeeStatus}" var="status" itemLabel="#{status.toString()}" itemValue="#{status}"/>
+                            </p:selectOneMenu>
+                        </b:formGroup>
+                    </b:panelGrid>
+                    <f:facet name="footer">
+                        <b:row>
+                            <b:panelGrid colSpans="6,6" size="lg" styleClass="ui-fluid">
+                                <b:commandButton large-screen="full-width" size="lg" value="Save" icon="check" look="success" action="#{employeeBean.save(employeeBean.entity)}" update="@form" />
+                                <b:commandButton large-screen="full-width" size="lg" value="Cancel" iconAwesome="window-close" look="danger" action="#{employeeBean.cancel(employeeBean.entity)}" immediate="true" process="@this"  update="@(form)"/>
+                            </b:panelGrid>
+                        </b:row>
+                    </f:facet>
+                </b:panel> 
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

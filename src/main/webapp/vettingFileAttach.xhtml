@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <b:panel  look="default"  collapsible="false">
+            <b:panelGrid col-spans="12" size="lg" styleClass="ui-fluid">
+                <p:fieldset legend="File Upload" rendered="#{not (vettingFileAttachmentBean.vettingStatus eq 'APPROVED' or vettingFileAttachmentBean.vettingStatus eq 'VETTING_DENIED')}">
+                    <b:panelGrid col-spans="12" size="lg" styleClass="ui-fluid">
+                        <b:formGroup>
+                            <b:formGroup>
+                                <p:outputLabel indicateRequired="true" value="File upload size may not exceed 8MB" />
+                            </b:formGroup>
+                        </b:formGroup>
+                    </b:panelGrid>
+                    <b:panelGrid col-spans="6,6" size="md" styleClass="ui-fluid">
+                        <b:formGroup>
+                            <p:fileUpload skinSimple="true" onstart="PF('blockUI').block()" oncomplete="PF('blockUI').unblock()" listener="#{vettingFileAttachmentBean.handleFileUpload}" auto="true"  mode="advanced" dragDropSupport="false"  update="attachmentFile uploadMessageUpload" sizeLimit="8000000" fileLimit="3" allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|doc|docx|xls|xlsx|xlsm|mp4|avi|flv|mkv|wmv|mov)$/i" />
+                        </b:formGroup> 
+                    </b:panelGrid>
+                </p:fieldset> 
+                <p:messages id="uploadMessageUpload"/>
+                <p:outputPanel id="attachmentFile">
+                    <p:separator rendered="#{not empty vettingFileAttachmentBean.attachments}"/>
+                    <b:panelGrid col-spans="6,3,2,1" size="lg" styleClass="ui-fluid" rendered="#{not empty vettingFileAttachmentBean.attachments}">
+                        <p:outputLabel value="Document Name"/>
+                        <p:outputLabel value="Upload Date"/>
+                        <p:outputLabel value="Uploaded By"/>
+                        <p:outputLabel value="Action"/>
+                    </b:panelGrid>
+                    <p:separator rendered="#{not empty vettingFileAttachmentBean.attachments}"/>
+                    <ui:repeat value="#{vettingFileAttachmentBean.attachments}" var="document" varStatus="expVarStatus">
+                        <b:panelGrid col-spans="6,3,2,1" size="md" styleClass="ui-fluid">
+                            <b:formGroup>
+                                <h:outputText styleClass="displaycss" value="#{document.description}"/> 
+                            </b:formGroup>
+                            <b:formGroup>
+                                <h:outputText styleClass="displaycss" value="#{document.createdDate}">
+                                    <f:convertDateTime pattern="dd MMM yyyy"/>
+                                </h:outputText>
+                            </b:formGroup>
+                            <b:formGroup>
+                                <h:outputText styleClass="displaycss" value="#{document.uploadedBy}"/> 
+                            </b:formGroup>
+                            <b:formGroup>
+                                <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                                    <p:commandButton styleClass="ui-button-primary btn-size-sm" rendered="#{document.createdBy ne vettingFileAttachmentBean.activeUser.sid}" value="Download" actionListener="#{vettingFileAttachmentBean.fileDownload(document)}" ajax="false" immediate="true" update="@form">
+                                        <p:fileDownload value="#{vettingFileAttachmentBean.downloadFile}"/>
+                                    </p:commandButton>
+                                    <p:commandButton styleClass="ui-button-danger btn-size-sm" rendered="#{document.createdBy eq vettingFileAttachmentBean.activeUser.sid and not(vettingFileAttachmentBean.vettingStatus eq 'APPROVED' or vettingFileAttachmentBean.vettingStatus eq 'VETTING_DENIED')}" value="Delete" action="#{vettingFileAttachmentBean.removeAttach(document)}" immediate="true" update="@form">
+                                        <p:confirm header="Confirmation" message="Do you want to delete this document?" icon="pi pin-info-circle"/>
+                                    </p:commandButton>
+                                </b:panelGrid>
+                            </b:formGroup>
+                        </b:panelGrid>
+                    </ui:repeat>
+                </p:outputPanel>
+            </b:panelGrid>
+        </b:panel>
+    </h:body>
+</html>

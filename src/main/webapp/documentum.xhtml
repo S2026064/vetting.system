@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <ui:composition template="/template/template.xhtml">
+            <ui:define name="maincontent">                
+                <b:panel collapsible="false" look="default" rendered="#{documentumUrlBean.add}">
+                    <f:facet name="heading">
+                        <p:outputLabel value="Documentum Urls" styleClass="panel-title-css"/>
+                    </f:facet>
+                    <b:panel collapsible="false" look="default">
+                        <b:panelGrid col-spans="12" size="lg" styleClass="ui-fluid">
+                            <b:formGroup>
+                                <p:outputLabel value="Upload Url"/>
+                                <b:inputText value="#{documentumUrlBean.entity.uploadUrl}" field-size="lg">
+                                </b:inputText>
+                            </b:formGroup>
+                            <b:formGroup>
+                                <p:outputLabel value="Download Url"/>
+                                <b:inputText value="#{documentumUrlBean.entity.downloadUrl}" field-size="lg">
+                                </b:inputText>
+                            </b:formGroup>
+                        </b:panelGrid>
+                    </b:panel>                    
+                    <f:facet name="footer">
+                        <b:row>
+                            <b:panelGrid colSpans="12" size="lg" styleClass="ui-fluid">
+                                <b:commandButton large-screen="full-width" size="lg" value="Save" look="success" icon="check" action="#{documentumUrlBean.save(documentumUrlBean.entity)}" update="templateForm" />
+                            </b:panelGrid>
+                        </b:row>
+                    </f:facet>
+                </b:panel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
